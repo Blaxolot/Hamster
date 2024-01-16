@@ -1,7 +1,7 @@
 // hej
 const FLOOR_HEIGHT = 50;
 const JUMP_FORCE = 800;
-const SPEED = 300;
+let SPEED = 300;
 // initialize context
 kaboom();
 setBackground(50, 50, 50);
@@ -17,10 +17,10 @@ loadSound("pickup", "assets/pickup.wav");
 loadSound("jump", "assets/jump.wav");
 loadSound("negative", "assets/negative_beeps.mp3");
 loadSound("gameover", "assets/gameover.mp3");
-
 scene("game", () => {
   // define gravity
-  setGravity(1500);
+  let GRAVITY = 1250;
+  setGravity(GRAVITY);
 
   // add a game object to screen
   const player = add([
@@ -56,9 +56,17 @@ scene("game", () => {
   onKeyPress("space", jump);
   onKeyPress("up", jump);
   onClick(jump);
-
+  // Increase speed gradually
+  function increaseSpeed() {
+    SPEED += 2;
+    GRAVITY += 2;
+    setGravity(GRAVITY);
+  }
+  // Increase speed gradually
+  loop(1, () => {
+    increaseSpeed();
+  });
   function spawnItem() {
-    // add Bean obj
     const number = randi(4);
     if (number == 1) {
       add([
@@ -95,7 +103,7 @@ scene("game", () => {
       ]);
     }
 
-    // wait a random amount of time to spawn next Bean
+    // wait a random amount of time to spawn next Item
     wait(rand(1.5, 2), spawnItem);
   }
   spawnItem();
