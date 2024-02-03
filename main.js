@@ -1,7 +1,7 @@
 // hej
 const FLOOR_HEIGHT = 50;
 const JUMP_FORCE = 800;
-let SPEED = 300;
+let SPEED = 350;
 // initialize context
 kaboom();
 setBackground(50, 50, 50);
@@ -58,12 +58,12 @@ scene("game", () => {
   onClick(jump);
   // Increase speed gradually
   function increaseSpeed() {
-    SPEED += 2;
-    GRAVITY += 2;
+    SPEED += 1;
+    GRAVITY += 0.5;
     setGravity(GRAVITY);
   }
   // Increase speed gradually
-  loop(1, () => {
+  loop(0.5, () => {
     increaseSpeed();
   });
   function spawnItem() {
@@ -124,6 +124,10 @@ scene("game", () => {
     console.log("mniam");
   });
 
+  let bonusLive3;
+  let bonusLive2;
+  let bonusLive1;
+
   player.onCollide("apple", jabuszko => {
     play("pickup", {
       loop: false,
@@ -132,21 +136,72 @@ scene("game", () => {
     appleScore++;
     appleScoreLabel.text = appleScore;
     console.log("mniam");
+    if (appleScore % 10 === 0) {
+      lives += 1;
+      if (lives == 3) {
+        bonusLive3 = add([
+          sprite("heart"),
+          pos(width() - 155, 15),
+          scale(0.08),
+        ]);
+      }
+      if (lives == 2) {
+        bonusLive2 = add([
+          sprite("heart"),
+          pos(width() - 105, 15),
+          scale(0.08),
+        ]);
+      }
+      if (lives == 1) {
+        bonusLive1 = add([
+          sprite("heart"),
+          area(),
+          pos(width() - 55, 15),
+          scale(0.08),
+        ]);
+      }
+    }
   });
 
   player.onCollide("Chocolate", czekolada => {
-    // go to "lose" scene and pass the score
     destroy(czekolada);
     play("negative", {
       loop: false,
     });
     lives -= 1;
-    if (lives == 2) destroy(Live3);
-    if (lives == 1) destroy(Live2);
-    if (lives == 0) destroy(Live1);
+
+    // Check and destroy bonus hearts based on the number of lives
+    if (lives == 2 && bonusLive3) {
+      destroy(bonusLive3);
+      bonusLive3 = undefined;
+    }
+    if (lives == 1 && bonusLive2) {
+      destroy(bonusLive2);
+      bonusLive2 = undefined;
+    }
+    if (lives == 0 && bonusLive1) {
+      destroy(bonusLive1);
+      bonusLive1 = undefined;
+    }
+
+    // Destroy the corresponding Live heart only if the bonusLive heart existed
+    if (lives == 2 && Live3) {
+      destroy(Live3);
+      Live3 = undefined;
+    }
+    if (lives == 1 && Live2) {
+      destroy(Live2);
+      Live2 = undefined;
+    }
+    if (lives == 0 && Live1) {
+      destroy(Live1);
+      Live1 = undefined;
+    }
+
     if (lives == -1) {
       go("lose", seedScore + appleScore);
       localStorage.setItem("Score", seedScore + appleScore);
+      SPEED = 350;
     }
   });
 
@@ -154,14 +209,14 @@ scene("game", () => {
   add([sprite("seed"), scale(0.07), pos(18, 24)]);
   const appleScoreLabel = add([text(appleScore), pos(170, 24)]);
   add([sprite("apple"), scale(0.09), pos(120, 16)]);
-  const Live1 = add([
+  let Live1 = add([
     sprite("heart"),
     area(),
     pos(width() - 55, 15),
     scale(0.08),
   ]);
-  const Live2 = add([sprite("heart"), pos(width() - 105, 15), scale(0.08)]);
-  const Live3 = add([sprite("heart"), pos(width() - 155, 15), scale(0.08)]);
+  let Live2 = add([sprite("heart"), pos(width() - 105, 15), scale(0.08)]);
+  let Live3 = add([sprite("heart"), pos(width() - 155, 15), scale(0.08)]);
 });
 
 scene("lose", score => {
