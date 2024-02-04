@@ -17,6 +17,7 @@ loadSound("pickup", "assets/pickup.wav");
 loadSound("jump", "assets/jump.wav");
 loadSound("negative", "assets/negative_beeps.mp3");
 loadSound("gameover", "assets/gameover.mp3");
+loadSound("bonus", "assets/bonus.mp3");
 scene("game", () => {
   // define gravity
   let GRAVITY = 1250;
@@ -138,6 +139,9 @@ scene("game", () => {
     console.log("mniam");
     if (appleScore % 10 === 0) {
       lives += 1;
+      play("bonus", {
+        loop: false,
+      });
       if (lives == 3) {
         bonusLive3 = add([
           sprite("heart"),
