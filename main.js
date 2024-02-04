@@ -17,7 +17,7 @@ loadSound("pickup", "assets/pickup.wav");
 loadSound("jump", "assets/jump.wav");
 loadSound("negative", "assets/negative_beeps.mp3");
 loadSound("gameover", "assets/gameover.mp3");
-loadSound("bonus", "assets/bonus.mp3");
+loadSound("bonus", "assets/bonus_heart.mp3");
 scene("game", () => {
   // define gravity
   let GRAVITY = 1250;
