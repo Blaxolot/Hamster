@@ -4,7 +4,6 @@ const JUMP_FORCE = 800;
 let SPEED = 350;
 // initialize context
 kaboom();
-setBackground(50, 50, 50);
 
 // load assets
 loadSprite("hamster", "assets/hamster.png");
@@ -12,12 +11,16 @@ loadSprite("seed", "assets/seed.png");
 loadSprite("chocolate", "assets/chocolate-bar.png");
 loadSprite("heart", "assets/heart.png");
 loadSprite("apple", "assets/apple.png");
+loadSprite("homik", "assets/dirt.png");
 
 loadSound("pickup", "assets/pickup.wav");
 loadSound("jump", "assets/jump.wav");
 loadSound("negative", "assets/negative_beeps.mp3");
 loadSound("gameover", "assets/gameover.mp3");
 loadSound("bonus", "assets/bonus_heart.mp3");
+
+setBackground(50, 50, 50);
+
 scene("game", () => {
   // define gravity
   let GRAVITY = 1250;
@@ -34,15 +37,15 @@ scene("game", () => {
   ]);
 
   // floor
-  add([
-    rect(width(), FLOOR_HEIGHT),
-    outline(4),
-    pos(0, height()),
-    anchor("botleft"),
-    area(),
-    body({ isStatic: true }),
-    color(0, 150, 50),
-  ]);
+  for (let x = 0; x < width(); x += 60) {
+    add([
+      pos(x, height()),
+      sprite("homik"),
+      anchor("botleft"),
+      area(),
+      body({ isStatic: true }),
+    ]);
+  }
 
   function jump() {
     if (player.isGrounded()) {
@@ -73,7 +76,7 @@ scene("game", () => {
       add([
         sprite("chocolate"),
         area(),
-        pos(width(), height() - 60),
+        pos(width(), height() - 65),
         scale(0.15),
         anchor("botleft"),
         move(LEFT, SPEED),
@@ -84,7 +87,7 @@ scene("game", () => {
       add([
         sprite("apple"),
         area(),
-        pos(width(), height() - randi(55, 300)),
+        pos(width(), height() - randi(65, 300)),
         scale(0.16),
         anchor("botleft"),
         move(LEFT, SPEED),
@@ -95,7 +98,7 @@ scene("game", () => {
       add([
         sprite("seed"),
         area(),
-        pos(width(), height() - randi(55, 300)),
+        pos(width(), height() - randi(65, 300)),
         anchor("botleft"),
         move(LEFT, SPEED),
         scale(0.1),
@@ -235,9 +238,9 @@ scene("lose", score => {
   ]);
 
   add([
-    text("Game Over"),
+    text("Game Over", { size: 70 }),
     pos(width() / 2, height() / 2 + -250),
-    scale(2),
+
     anchor("center"),
   ]);
 
@@ -387,13 +390,13 @@ scene("menu", () => {
     anchor("center"),
   ]);
 
-  let texxt = `Your Score: ${localStorage.getItem("Score")}`;
+  let menu_text = `Your Score: ${localStorage.getItem("Score")}`;
   if (localStorage.getItem("Score") == null) {
-    texxt = "Hi, My name is Blue";
+    menu_text = "Hi, My name is Blue";
   }
   // display score
   add([
-    text(`${texxt}`),
+    text(`${menu_text}`),
     pos(width() / 2, height() / 2 - 150),
     anchor("center"),
   ]);
