@@ -11,7 +11,7 @@ loadSprite("seed", "assets/seed.png");
 loadSprite("chocolate", "assets/chocolate-bar.png");
 loadSprite("heart", "assets/heart.png");
 loadSprite("apple", "assets/apple.png");
-loadSprite("homik", "assets/dirt.png");
+loadSprite("homik", "assets/Dirt.png");
 
 loadSound("pickup", "assets/pickup.wav");
 loadSound("jump", "assets/jump.wav");
