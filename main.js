@@ -227,7 +227,92 @@ scene("game", () => {
   let Live2 = add([sprite("heart"), pos(width() - 105, 15), scale(0.08)]);
   let Live3 = add([sprite("heart"), pos(width() - 155, 15), scale(0.08)]);
 });
+let Credits; // Declare Credits in the global scope
 
+function display_info() {
+  if (!Credits) {
+    Credits = add([
+      rect(650, 600, { radius: 8 }),
+      color(0, 0, 0),
+      opacity(0.8),
+      pos(center()),
+      area(),
+      anchor("center"),
+      outline(5),
+      "credits",
+    ]);
+
+    Credits.add([
+      text("Icon Credits"),
+      anchor("center"),
+      pos(0, -240),
+      color(255, 255, 255),
+    ]);
+    Credits.add([
+      text("Hamster Icon created by Freepik - Flaticon"),
+      anchor("center"),
+      pos(0, -180),
+      color(255, 255, 255),
+      scale(0.6),
+    ]);
+    Credits.add([
+      text("Seed Icon created by Smashicons - Flaticon"),
+      anchor("center"),
+      pos(0, -140),
+      color(255, 255, 255),
+      scale(0.6),
+    ]);
+    Credits.add([
+      text("Apple Icon created by Smashicons - Flaticon"),
+      anchor("center"),
+      pos(0, -100),
+      color(255, 255, 255),
+      scale(0.6),
+    ]);
+    Credits.add([
+      text("Heart Icon created by Pixel perfect"),
+      anchor("center"),
+      pos(0, -60),
+      color(255, 255, 255),
+      scale(0.6),
+    ]);
+    Credits.add([
+      text("Chocolate Bar Icon created by Iconic Panda"),
+      anchor("center"),
+      pos(0, -20),
+      color(255, 255, 255),
+      scale(0.6),
+    ]);
+    Credits.add([
+      text("- Flaticon"),
+      anchor("center"),
+      pos(0, 5),
+      color(255, 255, 255),
+      scale(0.6),
+    ]);
+    Credits.add([
+      text("Arrow Icons created by Freepik - Flaticon"),
+      anchor("center"),
+      pos(0, 40),
+      color(255, 255, 255),
+      scale(0.6),
+    ]);
+    Credits.add([
+      text("x"),
+      anchor("center"),
+      area(),
+      pos(-305, -280),
+      color(150, 150, 150),
+      scale(0.8),
+      "x",
+    ]);
+
+    onClick("x", () => {
+      destroy(Credits);
+      Credits = null; // Reset Credits variable after destroying
+    });
+  }
+}
 scene("lose", score => {
   play("gameover", {
     loop: false,
@@ -292,92 +377,6 @@ scene("lose", score => {
     info.color = rgb(100, 100, 100);
     setCursor("default");
   });
-  let Credits; // Declare Credits in the global scope
-
-  function display_info() {
-    if (!Credits) {
-      Credits = add([
-        rect(650, 600, { radius: 8 }),
-        color(0, 0, 0),
-        opacity(0.8),
-        pos(center()),
-        area(),
-        anchor("center"),
-        outline(5),
-        "credits",
-      ]);
-
-      Credits.add([
-        text("Icon Credits"),
-        anchor("center"),
-        pos(0, -240),
-        color(255, 255, 255),
-      ]);
-      Credits.add([
-        text("Hamster Icon created by Freepik - Flaticon"),
-        anchor("center"),
-        pos(0, -180),
-        color(255, 255, 255),
-        scale(0.6),
-      ]);
-      Credits.add([
-        text("Seed Icon created by Smashicons - Flaticon"),
-        anchor("center"),
-        pos(0, -140),
-        color(255, 255, 255),
-        scale(0.6),
-      ]);
-      Credits.add([
-        text("Apple Icon created by Smashicons - Flaticon"),
-        anchor("center"),
-        pos(0, -100),
-        color(255, 255, 255),
-        scale(0.6),
-      ]);
-      Credits.add([
-        text("Heart Icon created by Pixel perfect"),
-        anchor("center"),
-        pos(0, -60),
-        color(255, 255, 255),
-        scale(0.6),
-      ]);
-      Credits.add([
-        text("Chocolate Bar Icon created by Iconic Panda"),
-        anchor("center"),
-        pos(0, -20),
-        color(255, 255, 255),
-        scale(0.6),
-      ]);
-      Credits.add([
-        text("- Flaticon"),
-        anchor("center"),
-        pos(0, 5),
-        color(255, 255, 255),
-        scale(0.6),
-      ]);
-      Credits.add([
-        text("Arrow Icons created by Freepik - Flaticon"),
-        anchor("center"),
-        pos(0, 40),
-        color(255, 255, 255),
-        scale(0.6),
-      ]);
-      Credits.add([
-        text("x"),
-        anchor("center"),
-        area(),
-        pos(-305, -280),
-        color(150, 150, 150),
-        scale(0.8),
-        "x",
-      ]);
-
-      onClick("x", () => {
-        destroy(Credits);
-        Credits = null; // Reset Credits variable after destroying
-      });
-    }
-  }
 
   onClick("play", () => go("game"));
   onClick("info", () => display_info());
@@ -472,7 +471,6 @@ scene("menu", () => {
     info.color = rgb(100, 100, 100);
     setCursor("default");
   });
-  let Credits;
   function hamsters() {
     left_arrow = add([
       sprite("left_arrow"),
@@ -490,90 +488,6 @@ scene("menu", () => {
       anchor("center"),
       "right-arrow",
     ]);
-  }
-  function display_info() {
-    if (!Credits) {
-      Credits = add([
-        rect(650, 600, { radius: 8 }),
-        color(0, 0, 0),
-        opacity(0.8),
-        pos(center()),
-        area(),
-        anchor("center"),
-        outline(5),
-        "credits",
-      ]);
-
-      Credits.add([
-        text("Icon Credits"),
-        anchor("center"),
-        pos(0, -240),
-        color(255, 255, 255),
-      ]);
-      Credits.add([
-        text("Hamster Icon created by Freepik - Flaticon"),
-        anchor("center"),
-        pos(0, -180),
-        color(255, 255, 255),
-        scale(0.6),
-      ]);
-      Credits.add([
-        text("Seed Icon created by Smashicons - Flaticon"),
-        anchor("center"),
-        pos(0, -140),
-        color(255, 255, 255),
-        scale(0.6),
-      ]);
-      Credits.add([
-        text("Apple Icon created by Smashicons - Flaticon"),
-        anchor("center"),
-        pos(0, -100),
-        color(255, 255, 255),
-        scale(0.6),
-      ]);
-      Credits.add([
-        text("Heart Icon created by Pixel perfect"),
-        anchor("center"),
-        pos(0, -60),
-        color(255, 255, 255),
-        scale(0.6),
-      ]);
-      Credits.add([
-        text("Chocolate Bar Icon created by Iconic Panda"),
-        anchor("center"),
-        pos(0, -20),
-        color(255, 255, 255),
-        scale(0.6),
-      ]);
-      Credits.add([
-        text("- Flaticon"),
-        anchor("center"),
-        pos(0, 5),
-        color(255, 255, 255),
-        scale(0.6),
-      ]);
-      Credits.add([
-        text("Arrow Icons created by Freepik - Flaticon"),
-        anchor("center"),
-        pos(0, 40),
-        color(255, 255, 255),
-        scale(0.6),
-      ]);
-      Credits.add([
-        text("x"),
-        anchor("center"),
-        area(),
-        pos(-305, -280),
-        color(150, 150, 150),
-        scale(0.8),
-        "x",
-      ]);
-
-      onClick("x", () => {
-        destroy(Credits);
-        Credits = null; // Reset Credits variable after destroying
-      });
-    }
   }
 
   onClick("play", () => go("game"));
@@ -599,4 +513,5 @@ scene("menu", () => {
   onClick("info", () => display_info());
   onKeyPress("space", () => go("game"));
 });
+
 go("menu", localStorage.getItem("Score"));
