@@ -154,69 +154,36 @@ scene("game", () => {
       play("bonus", {
         loop: false,
       });
-      parameters = [
-        sprite("heart"),
-        scale(0.08),
-      ]
+      parameters = [sprite("heart"), scale(0.08)];
       if (lives == 10) {
-        bonusLive10 = add([
-          pos(width() - 505, 15),
-          ...parameters
-        ]);
+        bonusLive10 = add([pos(width() - 505, 15), ...parameters]);
       }
       if (lives == 9) {
-        bonusLive9 = add([
-          pos(width() - 455, 15),
-          ...parameters
-        ]);
+        bonusLive9 = add([pos(width() - 455, 15), ...parameters]);
       }
       if (lives == 8) {
-        bonusLive8 = add([
-          pos(width() - 405, 15),
-          ...parameters
-        ]);
+        bonusLive8 = add([pos(width() - 405, 15), ...parameters]);
       }
       if (lives == 7) {
-        bonusLive7 = add([
-          pos(width() - 355, 15),
-          ...parameters
-        ]);
+        bonusLive7 = add([pos(width() - 355, 15), ...parameters]);
       }
       if (lives == 6) {
-        bonusLive6 = add([
-          pos(width() - 305, 15),
-          ...parameters
-        ]);
+        bonusLive6 = add([pos(width() - 305, 15), ...parameters]);
       }
       if (lives == 5) {
-        bonusLive5 = add([
-          pos(width() - 255, 15),
-          ...parameters
-        ]);
+        bonusLive5 = add([pos(width() - 255, 15), ...parameters]);
       }
       if (lives == 4) {
-        bonusLive4 = add([
-          pos(width() - 205, 15),
-          ...parameters
-        ]);
+        bonusLive4 = add([pos(width() - 205, 15), ...parameters]);
       }
       if (lives == 3) {
-        bonusLive3 = add([
-          pos(width() - 155, 15),
-          ...parameters
-        ]);
+        bonusLive3 = add([pos(width() - 155, 15), ...parameters]);
       }
       if (lives == 2) {
-        bonusLive2 = add([
-          pos(width() - 105, 15),
-          ...parameters
-        ]);
+        bonusLive2 = add([pos(width() - 105, 15), ...parameters]);
       }
       if (lives == 1) {
-        bonusLive1 = add([
-          pos(width() - 55, 15),
-          ...parameters
-        ]);
+        bonusLive1 = add([pos(width() - 55, 15), ...parameters]);
       }
     }
   });
@@ -227,7 +194,7 @@ scene("game", () => {
       loop: false,
     });
     lives -= 1;
-    
+
     // Check and destroy bonus hearts based on the number of lives
     if (lives == 9 && bonusLive10) {
       destroy(bonusLive10);
@@ -269,8 +236,16 @@ scene("game", () => {
       destroy(bonusLive1);
       bonusLive1 = undefined;
     }
-    // Destroy the corresponding Live heart only if the bonusLive heart existed
-    
+    if (lives == 2) {
+      destroy(Live3);
+    }
+    if (lives == 1) {
+      destroy(Live2);
+    }
+    if (lives == 0) {
+      destroy(Live1);
+    }
+
     if (lives == -1) {
       go("lose", seedScore + appleScore);
       localStorage.setItem("Score", seedScore + appleScore);
@@ -282,12 +257,7 @@ scene("game", () => {
   add([sprite("seed"), scale(0.07), pos(18, 24)]);
   const appleScoreLabel = add([text(appleScore), pos(170, 24)]);
   add([sprite("apple"), scale(0.09), pos(120, 16)]);
-  let Live1 = add([
-    sprite("heart"),
-    area(),
-    pos(width() - 55, 15),
-    scale(0.08),
-  ]);
+  let Live1 = add([sprite("heart"), pos(width() - 55, 15), scale(0.08)]);
   let Live2 = add([sprite("heart"), pos(width() - 105, 15), scale(0.08)]);
   let Live3 = add([sprite("heart"), pos(width() - 155, 15), scale(0.08)]);
 });
@@ -296,7 +266,7 @@ let Credits; // Declare Credits in the global scope
 function display_info() {
   if (!Credits) {
     Credits = add([
-      rect(650, 600, { radius: 8 }),
+      rect(650, 650, { radius: 8 }),
       color(0, 0, 0),
       opacity(0.8),
       pos(center()),
@@ -305,67 +275,49 @@ function display_info() {
       outline(5),
       "credits",
     ]);
-
+    parameters = [anchor("center"), color(255, 255, 255), scale(0.6)];
     Credits.add([
       text("Icon Credits"),
       anchor("center"),
-      pos(0, -240),
+      pos(0, -260),
       color(255, 255, 255),
     ]);
     Credits.add([
       text("Hamster Icon created by Freepik - Flaticon"),
-      anchor("center"),
-      pos(0, -180),
-      color(255, 255, 255),
-      scale(0.6),
+      pos(0, -220),
+      ...parameters,
     ]);
     Credits.add([
       text("Seed Icon created by Smashicons - Flaticon"),
-      anchor("center"),
-      pos(0, -140),
-      color(255, 255, 255),
-      scale(0.6),
+      pos(0, -180),
+      ...parameters,
     ]);
     Credits.add([
       text("Apple Icon created by Smashicons - Flaticon"),
-      anchor("center"),
-      pos(0, -100),
-      color(255, 255, 255),
-      scale(0.6),
+      pos(0, -140),
+      ...parameters,
     ]);
     Credits.add([
       text("Heart Icon created by Pixel perfect"),
-      anchor("center"),
-      pos(0, -60),
-      color(255, 255, 255),
-      scale(0.6),
+      pos(0, -100),
+      ...parameters,
     ]);
     Credits.add([
       text("Chocolate Bar Icon created by Iconic Panda"),
-      anchor("center"),
-      pos(0, -20),
-      color(255, 255, 255),
-      scale(0.6),
+      pos(0, -60),
+      ...parameters,
     ]);
-    Credits.add([
-      text("- Flaticon"),
-      anchor("center"),
-      pos(0, 5),
-      color(255, 255, 255),
-      scale(0.6),
-    ]);
+    Credits.add([text("- Flaticon"), pos(0, -30), ...parameters]);
     Credits.add([
       text("Arrow Icons created by Freepik - Flaticon"),
-      anchor("center"),
-      pos(0, 40),
-      color(255, 255, 255),
-      scale(0.6),
+      pos(0, 0),
+      ...parameters,
     ]);
     Credits.add([
       text("x"),
       anchor("center"),
       area(),
-      pos(-305, -280),
+      pos(-305, -305),
       color(150, 150, 150),
       scale(0.8),
       "x",
@@ -477,8 +429,8 @@ scene("menu", () => {
   const info = add([
     text("i"),
     area(),
-    pos(width() - 75, height() - 60),
-    color(100, 100, 100),
+    pos(width() - 60, height() - 55),
+    color(140, 140, 140),
     "info",
   ]);
 
@@ -532,7 +484,7 @@ scene("menu", () => {
     setCursor("pointer");
   });
   info.onHoverEnd(() => {
-    info.color = rgb(100, 100, 100);
+    info.color = rgb(140, 140, 140);
     setCursor("default");
   });
   function hamsters() {
