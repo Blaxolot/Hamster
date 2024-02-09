@@ -130,6 +130,13 @@ scene("game", () => {
     console.log("mniam");
   });
 
+  let bonusLive10;
+  let bonusLive9;
+  let bonusLive8;
+  let bonusLive7;
+  let bonusLive6;
+  let bonusLive5;
+  let bonusLive4;
   let bonusLive3;
   let bonusLive2;
   let bonusLive1;
@@ -142,31 +149,73 @@ scene("game", () => {
     appleScore++;
     appleScoreLabel.text = appleScore;
     console.log("mniam");
-    if (appleScore % 10 === 0) {
+    if ([10, 20, 30, 40, 50, 60, 70, 80, 90, 100].includes(appleScore)) {
       lives += 1;
       play("bonus", {
         loop: false,
       });
+      parameters = [
+        sprite("heart"),
+        scale(0.08),
+      ]
+      if (lives == 10) {
+        bonusLive10 = add([
+          pos(width() - 505, 15),
+          ...parameters
+        ]);
+      }
+      if (lives == 9) {
+        bonusLive9 = add([
+          pos(width() - 455, 15),
+          ...parameters
+        ]);
+      }
+      if (lives == 8) {
+        bonusLive8 = add([
+          pos(width() - 405, 15),
+          ...parameters
+        ]);
+      }
+      if (lives == 7) {
+        bonusLive7 = add([
+          pos(width() - 355, 15),
+          ...parameters
+        ]);
+      }
+      if (lives == 6) {
+        bonusLive6 = add([
+          pos(width() - 305, 15),
+          ...parameters
+        ]);
+      }
+      if (lives == 5) {
+        bonusLive5 = add([
+          pos(width() - 255, 15),
+          ...parameters
+        ]);
+      }
+      if (lives == 4) {
+        bonusLive4 = add([
+          pos(width() - 205, 15),
+          ...parameters
+        ]);
+      }
       if (lives == 3) {
         bonusLive3 = add([
-          sprite("heart"),
           pos(width() - 155, 15),
-          scale(0.08),
+          ...parameters
         ]);
       }
       if (lives == 2) {
         bonusLive2 = add([
-          sprite("heart"),
           pos(width() - 105, 15),
-          scale(0.08),
+          ...parameters
         ]);
       }
       if (lives == 1) {
         bonusLive1 = add([
-          sprite("heart"),
-          area(),
           pos(width() - 55, 15),
-          scale(0.08),
+          ...parameters
         ]);
       }
     }
@@ -178,8 +227,36 @@ scene("game", () => {
       loop: false,
     });
     lives -= 1;
-
+    
     // Check and destroy bonus hearts based on the number of lives
+    if (lives == 9 && bonusLive10) {
+      destroy(bonusLive10);
+      bonusLive10 = undefined;
+    }
+    if (lives == 8 && bonusLive9) {
+      destroy(bonusLive9);
+      bonusLive9 = undefined;
+    }
+    if (lives == 7 && bonusLive8) {
+      destroy(bonusLive8);
+      bonusLive8 = undefined;
+    }
+    if (lives == 6 && bonusLive7) {
+      destroy(bonusLive7);
+      bonusLive7 = undefined;
+    }
+    if (lives == 5 && bonusLive6) {
+      destroy(bonusLive6);
+      bonusLive6 = undefined;
+    }
+    if (lives == 4 && bonusLive5) {
+      destroy(bonusLive5);
+      bonusLive5 = undefined;
+    }
+    if (lives == 3 && bonusLive4) {
+      destroy(bonusLive4);
+      bonusLive4 = undefined;
+    }
     if (lives == 2 && bonusLive3) {
       destroy(bonusLive3);
       bonusLive3 = undefined;
@@ -192,21 +269,8 @@ scene("game", () => {
       destroy(bonusLive1);
       bonusLive1 = undefined;
     }
-
     // Destroy the corresponding Live heart only if the bonusLive heart existed
-    if (lives == 2 && Live3) {
-      destroy(Live3);
-      Live3 = undefined;
-    }
-    if (lives == 1 && Live2) {
-      destroy(Live2);
-      Live2 = undefined;
-    }
-    if (lives == 0 && Live1) {
-      destroy(Live1);
-      Live1 = undefined;
-    }
-
+    
     if (lives == -1) {
       go("lose", seedScore + appleScore);
       localStorage.setItem("Score", seedScore + appleScore);
