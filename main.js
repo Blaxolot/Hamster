@@ -14,6 +14,8 @@ loadSprite("apple", "assets/apple.png");
 loadSprite("homik", "assets/Dirt.png");
 loadSprite("left_arrow", "assets/left_arrow.png");
 loadSprite("right_arrow", "assets/right_arrow.png");
+loadSprite("banana", "assets/banana.png");
+loadSprite("hello", "assets/hello.png");
 
 loadSound("pickup", "assets/pickup.wav");
 loadSound("jump", "assets/jump.wav");
@@ -73,7 +75,7 @@ scene("game", () => {
     increaseSpeed();
   });
   function spawnItem() {
-    const number = randi(4);
+    const number = randi(5);
     if (number == 1) {
       add([
         sprite("chocolate"),
@@ -96,6 +98,17 @@ scene("game", () => {
         offscreen({ destroy: true }),
         "apple",
       ]);
+    } else if (number == 3) {
+      add([
+        sprite("banana"),
+        area(),
+        pos(width(), height() - randi(65, 300)),
+        scale(0.14),
+        anchor("botleft"),
+        move(LEFT, SPEED),
+        offscreen({ destroy: true }),
+        "banana",
+      ]);
     } else {
       add([
         sprite("seed"),
@@ -117,6 +130,7 @@ scene("game", () => {
   // keep track of score
   let seedScore = 0;
   let appleScore = 0;
+  let bananaScore = 0;
   let lives = 3;
 
   // lose if player collides with any game obj with tag "seed"
@@ -126,7 +140,7 @@ scene("game", () => {
     });
     destroy(orzech);
     seedScore++;
-    scoreLabel.text = seedScore;
+    seedscoreLabel.text = seedScore;
     console.log("mniam");
   });
 
@@ -247,16 +261,27 @@ scene("game", () => {
     }
 
     if (lives == -1) {
-      go("lose", seedScore + appleScore);
-      localStorage.setItem("Score", seedScore + appleScore);
+      go("lose", seedScore + appleScore + bananaScore);
+      localStorage.setItem("Score", seedScore + appleScore + bananaScore);
       SPEED = 350;
     }
   });
+  player.onCollide("banana", banan => {
+    play("pickup", {
+      loop: false,
+    });
+    destroy(banan);
+    bananaScore++;
+    bananaScoreLabel.text = bananaScore;
+    console.log("mniam");
+  });
 
-  const scoreLabel = add([text(seedScore), pos(60, 24)]);
-  add([sprite("seed"), scale(0.07), pos(18, 24)]);
-  const appleScoreLabel = add([text(appleScore), pos(170, 24)]);
-  add([sprite("apple"), scale(0.09), pos(120, 16)]);
+  const seedscoreLabel = add([text(seedScore), pos(65, 24)]);
+  add([sprite("seed"), scale(0.08), pos(16, 20)]);
+  const appleScoreLabel = add([text(appleScore), pos(175, 24)]);
+  add([sprite("apple"), scale(0.1), pos(120, 10)]);
+  const bananaScoreLabel = add([text(bananaScore), pos(65, 80)]);
+  add([sprite("hello"), scale(0.1), pos(14, 75)]);
   let Live1 = add([sprite("heart"), pos(width() - 55, 15), scale(0.08)]);
   let Live2 = add([sprite("heart"), pos(width() - 105, 15), scale(0.08)]);
   let Live3 = add([sprite("heart"), pos(width() - 155, 15), scale(0.08)]);
@@ -311,6 +336,11 @@ function display_info() {
     Credits.add([
       text("Arrow Icons created by Freepik - Flaticon"),
       pos(0, 0),
+      ...parameters,
+    ]);
+    Credits.add([
+      text("Banana Icon created by juicy_fish - Flaticon"),
+      pos(0, 40),
       ...parameters,
     ]);
     Credits.add([
