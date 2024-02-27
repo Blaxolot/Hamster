@@ -522,7 +522,7 @@ scene("menu", () => {
 
     let some_text;
     let buy_cap_button_color;
-    let buy_cap_text_scale;
+    let buy_cap_text_scale = 0.7;
     if (
       localStorage.getItem("seeds") >= 10 &&
       localStorage.getItem("apples") >= 5
@@ -535,7 +535,10 @@ scene("menu", () => {
         some_text = "Buy";
         buy_cap_button_color = rgb(0, 255, 0);
       }
-    } else {
+    } else if (
+      localStorage.getItem("seeds") < 10 &&
+      localStorage.getItem("apples") < 5
+    ) {
       some_text = "Buy";
       buy_cap_button_color = rgb(255, 0, 0);
     }
