@@ -528,9 +528,18 @@ scene("menu", () => {
       localStorage.getItem("apples") >= 5
     ) {
       if (localStorage.getItem("93rfDw") === "#%1d8*f@4p") {
-        some_text = "Wear";
-        buy_cap_button_color = rgb(160, 0, 0);
-        buy_cap_text_scale = 0.7;
+        if (localStorage.getItem("Wearing") == "True") {
+          some_text = "Wearing";
+          buy_cap_button_color = rgb(0, 160, 0);
+          buy_cap_text_scale = 0.6;
+          hamster = loadSprite("hamster", "assets/hamstercap.png");
+        }
+        if (localStorage.getItem("Wearing") == "False") {
+          some_text = "Wear";
+          buy_cap_button_color = rgb(160, 0, 0);
+          buy_cap_text_scale = 0.7;
+          hamster = loadSprite("hamster", "assets/hamster.png");
+        }
       } else {
         some_text = "Buy";
         buy_cap_button_color = rgb(0, 255, 0);
@@ -539,8 +548,23 @@ scene("menu", () => {
       localStorage.getItem("seeds") < 10 &&
       localStorage.getItem("apples") < 5
     ) {
-      some_text = "Buy";
-      buy_cap_button_color = rgb(255, 0, 0);
+      if (localStorage.getItem("93rfDw") === "#%1d8*f@4p") {
+        if (localStorage.getItem("Wearing") == "True") {
+          some_text = "Wearing";
+          buy_cap_button_color = rgb(0, 160, 0);
+          buy_cap_text_scale = 0.6;
+          hamster = loadSprite("hamster", "assets/hamstercap.png");
+        }
+        if (localStorage.getItem("Wearing") == "False") {
+          some_text = "Wear";
+          buy_cap_button_color = rgb(160, 0, 0);
+          buy_cap_text_scale = 0.7;
+          hamster = loadSprite("hamster", "assets/hamster.png");
+        }
+      } else {
+        some_text = "Buy";
+        buy_cap_button_color = rgb(255, 0, 0);
+      }
     }
 
     if (some_text == "Wear") {
@@ -605,7 +629,11 @@ scene("menu", () => {
           buy_cap.color = rgb(160, 0, 0);
           buy_cap_text.text = some_text;
         }
-      } else {
+      } else if (
+        seeds > 10 &&
+        apples > 5 &&
+        localStorage.getItem("93rfDw") !== "#%1d8*f@4p"
+      ) {
         alert("You don't have enough seeds and apples");
       }
     });
@@ -621,7 +649,11 @@ scene("menu", () => {
   onClick("hamsters", () => hamsters());
   onClick("shop", () => shop());
   onClick("left-arrow", () => {
-    hamster = loadSprite("hamster", "assets/white_hamster.png");
+    if (localStorage.getItem("Wearing") == "True") {
+      hamster = loadSprite("hamster", "assets/white_hamstercap.png");
+    } else {
+      hamster = loadSprite("hamster", "assets/white_hamster.png");
+    }
     hamster = add([
       sprite("hamster"),
       pos(width() / 2, height() / 2),
@@ -630,7 +662,11 @@ scene("menu", () => {
     ]);
   });
   onClick("right-arrow", () => {
-    hamster = loadSprite("hamster", "assets/hamster.png");
+    if (localStorage.getItem("Wearing") == "True") {
+      hamster = loadSprite("hamster", "assets/hamstercap.png");
+    } else {
+      hamster = loadSprite("hamster", "assets/hamster.png");
+    }
     hamster = add([
       sprite("hamster"),
       pos(width() / 2, height() / 2),
