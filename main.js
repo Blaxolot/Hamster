@@ -549,6 +549,10 @@ scene("menu", () => {
       localStorage.getItem("apples") < 5
     ) {
       if (localStorage.getItem("93rfDw") === "#%1d8*f@4p") {
+        some_text = "Wearing";
+        buy_cap_button_color = rgb(0, 160, 0);
+        buy_cap_text_scale = 0.6;
+        hamster = loadSprite("hamster", "assets/hamstercap.png");
         if (localStorage.getItem("Wearing") == "True") {
           some_text = "Wearing";
           buy_cap_button_color = rgb(0, 160, 0);
@@ -625,9 +629,11 @@ scene("menu", () => {
           localStorage.setItem("93rfDw", "#%1d8*f@4p");
           localStorage.setItem("seeds", seeds - 10);
           localStorage.setItem("apples", apples - 5);
-          some_text = "Wear";
-          buy_cap.color = rgb(160, 0, 0);
+          some_text = "Wearing";
+          buy_cap.color = rgb(0, 160, 0);
           buy_cap_text.text = some_text;
+          buy_cap_text.scale = 0.6;
+          hamster = loadSprite("hamster", "assets/hamstercap.png");
         }
       } else if (
         seeds > 10 &&
