@@ -149,16 +149,10 @@ scene("game", () => {
     console.log("mniam");
   });
 
-  let bonusLive10;
-  let bonusLive9;
-  let bonusLive8;
-  let bonusLive7;
-  let bonusLive6;
-  let bonusLive5;
-  let bonusLive4;
-  let bonusLive3;
-  let bonusLive2;
-  let bonusLive1;
+  for (let i = 1; i <= 10; i++) {
+    let bonuslives = `bonusLive${i}`;
+    this[bonuslives] = undefined;
+  }
 
   player.onCollide("apple", jabuszko => {
     play("pickup", {
@@ -167,7 +161,6 @@ scene("game", () => {
     destroy(jabuszko);
     appleScore++;
     appleScoreLabel.text = appleScore;
-    console.log("mniam");
     if ([10, 20, 30, 40, 50, 60, 70, 80, 90, 100].includes(appleScore)) {
       lives += 1;
       play("bonus", {
@@ -204,6 +197,7 @@ scene("game", () => {
       if (lives == 1) {
         bonusLive1 = add([pos(width() - 55, 15), ...parameters]);
       }
+      console.log("mniam");
     }
   });
 
@@ -263,9 +257,6 @@ scene("game", () => {
     }
     if (lives == 0) {
       destroy(Live1);
-    }
-
-    if (lives == -1) {
       go("menu");
       seeds = localStorage.getItem("seeds");
       apples = localStorage.getItem("apples");
@@ -274,7 +265,11 @@ scene("game", () => {
       localStorage.setItem("apples", +appleScore + +apples);
       localStorage.setItem("bananas", +bananaScore + +bananas);
       SPEED = 350;
+      play("gameover", {
+        loop: false,
+      });
     }
+    console.log("fu");
   });
   player.onCollide("banana", banan => {
     play("pickup", {
