@@ -37,7 +37,6 @@ scene("game", () => {
 
   // add a game object to screen
   const player = add([
-    // list of components
     sprite("hamster"),
     pos(80, 40),
     scale(0.2),
@@ -370,14 +369,13 @@ function display_info() {
   }
 }
 scene("menu", () => {
-  let hamster = add([
+  add([
     sprite("hamster"),
     pos(width() / 2, height() / 2),
     scale(0.55),
     anchor("center"),
   ]);
 
-  // display Hamster
   add([
     text("Hamster", { size: 100 }),
     pos(width() / 2, height() / 2 + -230),
@@ -411,6 +409,7 @@ scene("menu", () => {
     outline(5),
     "play",
   ]);
+  play_button.add([text("Play"), anchor("center"), color(0, 0, 0)]);
   const hamsters_button = add([
     rect(180, 40, { radius: 8 }),
     color(70, 70, 70),
@@ -419,6 +418,11 @@ scene("menu", () => {
     anchor("center"),
     outline(4.5),
     "hamsters",
+  ]);
+  hamsters_button.add([
+    text("Hamsters", { size: 30 }),
+    anchor("center"),
+    color(0, 0, 0),
   ]);
   const shop_button = add([
     rect(120, 40, { radius: 8 }),
@@ -429,7 +433,12 @@ scene("menu", () => {
     outline(4.5),
     "shop",
   ]);
-  play_button.add([text("Play"), anchor("center"), color(0, 0, 0)]);
+  shop_button.add([
+    text("Shop", { size: 30 }),
+    anchor("center"),
+    color(0, 0, 0),
+  ]);
+  // animations
   play_button.onHoverUpdate(() => {
     play_button.color = rgb(10, 100, 10);
     play_button.scale = vec2(1.025);
@@ -440,16 +449,6 @@ scene("menu", () => {
     play_button.color = rgb(0, 0, 255);
     setCursor("default");
   });
-  hamsters_button.add([
-    text("Hamsters", { size: 30 }),
-    anchor("center"),
-    color(0, 0, 0),
-  ]);
-  shop_button.add([
-    text("Shop", { size: 30 }),
-    anchor("center"),
-    color(0, 0, 0),
-  ]);
   hamsters_button.onHoverUpdate(() => {
     hamsters_button.color = rgb(60, 60, 60);
     hamsters_button.scale = vec2(1.02);
@@ -470,7 +469,6 @@ scene("menu", () => {
     shop_button.color = rgb(70, 70, 70);
     setCursor("default");
   });
-
   info.onHoverUpdate(() => {
     info.color = rgb(255, 255, 250);
     setCursor("pointer");
@@ -479,6 +477,7 @@ scene("menu", () => {
     info.color = rgb(140, 140, 140);
     setCursor("default");
   });
+
   function hamsters() {
     left_arrow = add([
       sprite("left_arrow"),
@@ -498,11 +497,13 @@ scene("menu", () => {
     ]);
   }
   function shop() {
+    let some_text, buy_cap_button_color;
+    let buy_cap_text_scale = 0.7;
     let background = add([rect(width(), height()), color(50, 50, 50)]);
     background.add([
       text("Shop", { size: 70 }),
       anchor("center"),
-      pos(width() / 2, height() / 2 - 300),
+      pos(width() / 2, 50),
     ]);
     background.add([
       rect(200, 200, { radius: 15 }),
@@ -514,10 +515,6 @@ scene("menu", () => {
     background.add([sprite("apple"), scale(0.085), pos(135, 25)]);
     background.add([text("5"), scale(0.9), pos(180, 33)]);
     background.add([sprite("cap"), scale(0.25), pos(56, 55)]);
-
-    let some_text;
-    let buy_cap_button_color;
-    let buy_cap_text_scale = 0.7;
     if (
       localStorage.getItem("seeds") >= 10 &&
       localStorage.getItem("apples") >= 5
@@ -565,7 +562,6 @@ scene("menu", () => {
         buy_cap_button_color = rgb(255, 0, 0);
       }
     }
-
     if (some_text == "Wear") {
       onClick("buy-cap", () => {
         some_text = "Wearing";
@@ -576,12 +572,7 @@ scene("menu", () => {
         hamster = loadSprite("hamster", "assets/hamstercap.png");
       });
     }
-    if (localStorage.getItem("Wearing") == "True") {
-      some_text = "Wearing";
-      buy_cap_button_color = rgb(0, 160, 0);
-      buy_cap_text_scale = 0.6;
-      hamster = loadSprite("hamster", "assets/hamstercap.png");
-    }
+
     if (some_text == "Wearing") {
       onClick("buy-cap", () => {
         some_text = "Wear";
