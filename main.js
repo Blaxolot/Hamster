@@ -449,26 +449,22 @@ scene("menu", () => {
     play_button.color = rgb(0, 0, 255);
     setCursor("default");
   });
-  hamsters_button.onHoverUpdate(() => {
-    hamsters_button.color = rgb(60, 60, 60);
-    hamsters_button.scale = vec2(1.02);
-    setCursor("pointer");
-  });
-  hamsters_button.onHoverEnd(() => {
-    hamsters_button.scale = vec2(1);
-    hamsters_button.color = rgb(70, 70, 70);
-    setCursor("default");
-  });
-  shop_button.onHoverUpdate(() => {
-    shop_button.color = rgb(60, 60, 60);
-    shop_button.scale = vec2(1.02);
-    setCursor("pointer");
-  });
-  shop_button.onHoverEnd(() => {
-    shop_button.scale = vec2(1);
-    shop_button.color = rgb(70, 70, 70);
-    setCursor("default");
-  });
+  function handleButtonHover(...buttons) {
+    buttons.forEach(button => {
+      button.onHoverUpdate(() => {
+        button.color = rgb(60, 60, 60);
+        button.scale = vec2(1.02);
+        setCursor("pointer");
+      });
+      button.onHoverEnd(() => {
+        button.scale = vec2(1);
+        button.color = rgb(70, 70, 70);
+        setCursor("default");
+      });
+    });
+  }
+  handleButtonHover(hamsters_button, shop_button);
+
   info.onHoverUpdate(() => {
     info.color = rgb(255, 255, 250);
     setCursor("pointer");
@@ -499,6 +495,8 @@ scene("menu", () => {
   function shop() {
     let some_text, buy_cap_button_color;
     let buy_cap_text_scale = 0.7;
+    let seeds = localStorage.getItem("seeds");
+    let apples = localStorage.getItem("apples");
     let background = add([rect(width(), height()), color(50, 50, 50)]);
     background.add([
       text("Shop", { size: 70 }),
@@ -515,53 +513,35 @@ scene("menu", () => {
     background.add([sprite("apple"), scale(0.085), pos(135, 25)]);
     background.add([text("5"), scale(0.9), pos(180, 33)]);
     background.add([sprite("cap"), scale(0.25), pos(56, 55)]);
-    if (
-      localStorage.getItem("seeds") >= 10 &&
-      localStorage.getItem("apples") >= 5
-    ) {
-      if (localStorage.getItem("93rfDw") === "#%1d8*f@4p") {
-        if (localStorage.getItem("Wearing") == "True") {
-          some_text = "Wearing";
-          buy_cap_button_color = rgb(0, 160, 0);
-          buy_cap_text_scale = 0.6;
-          hamster = loadSprite("hamster", "assets/hamstercap.png");
-        }
-        if (localStorage.getItem("Wearing") == "False") {
-          some_text = "Wear";
-          buy_cap_button_color = rgb(160, 0, 0);
-          buy_cap_text_scale = 0.7;
-          hamster = loadSprite("hamster", "assets/hamster.png");
-        }
-      } else {
-        some_text = "Buy";
-        buy_cap_button_color = rgb(0, 255, 0);
-      }
-    } else if (
-      localStorage.getItem("seeds") < 10 &&
-      localStorage.getItem("apples") < 5
-    ) {
-      if (localStorage.getItem("93rfDw") === "#%1d8*f@4p") {
+    // logic for button color and text
+    if (localStorage.getItem("93rfDw") === "#%1d8*f@4p") {
+      some_text = "Wearing";
+      buy_cap_button_color = rgb(0, 160, 0);
+      buy_cap_text_scale = 0.6;
+      hamster = loadSprite("hamster", "assets/hamstercap.png");
+      if (localStorage.getItem("Wearing") == "True") {
         some_text = "Wearing";
         buy_cap_button_color = rgb(0, 160, 0);
         buy_cap_text_scale = 0.6;
         hamster = loadSprite("hamster", "assets/hamstercap.png");
-        if (localStorage.getItem("Wearing") == "True") {
-          some_text = "Wearing";
-          buy_cap_button_color = rgb(0, 160, 0);
-          buy_cap_text_scale = 0.6;
-          hamster = loadSprite("hamster", "assets/hamstercap.png");
-        }
-        if (localStorage.getItem("Wearing") == "False") {
-          some_text = "Wear";
-          buy_cap_button_color = rgb(160, 0, 0);
-          buy_cap_text_scale = 0.7;
-          hamster = loadSprite("hamster", "assets/hamster.png");
-        }
-      } else {
+      }
+      if (localStorage.getItem("Wearing") == "False") {
+        some_text = "Wear";
+        buy_cap_button_color = rgb(160, 0, 0);
+        buy_cap_text_scale = 0.7;
+        hamster = loadSprite("hamster", "assets/hamster.png");
+      }
+    } else {
+      if (seeds < 10 && apples < 5) {
         some_text = "Buy";
         buy_cap_button_color = rgb(255, 0, 0);
       }
+      if (seeds >= 10 && apples >= 5) {
+        some_text = "Buy";
+        buy_cap_button_color = rgb(0, 255, 0);
+      }
     }
+
     if (some_text == "Wear") {
       onClick("buy-cap", () => {
         some_text = "Wearing";
@@ -608,8 +588,6 @@ scene("menu", () => {
     ]);
 
     onClick("buy-cap", () => {
-      let seeds = localStorage.getItem("seeds");
-      let apples = localStorage.getItem("apples");
       if (seeds >= 10 && apples >= 5) {
         if (localStorage.getItem("93rfDw") !== "#%1d8*f@4p") {
           localStorage.setItem("93rfDw", "#%1d8*f@4p");
@@ -620,10 +598,11 @@ scene("menu", () => {
           buy_cap_text.text = some_text;
           buy_cap_text.scale = 0.6;
           hamster = loadSprite("hamster", "assets/hamstercap.png");
+          localStorage.setItem("Wearing", "True");
         }
       } else if (
-        seeds > 10 &&
-        apples > 5 &&
+        seeds < 10 &&
+        apples < 5 &&
         localStorage.getItem("93rfDw") !== "#%1d8*f@4p"
       ) {
         alert("You don't have enough seeds and apples");
@@ -632,7 +611,7 @@ scene("menu", () => {
 
     onClick("x", () => {
       destroy(background);
-      background = null; // Reset Credits variable after destroying
+      background = null; // Reset background variable after destroying
       go("menu");
     });
   }
@@ -671,4 +650,4 @@ scene("menu", () => {
   onKeyPress("space", () => go("game"));
 });
 
-go("menu", localStorage.getItem("Score"));
+go("menu");
