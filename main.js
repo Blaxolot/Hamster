@@ -688,9 +688,8 @@ scene("menu", () => {
           localStorage.setItem("Wearing", "True");
         }
       } else if (
-        seeds < 10 ||
-        apples < 5 &&
-        localStorage.getItem("93rfDw") !== "#%1d8*f@4p"
+        (seeds < 10 && localStorage.getItem("93rfDw") !== "#%1d8*f@4p") ||
+        (apples < 5 && localStorage.getItem("93rfDw") !== "#%1d8*f@4p")
       ) {
         alert("You don't have enough seeds and apples");
       }
@@ -709,9 +708,8 @@ scene("menu", () => {
           localStorage.setItem("Shoes", "True");
         }
       } else if (
-        seeds < 5 ||
-        bananas < 5 &&
-        localStorage.getItem("Sk@3o&") !== "%01ns#9p"
+        (seeds < 5 && localStorage.getItem("Sk@3o&") !== "%01ns#9p") ||
+        (bananas < 5 && localStorage.getItem("Sk@3o&") !== "%01ns#9p")
       ) {
         alert("You don't have enough seeds and bananas");
       }
@@ -726,44 +724,40 @@ scene("menu", () => {
       go("menu");
     });
   }
-
+  let Wearing = localStorage.getItem("Wearing");
+  let Shoes = localStorage.getItem("Shoes");
   onClick("play", () => go("game"));
   onClick("hamsters", () => hamsters());
   onClick("shop", () => shop());
   onClick("left-arrow", () => {
-    if (Wearing == "True" && Shoes == "False") {
+    if (Wearing == "True" && Shoes !== "True") {
       hamster = loadSprite("hamster", "images/white_hamstercap.png");
-    }
-    if (Shoes == "True") {
+    } else if (Shoes == "True" && Wearing !== "True") {
       hamster = loadSprite("hamster", "images/white_hamstershoes.png");
-    }
-    if (Shoes == "True" && Wearing == "True") {
+    } else if (Shoes == "True" && Wearing == "True") {
       hamster = loadSprite("hamster", "images/white_hamstercapshoes.png");
-    } else if (Wearing == "False" && Shoes == "False") {
+    } else {
       hamster = loadSprite("hamster", "images/white_hamster.png");
     }
-
-    hamster = add([
-      sprite("hamster"),
+    add([
+      sprite(hamster),
       pos(width() / 2, height() / 2),
       scale(0.55),
       anchor("center"),
     ]);
   });
   onClick("right-arrow", () => {
-    if (Wearing == "True") {
+    if (Wearing == "True" && Shoes !== "True") {
       hamster = loadSprite("hamster", "images/hamstercap.png");
-    }
-    if (Shoes == "True") {
+    } else if (Shoes == "True" && Wearing !== "True") {
       hamster = loadSprite("hamster", "images/hamstershoes.png");
-    }
-    if (Shoes == "True" && Wearing == "True") {
+    } else if (Shoes == "True" && Wearing == "True") {
       hamster = loadSprite("hamster", "images/hamstercapshoes.png");
-    } else if (Wearing == "False" && Shoes == "False") {
+    } else {
       hamster = loadSprite("hamster", "images/hamster.png");
     }
-    hamster = add([
-      sprite("hamster"),
+    add([
+      sprite(hamster),
       pos(width() / 2, height() / 2),
       scale(0.55),
       anchor("center"),
