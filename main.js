@@ -4,7 +4,7 @@ let SPEED = 350;
 // initialize context
 kaboom();
 // load assets
-let hamster = loadSprite("hamster", "images/hamster.png");
+loadSprite("hamster", "images/hamster.png");
 loadSprite("seed", "images/seed.png");
 loadSprite("chocolate", "images/chocolate-bar.png");
 loadSprite("heart", "images/heart.png");
@@ -335,7 +335,7 @@ function display_info() {
       ...parameters,
     ]);
     Credits.add([
-      text("Heart Icon created by Pixel perfect"),
+      text("Heart Icon created by Pixel perfect - Flaticon"),
       pos(0, -100),
       ...parameters,
     ]);
@@ -372,6 +372,10 @@ function display_info() {
 
     onClick("x", () => {
       destroy(Credits);
+      Credits = null; // Reset Credits variable after destroying
+    });
+    onKeyPress("escape", () => {
+      go("menu");
       Credits = null; // Reset Credits variable after destroying
     });
   }
@@ -714,13 +718,25 @@ scene("menu", () => {
         alert("You don't have enough seeds and bananas");
       }
     });
-
+    function loadrighthamster() {
+      if (cap_text == "Wearing" && shoes_text !== "Wearing") {
+        loadSprite("hamster", "images/hamstercap.png");
+      } else if (shoes_text == "Wearing" && cap_text !== "Wearing") {
+        loadSprite("hamster", "images/hamstershoes.png");
+      } else if (shoes_text == "Wearing" && cap_text == "Wearing") {
+        loadSprite("hamster", "images/hamstercapshoes.png");
+      } else {
+        loadSprite("hamster", "images/hamster.png");
+      }
+    }
+    onKeyPress("escape", () => {
+      loadrighthamster();
+      go("menu");
+    });
     onClick("x", () => {
       destroy(background);
       background = null; // Reset background variable after destroying
-      if (shoes_text == "Wearing" && cap_text == "Wearing") {
-        hamster = loadSprite("hamster", "images/hamstercapshoes.png");
-      }
+      loadrighthamster();
       go("menu");
     });
   }
