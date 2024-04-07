@@ -3,17 +3,18 @@ const JUMP_FORCE = 800;
 let SPEED = 350;
 // initialize context
 kaboom();
+
 // load assets
 loadSprite("hamster", "images/hamster.png");
 loadSprite("seed", "images/seed.png");
+loadSprite("apple", "images/apple.png");
+loadSprite("banana", "images/banana.png");
 loadSprite("chocolate", "images/chocolate-bar.png");
 loadSprite("heart", "images/heart.png");
-loadSprite("apple", "images/apple.png");
-loadSprite("homik", "images/Dirt.png");
+loadSprite("dirt", "images/Dirt.png");
 loadSprite("left_arrow", "images/left_arrow.png");
 loadSprite("right_arrow", "images/right_arrow.png");
-loadSprite("banana", "images/banana.png");
-loadSprite("hello", "images/hello.png");
+loadSprite("left_banana", "images/left_banana.png");
 loadSprite("cap", "images/cap.png");
 loadSprite("shoes", "images/hamstershoes.png");
 
@@ -22,32 +23,47 @@ loadSound("jump", "sounds/jump.wav");
 loadSound("negative", "sounds/negative_beeps.mp3");
 loadSound("gameover", "sounds/gameover.mp3");
 loadSound("bonus", "sounds/bonus_heart.mp3");
+let seeds = localStorage.getItem("seeds");
+let apples = localStorage.getItem("apples");
+let bananas = localStorage.getItem("bananas");
 let Wearing = localStorage.getItem("Wearing");
 let Shoes = localStorage.getItem("Shoes");
 setBackground(50, 50, 50);
 if (Wearing == "True") {
-  hamster = loadSprite("hamster", "images/hamstercap.png");
+  loadSprite("hamster", "images/hamstercap.png");
 }
 if (Wearing == "False" && Shoes == "False") {
-  hamster = loadSprite("hamster", "images/hamster.png");
+  loadSprite("hamster", "images/hamster.png");
 }
 if (Shoes == "True") {
-  hamster = loadSprite("hamster", "images/hamstershoes.png");
+  loadSprite("hamster", "images/hamstershoes.png");
 }
 if (Shoes == "True" && Wearing == "True") {
-  hamster = loadSprite("hamster", "images/hamstercapshoes.png");
+  loadSprite("hamster", "images/hamstercapshoes.png");
 }
-
+let hamster_pos = 80;
+let hamster_scale = 0.2;
+let chocolate_scale = 0.15;
+let apple_scale = 0.16;
+let banana_scale = 0.14;
+let seed_scale = 0.1;
 scene("game", () => {
   // define gravity
   let GRAVITY = 1250;
   setGravity(GRAVITY);
-
   // add a game object to screen
+  if (window.innerWidth <= 500) {
+    hamster_scale = 0.18;
+    hamster_pos = 10;
+    chocolate_scale = 0.12;
+    apple_scale = 0.12;
+    banana_scale = 0.11;
+    seed_scale = 0.09;
+  }
   const player = add([
     sprite("hamster"),
-    pos(80, 40),
-    scale(0.2),
+    pos(hamster_pos, 40),
+    scale(hamster_scale),
     area(),
     body(),
   ]);
@@ -56,7 +72,7 @@ scene("game", () => {
   for (let x = 0; x < width(); x += 60) {
     add([
       pos(x, height()),
-      sprite("homik"),
+      sprite("dirt"),
       anchor("botleft"),
       area(),
       body({ isStatic: true }),
@@ -66,9 +82,7 @@ scene("game", () => {
   function jump() {
     if (player.isGrounded()) {
       player.jump(JUMP_FORCE);
-      play("jump", {
-        loop: false,
-      });
+      play("jump");
     }
   }
 
@@ -93,7 +107,7 @@ scene("game", () => {
         sprite("chocolate"),
         area(),
         pos(width(), height() - 65),
-        scale(0.15),
+        scale(chocolate_scale),
         anchor("botleft"),
         move(LEFT, SPEED),
         offscreen({ destroy: true }),
@@ -104,7 +118,7 @@ scene("game", () => {
         sprite("apple"),
         area(),
         pos(width(), height() - randi(65, 300)),
-        scale(0.16),
+        scale(apple_scale),
         anchor("botleft"),
         move(LEFT, SPEED),
         offscreen({ destroy: true }),
@@ -115,7 +129,7 @@ scene("game", () => {
         sprite("banana"),
         area(),
         pos(width(), height() - randi(65, 300)),
-        scale(0.14),
+        scale(banana_scale),
         anchor("botleft"),
         move(LEFT, SPEED),
         offscreen({ destroy: true }),
@@ -128,7 +142,7 @@ scene("game", () => {
         pos(width(), height() - randi(65, 300)),
         anchor("botleft"),
         move(LEFT, SPEED),
-        scale(0.1),
+        scale(seed_scale),
         offscreen({ destroy: true }),
         "seed",
       ]);
@@ -147,12 +161,10 @@ scene("game", () => {
 
   // lose if player collides with any game obj with tag "seed"
   player.onCollide("seed", orzech => {
-    play("pickup", {
-      loop: false,
-    });
+    play("pickup");
     destroy(orzech);
     seedScore++;
-    seedscoreLabel.text = seedScore;
+    seedScoreLabel.text = seedScore;
     console.log("mniam");
   });
 
@@ -161,18 +173,14 @@ scene("game", () => {
     this[bonuslives] = undefined;
   }
 
-  player.onCollide("apple", jabuszko => {
-    play("pickup", {
-      loop: false,
-    });
-    destroy(jabuszko);
+  player.onCollide("apple", jabłuszko => {
+    play("pickup");
+    destroy(jabłuszko);
     appleScore++;
     appleScoreLabel.text = appleScore;
     if ([10, 20, 30, 40, 50, 60, 70, 80, 90, 100].includes(appleScore)) {
       lives += 1;
-      play("bonus", {
-        loop: false,
-      });
+      play("bonus");
       parameters = [sprite("heart"), scale(0.08)];
       if (lives == 10) {
         bonusLive10 = add([pos(width() - 505, 15), ...parameters]);
@@ -210,51 +218,39 @@ scene("game", () => {
 
   player.onCollide("Chocolate", czekolada => {
     destroy(czekolada);
-    play("negative", {
-      loop: false,
-    });
+    play("negative");
     lives -= 1;
 
     // Check and destroy bonus hearts based on the number of lives
     if (lives == 9 && bonusLive10) {
       destroy(bonusLive10);
-      bonusLive10 = undefined;
     }
     if (lives == 8 && bonusLive9) {
       destroy(bonusLive9);
-      bonusLive9 = undefined;
     }
     if (lives == 7 && bonusLive8) {
       destroy(bonusLive8);
-      bonusLive8 = undefined;
     }
     if (lives == 6 && bonusLive7) {
       destroy(bonusLive7);
-      bonusLive7 = undefined;
     }
     if (lives == 5 && bonusLive6) {
       destroy(bonusLive6);
-      bonusLive6 = undefined;
     }
     if (lives == 4 && bonusLive5) {
       destroy(bonusLive5);
-      bonusLive5 = undefined;
     }
     if (lives == 3 && bonusLive4) {
       destroy(bonusLive4);
-      bonusLive4 = undefined;
     }
     if (lives == 2 && bonusLive3) {
       destroy(bonusLive3);
-      bonusLive3 = undefined;
     }
     if (lives == 1 && bonusLive2) {
       destroy(bonusLive2);
-      bonusLive2 = undefined;
     }
     if (lives == 0 && bonusLive1) {
       destroy(bonusLive1);
-      bonusLive1 = undefined;
     }
     if (lives == 2) {
       destroy(Live3);
@@ -265,35 +261,28 @@ scene("game", () => {
     if (lives == 0) {
       destroy(Live1);
       go("menu");
-      seeds = localStorage.getItem("seeds");
-      apples = localStorage.getItem("apples");
-      bananas = localStorage.getItem("bananas");
       localStorage.setItem("seeds", +seedScore + +seeds);
       localStorage.setItem("apples", +appleScore + +apples);
       localStorage.setItem("bananas", +bananaScore + +bananas);
       SPEED = 350;
-      play("gameover", {
-        loop: false,
-      });
+      play("gameover");
     }
     console.log("fu");
   });
   player.onCollide("banana", banan => {
-    play("pickup", {
-      loop: false,
-    });
+    play("pickup");
     destroy(banan);
     bananaScore++;
     bananaScoreLabel.text = bananaScore;
     console.log("mniam");
   });
 
-  const seedscoreLabel = add([text(seedScore), pos(65, 24)]);
+  const seedScoreLabel = add([text(seedScore), pos(65, 24)]);
   add([sprite("seed"), scale(0.08), pos(16, 20)]);
   const appleScoreLabel = add([text(appleScore), pos(175, 24)]);
   add([sprite("apple"), scale(0.1), pos(120, 10)]);
   const bananaScoreLabel = add([text(bananaScore), pos(65, 80)]);
-  add([sprite("hello"), scale(0.1), pos(14, 75)]);
+  add([sprite("left_banana"), scale(0.1), pos(14, 75)]);
   let Live1 = add([sprite("heart"), pos(width() - 55, 15), scale(0.08)]);
   let Live2 = add([sprite("heart"), pos(width() - 105, 15), scale(0.08)]);
   let Live3 = add([sprite("heart"), pos(width() - 155, 15), scale(0.08)]);
@@ -372,24 +361,39 @@ function display_info() {
 
     onClick("x", () => {
       destroy(Credits);
-      Credits = null; // Reset Credits variable after destroying
+      Credits = null;
     });
     onKeyPress("escape", () => {
       go("menu");
-      Credits = null; // Reset Credits variable after destroying
+      Credits = null;
     });
   }
 }
 scene("menu", () => {
+  let hamster_scale = 0.55;
+  let Hamster_text_size = 100;
+  let Shop_text_size = 70;
+  let arrows = 200;
+  let arrows_scale = 0.2;
+  let info_x = 40;
+  let info_y = 45;
+  if (window.innerWidth <= 500) {
+    Hamster_text_size = 0.01;
+    Shop_text_size = 0.01;
+    hamster_scale = 0.5;
+    arrows = 130;
+    arrows_scale = 0.16;
+    info_x = 35;
+    info_y = 45;
+  }
   add([
     sprite("hamster"),
     pos(width() / 2, height() / 2),
-    scale(0.55),
+    scale(hamster_scale),
     anchor("center"),
   ]);
-
   add([
-    text("Hamster", { size: 100 }),
+    text("Hamster", { size: Hamster_text_size }),
     pos(width() / 2, height() / 2 + -230),
     anchor("center"),
   ]);
@@ -400,14 +404,14 @@ scene("menu", () => {
   add([text(localStorage.getItem("seeds") || 0), pos(60, 53)]);
   add([sprite("apple"), scale(0.09), pos(8, 100)]);
   add([text(localStorage.getItem("apples") || 0), pos(60, 110)]);
-  add([sprite("hello"), scale(0.09), pos(10, 150)]);
+  add([sprite("left_banana"), scale(0.09), pos(10, 150)]);
   add([text(localStorage.getItem("bananas") || 0), pos(60, 160)]);
 
   // display credits
   const info = add([
     text("i"),
     area(),
-    pos(width() - 60, height() - 55),
+    pos(width() - info_x, height() - info_y),
     color(140, 140, 140),
     "info",
   ]);
@@ -489,16 +493,16 @@ scene("menu", () => {
   function hamsters() {
     left_arrow = add([
       sprite("left_arrow"),
-      scale(0.2),
-      pos(width() / 2 - 200, height() / 2),
+      scale(arrows_scale),
+      pos(width() / 2 - arrows, height() / 2),
       area(),
       anchor("center"),
       "left-arrow",
     ]);
     right_arrow = add([
       sprite("right_arrow"),
-      scale(0.2),
-      pos(width() / 2 + 200, height() / 2),
+      scale(arrows_scale),
+      pos(width() / 2 + arrows, height() / 2),
       area(),
       anchor("center"),
       "right-arrow",
@@ -508,12 +512,9 @@ scene("menu", () => {
     let cap_text, shoes_text, buy_cap_button_color, buy_shoes_button_color;
     let buy_cap_text_scale = 0.7;
     let buy_shoes_text_scale = 0.7;
-    let seeds = localStorage.getItem("seeds");
-    let apples = localStorage.getItem("apples");
-    let bananas = localStorage.getItem("bananas");
     let background = add([rect(width(), height()), color(50, 50, 50)]);
     background.add([
-      text("Shop", { size: 70 }),
+      text("Shop", { size: Shop_text_size }),
       anchor("center"),
       pos(width() / 2, 50),
     ]);
@@ -536,26 +537,23 @@ scene("menu", () => {
     ]);
     background.add([sprite("seed"), scale(0.08), pos(35, 250)]);
     background.add([text("5"), scale(0.9), pos(80, 253)]);
-    background.add([sprite("hello"), scale(0.085), pos(132, 245)]);
+    background.add([sprite("left_banana"), scale(0.085), pos(132, 245)]);
     background.add([text("5"), scale(0.9), pos(180, 253)]);
     background.add([sprite("shoes"), scale(0.2), pos(69, 285)]);
     // logic for cap button color and text
-    if (localStorage.getItem("93rfDw") === "#%1d8*f@4p") {
+    if (localStorage.getItem("93rfDw") == "#%1d8*f@4p") {
       cap_text = "Wearing";
       buy_cap_button_color = rgb(0, 160, 0);
       buy_cap_text_scale = 0.6;
-      hamster = loadSprite("hamster", "images/hamstercap.png");
       if (localStorage.getItem("Wearing") == "True") {
         cap_text = "Wearing";
         buy_cap_button_color = rgb(0, 160, 0);
         buy_cap_text_scale = 0.6;
-        hamster = loadSprite("hamster", "images/hamstercap.png");
       }
       if (localStorage.getItem("Wearing") == "False") {
         cap_text = "Wear";
         buy_cap_button_color = rgb(160, 0, 0);
         buy_cap_text_scale = 0.7;
-        hamster = loadSprite("hamster", "images/hamster.png");
       }
     } else {
       if (seeds < 10 || apples < 5) {
@@ -568,22 +566,19 @@ scene("menu", () => {
       }
     }
     // logic for shoes button color and text
-    if (localStorage.getItem("Sk@3o&") === "%01ns#9p") {
+    if (localStorage.getItem("Sk@3o&") == "%01ns#9p") {
       shoes_text = "Wearing";
       buy_shoes_button_color = rgb(0, 160, 0);
       buy_shoes_text_scale = 0.6;
-      hamster = loadSprite("hamster", "images/hamstershoes.png");
       if (localStorage.getItem("Shoes") == "True") {
         shoes_text = "Wearing";
         buy_shoes_button_color = rgb(0, 160, 0);
         buy_shoes_text_scale = 0.6;
-        hamster = loadSprite("hamster", "images/hamstershoes.png");
       }
       if (localStorage.getItem("Shoes") == "False") {
         shoes_text = "Wear";
         buy_shoes_button_color = rgb(160, 0, 0);
         buy_shoes_text_scale = 0.7;
-        hamster = loadSprite("hamster", "images/hamster.png");
       }
     } else {
       if (seeds < 5 || bananas < 5) {
@@ -603,7 +598,6 @@ scene("menu", () => {
         buy_cap_text.text = cap_text;
         buy_cap_text.scale = 0.6;
         buy_cap.color = rgb(0, 160, 0);
-        hamster = loadSprite("hamster", "images/hamstercap.png");
       });
     }
 
@@ -614,7 +608,6 @@ scene("menu", () => {
         buy_cap_text.text = cap_text;
         buy_cap_text.scale = 0.7;
         buy_cap.color = rgb(160, 0, 0);
-        hamster = loadSprite("hamster", "images/hamster.png");
       });
     }
 
@@ -625,7 +618,6 @@ scene("menu", () => {
         buy_shoes_text.text = shoes_text;
         buy_shoes_text.scale = 0.6;
         buy_shoes.color = rgb(0, 160, 0);
-        hamster = loadSprite("hamster", "images/hamstershoes.png");
       });
     }
 
@@ -636,7 +628,6 @@ scene("menu", () => {
         buy_shoes_text.text = shoes_text;
         buy_shoes_text.scale = 0.7;
         buy_shoes.color = rgb(160, 0, 0);
-        hamster = loadSprite("hamster", "images/hamster.png");
       });
     }
 
@@ -688,7 +679,6 @@ scene("menu", () => {
           buy_cap.color = rgb(0, 160, 0);
           buy_cap_text.text = cap_text;
           buy_cap_text.scale = 0.6;
-          hamster = loadSprite("hamster", "images/hamstercap.png");
           localStorage.setItem("Wearing", "True");
         }
       } else if (
@@ -708,7 +698,6 @@ scene("menu", () => {
           buy_shoes.color = rgb(0, 160, 0);
           buy_shoes_text.text = shoes_text;
           buy_shoes_text.scale = 0.6;
-          hamster = loadSprite("hamster", "images/hamstershoes.png");
           localStorage.setItem("Shoes", "True");
         }
       } else if (
@@ -740,8 +729,7 @@ scene("menu", () => {
       go("menu");
     });
   }
-  let Wearing = localStorage.getItem("Wearing");
-  let Shoes = localStorage.getItem("Shoes");
+
   onClick("play", () => go("game"));
   onClick("hamsters", () => hamsters());
   onClick("shop", () => shop());
@@ -758,7 +746,7 @@ scene("menu", () => {
     add([
       sprite(hamster),
       pos(width() / 2, height() / 2),
-      scale(0.55),
+      scale(hamster_scale),
       anchor("center"),
     ]);
   });
@@ -775,7 +763,7 @@ scene("menu", () => {
     add([
       sprite(hamster),
       pos(width() / 2, height() / 2),
-      scale(0.55),
+      scale(hamster_scale),
       anchor("center"),
     ]);
   });
