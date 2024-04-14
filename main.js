@@ -3,7 +3,6 @@ const JUMP_FORCE = 800;
 let SPEED = 350;
 // initialize context
 kaboom();
-
 // load assets
 loadSprite("hamster", "images/hamster.png");
 loadSprite("seed", "images/seed.png");
@@ -23,11 +22,18 @@ loadSound("jump", "sounds/jump.wav");
 loadSound("negative", "sounds/negative_beeps.mp3");
 loadSound("gameover", "sounds/gameover.mp3");
 loadSound("bonus", "sounds/bonus_heart.mp3");
-let seeds = localStorage.getItem("seeds");
-let apples = localStorage.getItem("apples");
-let bananas = localStorage.getItem("bananas");
-let Wearing = localStorage.getItem("Wearing");
-let Shoes = localStorage.getItem("Shoes");
+
+function updateLocalStorageVariables() {
+  seeds = localStorage.getItem("seeds");
+  apples = localStorage.getItem("apples");
+  bananas = localStorage.getItem("bananas");
+  Wearing = localStorage.getItem("Wearing");
+  Shoes = localStorage.getItem("Shoes");
+}
+
+// Update the variables initially
+updateLocalStorageVariables();
+
 setBackground(50, 50, 50);
 if (Wearing == "True") {
   loadSprite("hamster", "images/hamstercap.png");
@@ -51,7 +57,7 @@ scene("game", () => {
   // define gravity
   let GRAVITY = 1250;
   setGravity(GRAVITY);
-  // add a game object to screen
+
   if (window.innerWidth <= 500) {
     hamster_scale = 0.18;
     hamster_pos = 10;
@@ -60,6 +66,7 @@ scene("game", () => {
     banana_scale = 0.11;
     seed_scale = 0.09;
   }
+  // add a game object to screen
   const player = add([
     sprite("hamster"),
     pos(hamster_pos, 40),
@@ -91,14 +98,10 @@ scene("game", () => {
   onKeyPress("up", jump);
   onClick(jump);
   // Increase speed gradually
-  function increaseSpeed() {
+  loop(0.5, () => {
     SPEED += 1;
     GRAVITY += 0.5;
     setGravity(GRAVITY);
-  }
-  // Increase speed gradually
-  loop(0.5, () => {
-    increaseSpeed();
   });
   function spawnItem() {
     const number = randi(5);
@@ -159,7 +162,7 @@ scene("game", () => {
   let bananaScore = 0;
   let lives = 3;
 
-  // lose if player collides with any game obj with tag "seed"
+  // collect if player collides with any game obj with tag "seed"
   player.onCollide("seed", orzech => {
     play("pickup");
     destroy(orzech);
@@ -182,35 +185,14 @@ scene("game", () => {
       lives += 1;
       play("bonus");
       parameters = [sprite("heart"), scale(0.08)];
-      if (lives == 10) {
-        bonusLive10 = add([pos(width() - 505, 15), ...parameters]);
-      }
-      if (lives == 9) {
-        bonusLive9 = add([pos(width() - 455, 15), ...parameters]);
-      }
-      if (lives == 8) {
-        bonusLive8 = add([pos(width() - 405, 15), ...parameters]);
-      }
-      if (lives == 7) {
-        bonusLive7 = add([pos(width() - 355, 15), ...parameters]);
-      }
-      if (lives == 6) {
-        bonusLive6 = add([pos(width() - 305, 15), ...parameters]);
-      }
-      if (lives == 5) {
-        bonusLive5 = add([pos(width() - 255, 15), ...parameters]);
-      }
-      if (lives == 4) {
-        bonusLive4 = add([pos(width() - 205, 15), ...parameters]);
-      }
-      if (lives == 3) {
-        bonusLive3 = add([pos(width() - 155, 15), ...parameters]);
-      }
-      if (lives == 2) {
-        bonusLive2 = add([pos(width() - 105, 15), ...parameters]);
-      }
-      if (lives == 1) {
-        bonusLive1 = add([pos(width() - 55, 15), ...parameters]);
+
+      for (let i = 1; i <= 10; i++) {
+        if (lives == i) {
+          window["bonusLive" + i] = add([
+            pos(width() - 50 * i - 5, 15),
+            ...parameters,
+          ]);
+        }
       }
       console.log("mniam");
     }
@@ -222,36 +204,12 @@ scene("game", () => {
     lives -= 1;
 
     // Check and destroy bonus hearts based on the number of lives
-    if (lives == 9 && bonusLive10) {
-      destroy(bonusLive10);
+    for (let i = 2; i <= 10; i++) {
+      if (lives == i - 1 && window["bonusLive" + i]) {
+        destroy(window["bonusLive" + i]);
+      }
     }
-    if (lives == 8 && bonusLive9) {
-      destroy(bonusLive9);
-    }
-    if (lives == 7 && bonusLive8) {
-      destroy(bonusLive8);
-    }
-    if (lives == 6 && bonusLive7) {
-      destroy(bonusLive7);
-    }
-    if (lives == 5 && bonusLive6) {
-      destroy(bonusLive6);
-    }
-    if (lives == 4 && bonusLive5) {
-      destroy(bonusLive5);
-    }
-    if (lives == 3 && bonusLive4) {
-      destroy(bonusLive4);
-    }
-    if (lives == 2 && bonusLive3) {
-      destroy(bonusLive3);
-    }
-    if (lives == 1 && bonusLive2) {
-      destroy(bonusLive2);
-    }
-    if (lives == 0 && bonusLive1) {
-      destroy(bonusLive1);
-    }
+
     if (lives == 2) {
       destroy(Live3);
     }
@@ -370,13 +328,13 @@ function display_info() {
   }
 }
 scene("menu", () => {
+  updateLocalStorageVariables();
   let hamster_scale = 0.55;
   let Hamster_text_size = 100;
   let Shop_text_size = 70;
   let arrows = 200;
   let arrows_scale = 0.2;
   let info_x = 40;
-  let info_y = 45;
   if (window.innerWidth <= 500) {
     Hamster_text_size = 0.01;
     Shop_text_size = 0.01;
@@ -384,41 +342,40 @@ scene("menu", () => {
     arrows = 130;
     arrows_scale = 0.16;
     info_x = 35;
-    info_y = 45;
   }
   add([
     sprite("hamster"),
-    pos(width() / 2, height() / 2),
+    pos(center()),
     scale(hamster_scale),
     anchor("center"),
   ]);
   add([
     text("Hamster", { size: Hamster_text_size }),
-    pos(width() / 2, height() / 2 + -230),
+    pos(width() / 2, height() / 2 - 230),
     anchor("center"),
   ]);
 
   // display score
   add([text("You have:"), pos(10, 10)]);
   add([sprite("seed"), scale(0.08), pos(10, 50)]);
-  add([text(localStorage.getItem("seeds") || 0), pos(60, 53)]);
+  add([text(seeds || 0), pos(60, 53)]);
   add([sprite("apple"), scale(0.09), pos(8, 100)]);
-  add([text(localStorage.getItem("apples") || 0), pos(60, 110)]);
+  add([text(apples || 0), pos(60, 110)]);
   add([sprite("left_banana"), scale(0.09), pos(10, 150)]);
-  add([text(localStorage.getItem("bananas") || 0), pos(60, 160)]);
+  add([text(bananas || 0), pos(60, 160)]);
 
   // display credits
   const info = add([
     text("i"),
-    area(),
-    pos(width() - info_x, height() - info_y),
+    pos(width() - info_x, height() - 45),
     color(140, 140, 140),
+    area(),
     "info",
   ]);
 
   const play_button = add([
     rect(350, 75, { radius: 8 }),
-    color(0, 0, 255),
+    color(0, 100, 0),
     pos(width() / 2, height() / 2 + 220),
     area(),
     anchor("center"),
@@ -456,13 +413,13 @@ scene("menu", () => {
   ]);
   // animations
   play_button.onHoverUpdate(() => {
-    play_button.color = rgb(10, 100, 10);
+    play_button.color = rgb(0, 125, 0);
     play_button.scale = vec2(1.025);
     setCursor("pointer");
   });
   play_button.onHoverEnd(() => {
     play_button.scale = vec2(1);
-    play_button.color = rgb(0, 0, 255);
+    play_button.color = rgb(0, 100, 0);
     setCursor("default");
   });
   function handleButtonHover(...buttons) {
@@ -491,7 +448,7 @@ scene("menu", () => {
   });
 
   function hamsters() {
-    left_arrow = add([
+    add([
       sprite("left_arrow"),
       scale(arrows_scale),
       pos(width() / 2 - arrows, height() / 2),
@@ -499,7 +456,7 @@ scene("menu", () => {
       anchor("center"),
       "left-arrow",
     ]);
-    right_arrow = add([
+    add([
       sprite("right_arrow"),
       scale(arrows_scale),
       pos(width() / 2 + arrows, height() / 2),
@@ -545,12 +502,12 @@ scene("menu", () => {
       cap_text = "Wearing";
       buy_cap_button_color = rgb(0, 160, 0);
       buy_cap_text_scale = 0.6;
-      if (localStorage.getItem("Wearing") == "True") {
+      if (Wearing == "True") {
         cap_text = "Wearing";
         buy_cap_button_color = rgb(0, 160, 0);
         buy_cap_text_scale = 0.6;
       }
-      if (localStorage.getItem("Wearing") == "False") {
+      if (Wearing == "False") {
         cap_text = "Wear";
         buy_cap_button_color = rgb(160, 0, 0);
         buy_cap_text_scale = 0.7;
@@ -570,12 +527,12 @@ scene("menu", () => {
       shoes_text = "Wearing";
       buy_shoes_button_color = rgb(0, 160, 0);
       buy_shoes_text_scale = 0.6;
-      if (localStorage.getItem("Shoes") == "True") {
+      if (Shoes == "True") {
         shoes_text = "Wearing";
         buy_shoes_button_color = rgb(0, 160, 0);
         buy_shoes_text_scale = 0.6;
       }
-      if (localStorage.getItem("Shoes") == "False") {
+      if (Shoes == "False") {
         shoes_text = "Wear";
         buy_shoes_button_color = rgb(160, 0, 0);
         buy_shoes_text_scale = 0.7;
@@ -590,14 +547,19 @@ scene("menu", () => {
         buy_shoes_button_color = rgb(0, 255, 0);
       }
     }
+    function set(item, buttonScale, buttonColor) {
+      red = rgb(160, 0, 0);
+      green = rgb(0, 160, 0);
+      eval("buy_" + item + "_text.text = " + item + "_text");
+      eval("buy_" + item + "_text.scale = " + buttonScale);
+      eval("buy_" + item + ".color = " + buttonColor);
+    }
 
     if (cap_text == "Wear") {
       onClick("buy-cap", () => {
         cap_text = "Wearing";
         localStorage.setItem("Wearing", "True");
-        buy_cap_text.text = cap_text;
-        buy_cap_text.scale = 0.6;
-        buy_cap.color = rgb(0, 160, 0);
+        set("cap", 0.6, "green");
       });
     }
 
@@ -605,9 +567,7 @@ scene("menu", () => {
       onClick("buy-cap", () => {
         cap_text = "Wear";
         localStorage.setItem("Wearing", "False");
-        buy_cap_text.text = cap_text;
-        buy_cap_text.scale = 0.7;
-        buy_cap.color = rgb(160, 0, 0);
+        set("cap", 0.7, "red");
       });
     }
 
@@ -615,9 +575,7 @@ scene("menu", () => {
       onClick("buy-shoes", () => {
         shoes_text = "Wearing";
         localStorage.setItem("Shoes", "True");
-        buy_shoes_text.text = shoes_text;
-        buy_shoes_text.scale = 0.6;
-        buy_shoes.color = rgb(0, 160, 0);
+        set("shoes", 0.6, "green");
       });
     }
 
@@ -625,9 +583,7 @@ scene("menu", () => {
       onClick("buy-shoes", () => {
         shoes_text = "Wear";
         localStorage.setItem("Shoes", "False");
-        buy_shoes_text.text = shoes_text;
-        buy_shoes_text.scale = 0.7;
-        buy_shoes.color = rgb(160, 0, 0);
+        set("shoes", 0.7, "red");
       });
     }
 
@@ -655,7 +611,7 @@ scene("menu", () => {
       outline(4.5),
       "buy-shoes",
     ]);
-    const buy_shoes_text = buy_shoes.add([
+    buy_shoes.add([
       text(shoes_text),
       anchor("center"),
       scale(buy_shoes_text_scale),
@@ -676,9 +632,7 @@ scene("menu", () => {
           localStorage.setItem("seeds", seeds - 10);
           localStorage.setItem("apples", apples - 5);
           cap_text = "Wearing";
-          buy_cap.color = rgb(0, 160, 0);
-          buy_cap_text.text = cap_text;
-          buy_cap_text.scale = 0.6;
+          set("cap", 0.6, "green");
           localStorage.setItem("Wearing", "True");
         }
       } else if (
@@ -695,9 +649,7 @@ scene("menu", () => {
           localStorage.setItem("seeds", seeds - 5);
           localStorage.setItem("bananas", bananas - 5);
           shoes_text = "Wearing";
-          buy_shoes.color = rgb(0, 160, 0);
-          buy_shoes_text.text = shoes_text;
-          buy_shoes_text.scale = 0.6;
+          set("shoes", 0.6, "green");
           localStorage.setItem("Shoes", "True");
         }
       } else if (
@@ -724,7 +676,7 @@ scene("menu", () => {
     });
     onClick("x", () => {
       destroy(background);
-      background = null; // Reset background variable after destroying
+      background = null;
       loadrighthamster();
       go("menu");
     });
@@ -745,7 +697,7 @@ scene("menu", () => {
     }
     add([
       sprite(hamster),
-      pos(width() / 2, height() / 2),
+      pos(center()),
       scale(hamster_scale),
       anchor("center"),
     ]);
@@ -762,7 +714,7 @@ scene("menu", () => {
     }
     add([
       sprite(hamster),
-      pos(width() / 2, height() / 2),
+      pos(center()),
       scale(hamster_scale),
       anchor("center"),
     ]);
