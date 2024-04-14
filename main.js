@@ -611,7 +611,7 @@ scene("menu", () => {
       outline(4.5),
       "buy-shoes",
     ]);
-    buy_shoes.add([
+    const buy_shoes_text = buy_shoes.add([
       text(shoes_text),
       anchor("center"),
       scale(buy_shoes_text_scale),
