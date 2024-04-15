@@ -8,7 +8,7 @@ loadSprite("hamster", "images/hamster.png");
 loadSprite("seed", "images/seed.png");
 loadSprite("apple", "images/apple.png");
 loadSprite("banana", "images/banana.png");
-loadSprite("chocolate", "images/chocolate-bar.png");
+loadSprite("chocolate", "images/chocolate_bar.png");
 loadSprite("heart", "images/heart.png");
 loadSprite("dirt", "images/Dirt.png");
 loadSprite("left_arrow", "images/left_arrow.png");
@@ -316,16 +316,15 @@ function display_info() {
       scale(0.8),
       "x",
     ]);
-
-    onClick("x", () => {
-      destroy(Credits);
-      Credits = null;
-    });
-    onKeyPress("escape", () => {
-      go("menu");
-      Credits = null;
-    });
   }
+  onClick("x", () => {
+    destroy(Credits);
+    Credits = null;
+  });
+  onKeyPress("escape", () => {
+    go("menu");
+    Credits = null;
+  });
 }
 scene("menu", () => {
   updateLocalStorageVariables();
@@ -454,7 +453,7 @@ scene("menu", () => {
       pos(width() / 2 - arrows, height() / 2),
       area(),
       anchor("center"),
-      "left-arrow",
+      "left_arrow",
     ]);
     add([
       sprite("right_arrow"),
@@ -462,7 +461,7 @@ scene("menu", () => {
       pos(width() / 2 + arrows, height() / 2),
       area(),
       anchor("center"),
-      "right-arrow",
+      "right_arrow",
     ]);
   }
   function shop() {
@@ -547,45 +546,36 @@ scene("menu", () => {
         buy_shoes_button_color = rgb(0, 255, 0);
       }
     }
-    function set(item, buttonScale, buttonColor) {
-      red = rgb(160, 0, 0);
-      green = rgb(0, 160, 0);
+    function set(item, Wearing_or_Wear) {
+      eval(item + "_text = " + `"${Wearing_or_Wear}"`);
+      Wear = rgb(160, 0, 0);
+      Wearing = rgb(0, 160, 0);
+      eval("buy_" + item + ".color = " + Wearing_or_Wear);
       eval("buy_" + item + "_text.text = " + item + "_text");
-      eval("buy_" + item + "_text.scale = " + buttonScale);
-      eval("buy_" + item + ".color = " + buttonColor);
+      (Wear = 0.7), (Wearing = 0.6);
+      eval("buy_" + item + "_text.scale = " + Wearing_or_Wear);
+
+      localStorage.setItem(
+        item == "cap" ? "Wearing" : "Shoes",
+        Wearing_or_Wear == "Wearing" ? "True" : "False"
+      );
     }
 
-    if (cap_text == "Wear") {
-      onClick("buy-cap", () => {
-        cap_text = "Wearing";
-        localStorage.setItem("Wearing", "True");
-        set("cap", 0.6, "green");
-      });
-    }
+    onClick("buy_cap", () => {
+      if (cap_text == "Wear") {
+        set("cap", "Wearing");
+      } else {
+        set("cap", "Wear");
+      }
+    });
 
-    if (cap_text == "Wearing") {
-      onClick("buy-cap", () => {
-        cap_text = "Wear";
-        localStorage.setItem("Wearing", "False");
-        set("cap", 0.7, "red");
-      });
-    }
-
-    if (shoes_text == "Wear") {
-      onClick("buy-shoes", () => {
-        shoes_text = "Wearing";
-        localStorage.setItem("Shoes", "True");
-        set("shoes", 0.6, "green");
-      });
-    }
-
-    if (shoes_text == "Wearing") {
-      onClick("buy-shoes", () => {
-        shoes_text = "Wear";
-        localStorage.setItem("Shoes", "False");
-        set("shoes", 0.7, "red");
-      });
-    }
+    onClick("buy_shoes", () => {
+      if (shoes_text == "Wear") {
+        set("shoes", "Wearing");
+      } else {
+        set("shoes", "Wear");
+      }
+    });
 
     const buy_cap = background.add([
       rect(100, 35, { radius: 8 }),
@@ -594,7 +584,7 @@ scene("menu", () => {
       area(),
       anchor("center"),
       outline(4.5),
-      "buy-cap",
+      "buy_cap",
     ]);
     const buy_cap_text = buy_cap.add([
       text(cap_text),
@@ -609,7 +599,7 @@ scene("menu", () => {
       area(),
       anchor("center"),
       outline(4.5),
-      "buy-shoes",
+      "buy_shoes",
     ]);
     const buy_shoes_text = buy_shoes.add([
       text(shoes_text),
@@ -625,15 +615,13 @@ scene("menu", () => {
       "x",
     ]);
 
-    onClick("buy-cap", () => {
+    onClick("buy_cap", () => {
       if (seeds >= 10 && apples >= 5) {
         if (localStorage.getItem("93rfDw") !== "#%1d8*f@4p") {
           localStorage.setItem("93rfDw", "#%1d8*f@4p");
           localStorage.setItem("seeds", seeds - 10);
           localStorage.setItem("apples", apples - 5);
-          cap_text = "Wearing";
-          set("cap", 0.6, "green");
-          localStorage.setItem("Wearing", "True");
+          set("cap", "Wearing");
         }
       } else if (
         (seeds < 10 && localStorage.getItem("93rfDw") !== "#%1d8*f@4p") ||
@@ -642,15 +630,13 @@ scene("menu", () => {
         alert("You don't have enough seeds and apples");
       }
     });
-    onClick("buy-shoes", () => {
+    onClick("buy_shoes", () => {
       if (seeds >= 5 && bananas >= 5) {
         if (localStorage.getItem("Sk@3o&") !== "%01ns#9p") {
           localStorage.setItem("Sk@3o&", "%01ns#9p");
           localStorage.setItem("seeds", seeds - 5);
           localStorage.setItem("bananas", bananas - 5);
-          shoes_text = "Wearing";
-          set("shoes", 0.6, "green");
-          localStorage.setItem("Shoes", "True");
+          set("shoes", "Wearing");
         }
       } else if (
         (seeds < 5 && localStorage.getItem("Sk@3o&") !== "%01ns#9p") ||
@@ -682,44 +668,36 @@ scene("menu", () => {
     });
   }
 
+  function updateHamsterImage() {
+    var hamster;
+    if (Wearing == "True" && Shoes !== "True") {
+      hamster = "hamstercap.png";
+    } else if (Shoes == "True" && Wearing !== "True") {
+      hamster = "hamstershoes.png";
+    } else if (Shoes == "True" && Wearing == "True") {
+      hamster = "hamstercapshoes.png";
+    } else {
+      hamster = "hamster.png";
+    }
+    return hamster;
+  }
+
+  function onClickArrow(direction, white) {
+    onClick(direction + "_arrow", () => {
+      var hamster = updateHamsterImage();
+      add([
+        sprite(loadSprite("hamster", "images/" + white + hamster)),
+        pos(center()),
+        scale(hamster_scale),
+        anchor("center"),
+      ]);
+    });
+  }
   onClick("play", () => go("game"));
   onClick("hamsters", () => hamsters());
   onClick("shop", () => shop());
-  onClick("left-arrow", () => {
-    if (Wearing == "True" && Shoes !== "True") {
-      hamster = loadSprite("hamster", "images/white_hamstercap.png");
-    } else if (Shoes == "True" && Wearing !== "True") {
-      hamster = loadSprite("hamster", "images/white_hamstershoes.png");
-    } else if (Shoes == "True" && Wearing == "True") {
-      hamster = loadSprite("hamster", "images/white_hamstercapshoes.png");
-    } else {
-      hamster = loadSprite("hamster", "images/white_hamster.png");
-    }
-    add([
-      sprite(hamster),
-      pos(center()),
-      scale(hamster_scale),
-      anchor("center"),
-    ]);
-  });
-  onClick("right-arrow", () => {
-    if (Wearing == "True" && Shoes !== "True") {
-      hamster = loadSprite("hamster", "images/hamstercap.png");
-    } else if (Shoes == "True" && Wearing !== "True") {
-      hamster = loadSprite("hamster", "images/hamstershoes.png");
-    } else if (Shoes == "True" && Wearing == "True") {
-      hamster = loadSprite("hamster", "images/hamstercapshoes.png");
-    } else {
-      hamster = loadSprite("hamster", "images/hamster.png");
-    }
-    add([
-      sprite(hamster),
-      pos(center()),
-      scale(hamster_scale),
-      anchor("center"),
-    ]);
-  });
-
+  onClickArrow("left", "white_");
+  onClickArrow("right", "");
   onClick("info", () => display_info());
   onKeyPress("space", () => go("game"));
 });
