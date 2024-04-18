@@ -1,8 +1,11 @@
-const FLOOR_HEIGHT = 50;
 const JUMP_FORCE = 800;
 let SPEED = 350;
+let GRAVITY = 1250;
 // initialize context
-kaboom();
+kaboom({
+  width: window.innerWidth,
+  height: window.innerHeight,
+});
 // load assets
 loadSprite("hamster", "images/hamster.png");
 loadSprite("seed", "images/seed.png");
@@ -38,16 +41,16 @@ setBackground(50, 50, 50);
 if (Wearing == "True") {
   loadSprite("hamster", "images/hamstercap.png");
 }
-if (Wearing == "False" && Shoes == "False") {
-  loadSprite("hamster", "images/hamster.png");
-}
 if (Shoes == "True") {
   loadSprite("hamster", "images/hamstershoes.png");
 }
 if (Shoes == "True" && Wearing == "True") {
   loadSprite("hamster", "images/hamstercapshoes.png");
 }
-let hamster_pos = 80;
+if (Wearing == "False" && Shoes == "False") {
+  loadSprite("hamster", "images/hamster.png");
+}
+let hamster_pos = 60;
 let hamster_scale = 0.2;
 let chocolate_scale = 0.15;
 let apple_scale = 0.16;
@@ -55,7 +58,6 @@ let banana_scale = 0.14;
 let seed_scale = 0.1;
 scene("game", () => {
   // define gravity
-  let GRAVITY = 1250;
   setGravity(GRAVITY);
 
   if (window.innerWidth <= 500) {
@@ -105,54 +107,31 @@ scene("game", () => {
   });
   function spawnItem() {
     const number = randi(5);
+    parameters = [
+      area(),
+      anchor("botleft"),
+      move(LEFT, SPEED),
+      pos(width(), height() - randi(65, 300)),
+      offscreen({ destroy: true }),
+    ];
     if (number == 1) {
       add([
         sprite("chocolate"),
-        area(),
-        pos(width(), height() - 65),
         scale(chocolate_scale),
-        anchor("botleft"),
-        move(LEFT, SPEED),
-        offscreen({ destroy: true }),
-        "Chocolate",
+        ...parameters,
+        pos(width(), height() - 65),
+        "chocolate",
       ]);
     } else if (number == 2) {
-      add([
-        sprite("apple"),
-        area(),
-        pos(width(), height() - randi(65, 300)),
-        scale(apple_scale),
-        anchor("botleft"),
-        move(LEFT, SPEED),
-        offscreen({ destroy: true }),
-        "apple",
-      ]);
+      add([sprite("apple"), scale(apple_scale), ...parameters, "apple"]);
     } else if (number == 3) {
-      add([
-        sprite("banana"),
-        area(),
-        pos(width(), height() - randi(65, 300)),
-        scale(banana_scale),
-        anchor("botleft"),
-        move(LEFT, SPEED),
-        offscreen({ destroy: true }),
-        "banana",
-      ]);
+      add([sprite("banana"), scale(banana_scale), ...parameters, "banana"]);
     } else {
-      add([
-        sprite("seed"),
-        area(),
-        pos(width(), height() - randi(65, 300)),
-        anchor("botleft"),
-        move(LEFT, SPEED),
-        scale(seed_scale),
-        offscreen({ destroy: true }),
-        "seed",
-      ]);
+      add([sprite("seed"), scale(seed_scale), ...parameters, "seed"]);
     }
 
     // wait a random amount of time to spawn next Item
-    wait(rand(1.5, 2), spawnItem);
+    wait(rand(1, 2), spawnItem);
   }
   spawnItem();
 
@@ -170,11 +149,6 @@ scene("game", () => {
     seedScoreLabel.text = seedScore;
     console.log("mniam");
   });
-
-  for (let i = 1; i <= 10; i++) {
-    let bonuslives = `bonusLive${i}`;
-    this[bonuslives] = undefined;
-  }
 
   player.onCollide("apple", jabłuszko => {
     play("pickup");
@@ -198,7 +172,7 @@ scene("game", () => {
     }
   });
 
-  player.onCollide("Chocolate", czekolada => {
+  player.onCollide("chocolate", czekolada => {
     destroy(czekolada);
     play("negative");
     lives -= 1;
@@ -661,15 +635,12 @@ scene("menu", () => {
       go("menu");
     });
     onClick("x", () => {
-      destroy(background);
-      background = null;
       loadrighthamster();
       go("menu");
     });
   }
 
   function updateHamsterImage() {
-    var hamster;
     if (Wearing == "True" && Shoes !== "True") {
       hamster = "hamstercap.png";
     } else if (Shoes == "True" && Wearing !== "True") {
@@ -684,7 +655,7 @@ scene("menu", () => {
 
   function onClickArrow(direction, white) {
     onClick(direction + "_arrow", () => {
-      var hamster = updateHamsterImage();
+      hamster = updateHamsterImage();
       add([
         sprite(loadSprite("hamster", "images/" + white + hamster)),
         pos(center()),
