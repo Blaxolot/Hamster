@@ -398,7 +398,7 @@ scene("menu", () => {
   function handleButtonHover(...buttons) {
     buttons.forEach(button => {
       button.onHoverUpdate(() => {
-        button.color = rgb(60, 60, 60);
+        button.color = rgb(90, 90, 90);
         button.scale = vec2(1.02);
         setCursor("pointer");
       });
@@ -459,7 +459,7 @@ scene("menu", () => {
     background.add([sprite("apple"), scale(0.085), pos(135, 25)]);
     background.add([text("5"), scale(0.9), pos(180, 33)]);
     background.add([sprite("cap"), scale(0.25), pos(56, 55)]);
-    // shoes
+    // Shoes
     background.add([
       rect(200, 200, { radius: 15 }),
       pos(20, 240),
@@ -472,9 +472,6 @@ scene("menu", () => {
     background.add([sprite("shoes"), scale(0.2), pos(69, 285)]);
     // logic for cap button color and text
     if (localStorage.getItem("93rfDw") == "#%1d8*f@4p") {
-      cap_text = "Wearing";
-      buy_cap_button_color = rgb(0, 160, 0);
-      buy_cap_text_scale = 0.6;
       if (Wearing == "True") {
         cap_text = "Wearing";
         buy_cap_button_color = rgb(0, 160, 0);
@@ -488,18 +485,15 @@ scene("menu", () => {
     } else {
       if (seeds < 10 || apples < 5) {
         cap_text = "Buy";
-        buy_cap_button_color = rgb(255, 0, 0);
+        buy_cap_button_color = rgb(250, 25, 25);
       }
       if (seeds >= 10 && apples >= 5) {
         cap_text = "Buy";
-        buy_cap_button_color = rgb(0, 255, 0);
+        buy_cap_button_color = rgb(0, 200, 0);
       }
     }
     // logic for shoes button color and text
     if (localStorage.getItem("Sk@3o&") == "%01ns#9p") {
-      shoes_text = "Wearing";
-      buy_shoes_button_color = rgb(0, 160, 0);
-      buy_shoes_text_scale = 0.6;
       if (Shoes == "True") {
         shoes_text = "Wearing";
         buy_shoes_button_color = rgb(0, 160, 0);
@@ -507,17 +501,17 @@ scene("menu", () => {
       }
       if (Shoes == "False") {
         shoes_text = "Wear";
-        buy_shoes_button_color = rgb(160, 0, 0);
+        buy_shoes_button_color = rgb(200, 0, 0);
         buy_shoes_text_scale = 0.7;
       }
     } else {
       if (seeds < 5 || bananas < 5) {
         shoes_text = "Buy";
-        buy_shoes_button_color = rgb(255, 0, 0);
+        buy_shoes_button_color = rgb(250, 25, 25);
       }
       if (seeds >= 5 && bananas >= 5) {
         shoes_text = "Buy";
-        buy_shoes_button_color = rgb(0, 255, 0);
+        buy_shoes_button_color = rgb(0, 200, 0);
       }
     }
     function set(item, Wearing_or_Wear) {
@@ -538,7 +532,7 @@ scene("menu", () => {
     onClick("buy_cap", () => {
       if (cap_text == "Wear") {
         set("cap", "Wearing");
-      } else {
+      } else if (cap_text == "Wearing") {
         set("cap", "Wear");
       }
     });
@@ -546,7 +540,7 @@ scene("menu", () => {
     onClick("buy_shoes", () => {
       if (shoes_text == "Wear") {
         set("shoes", "Wearing");
-      } else {
+      } else if (shoes_text == "Wearing") {
         set("shoes", "Wear");
       }
     });
