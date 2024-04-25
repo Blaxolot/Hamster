@@ -13,12 +13,12 @@ loadSprite("apple", "images/apple.png");
 loadSprite("banana", "images/banana.png");
 loadSprite("chocolate", "images/chocolate_bar.png");
 loadSprite("heart", "images/heart.png");
-loadSprite("dirt", "images/Dirt.png");
+loadSprite("dirt", "images/dirt.png");
 loadSprite("left_arrow", "images/left_arrow.png");
 loadSprite("right_arrow", "images/right_arrow.png");
 loadSprite("left_banana", "images/left_banana.png");
 loadSprite("cap", "images/cap.png");
-loadSprite("shoes", "images/hamstershoes.png");
+loadSprite("shoes", "images/hamster_shoes.png");
 
 loadSound("pickup", "sounds/pickup.wav");
 loadSound("jump", "sounds/jump.wav");
@@ -39,13 +39,13 @@ updateLocalStorageVariables();
 
 setBackground(50, 50, 50);
 if (Wearing == "True") {
-  loadSprite("hamster", "images/hamstercap.png");
+  loadSprite("hamster", "images/hamster_cap.png");
 }
 if (Shoes == "True") {
-  loadSprite("hamster", "images/hamstershoes.png");
+  loadSprite("hamster", "images/hamster_shoes.png");
 }
 if (Shoes == "True" && Wearing == "True") {
-  loadSprite("hamster", "images/hamstercapshoes.png");
+  loadSprite("hamster", "images/hamster_cap_shoes.png");
 }
 if (Wearing == "False" && Shoes == "False") {
   loadSprite("hamster", "images/hamster.png");
@@ -155,12 +155,12 @@ scene("game", () => {
     destroy(jabłuszko);
     appleScore++;
     appleScoreLabel.text = appleScore;
-    if ([10, 20, 30, 40, 50, 60, 70, 80, 90, 100].includes(appleScore)) {
+    if (appleScore >= 10 && appleScore <= 1000 && appleScore % 10 == 0) {
       lives += 1;
       play("bonus");
       parameters = [sprite("heart"), scale(0.08)];
 
-      for (let i = 1; i <= 10; i++) {
+      for (let i = 1; i <= 1000; i++) {
         if (lives == i) {
           window["bonusLive" + i] = add([
             pos(width() - 50 * i - 5, 15),
@@ -178,7 +178,7 @@ scene("game", () => {
     lives -= 1;
 
     // Check and destroy bonus hearts based on the number of lives
-    for (let i = 2; i <= 10; i++) {
+    for (let i = 0; i <= 1000; i++) {
       if (lives == i - 1 && window["bonusLive" + i]) {
         destroy(window["bonusLive" + i]);
       }
@@ -412,7 +412,7 @@ scene("menu", () => {
   handleButtonHover(hamsters_button, shop_button);
 
   info.onHoverUpdate(() => {
-    info.color = rgb(255, 255, 250);
+    info.color = rgb(240, 240, 240);
     setCursor("pointer");
   });
   info.onHoverEnd(() => {
@@ -479,7 +479,7 @@ scene("menu", () => {
       }
       if (Wearing == "False") {
         cap_text = "Wear";
-        buy_cap_button_color = rgb(160, 0, 0);
+        buy_cap_button_color = rgb(200, 0, 0);
         buy_cap_text_scale = 0.7;
       }
     } else {
@@ -516,7 +516,7 @@ scene("menu", () => {
     }
     function set(item, Wearing_or_Wear) {
       eval(item + "_text = " + `"${Wearing_or_Wear}"`);
-      Wear = rgb(160, 0, 0);
+      Wear = rgb(200, 0, 0);
       Wearing = rgb(0, 160, 0);
       eval("buy_" + item + ".color = " + Wearing_or_Wear);
       eval("buy_" + item + "_text.text = " + item + "_text");
@@ -615,11 +615,11 @@ scene("menu", () => {
     });
     function loadrighthamster() {
       if (cap_text == "Wearing" && shoes_text !== "Wearing") {
-        loadSprite("hamster", "images/hamstercap.png");
+        loadSprite("hamster", "images/hamster_cap.png");
       } else if (shoes_text == "Wearing" && cap_text !== "Wearing") {
-        loadSprite("hamster", "images/hamstershoes.png");
+        loadSprite("hamster", "images/hamster_shoes.png");
       } else if (shoes_text == "Wearing" && cap_text == "Wearing") {
-        loadSprite("hamster", "images/hamstercapshoes.png");
+        loadSprite("hamster", "images/hamster_cap_shoes.png");
       } else {
         loadSprite("hamster", "images/hamster.png");
       }
@@ -636,13 +636,13 @@ scene("menu", () => {
 
   function updateHamsterImage() {
     if (Wearing == "True" && Shoes !== "True") {
-      hamster = "hamstercap.png";
+      hamster = "hamster_cap";
     } else if (Shoes == "True" && Wearing !== "True") {
-      hamster = "hamstershoes.png";
+      hamster = "hamster_shoes";
     } else if (Shoes == "True" && Wearing == "True") {
-      hamster = "hamstercapshoes.png";
+      hamster = "hamster_cap_shoes";
     } else {
-      hamster = "hamster.png";
+      hamster = "hamster";
     }
     return hamster;
   }
@@ -651,7 +651,7 @@ scene("menu", () => {
     onClick(direction + "_arrow", () => {
       hamster = updateHamsterImage();
       add([
-        sprite(loadSprite("hamster", "images/" + white + hamster)),
+        sprite(loadSprite("hamster", "images/" + white + hamster + ".png")),
         pos(center()),
         scale(hamster_scale),
         anchor("center"),
