@@ -1,3 +1,4 @@
+const phone = window.innerWidth <= 500;
 const JUMP_FORCE = 800;
 let SPEED = 350;
 let GRAVITY = 1250;
@@ -38,36 +39,26 @@ function updateLocalStorageVariables() {
 updateLocalStorageVariables();
 
 setBackground(50, 50, 50);
-if (Wearing == "True") {
+if (Wearing == "True" && Shoes !== "True") {
   loadSprite("hamster", "images/hamster_cap.png");
-}
-if (Shoes == "True") {
+} else if (Shoes == "True" && Wearing !== "True") {
   loadSprite("hamster", "images/hamster_shoes.png");
-}
-if (Shoes == "True" && Wearing == "True") {
+} else if (Shoes == "True" && Wearing == "True") {
   loadSprite("hamster", "images/hamster_cap_shoes.png");
-}
-if (Wearing == "False" && Shoes == "False") {
+} else {
   loadSprite("hamster", "images/hamster.png");
 }
-let hamster_pos = 60;
-let hamster_scale = 0.2;
-let chocolate_scale = 0.15;
-let apple_scale = 0.16;
-let banana_scale = 0.14;
-let seed_scale = 0.1;
+
 scene("game", () => {
   // define gravity
   setGravity(GRAVITY);
 
-  if (window.innerWidth <= 500) {
-    hamster_scale = 0.18;
-    hamster_pos = 10;
-    chocolate_scale = 0.12;
-    apple_scale = 0.12;
-    banana_scale = 0.11;
-    seed_scale = 0.09;
-  }
+  hamster_pos = phone ? 0 : 60;
+  hamster_scale = phone ? 0.18 : 0.2;
+  chocolate_scale = phone ? 0.12 : 0.15;
+  apple_scale = phone ? 0.12 : 0.16;
+  banana_scale = phone ? 0.11 : 0.14;
+  seed_scale = phone ? 0.09 : 0.1;
   // add a game object to screen
   const player = add([
     sprite("hamster"),
@@ -302,20 +293,13 @@ function display_info() {
 }
 scene("menu", () => {
   updateLocalStorageVariables();
-  let hamster_scale = 0.55;
-  let Hamster_text_size = 100;
-  let Shop_text_size = 70;
-  let arrows = 200;
-  let arrows_scale = 0.2;
-  let info_x = 40;
-  if (window.innerWidth <= 500) {
-    Hamster_text_size = 0.01;
-    Shop_text_size = 0.01;
-    hamster_scale = 0.5;
-    arrows = 130;
-    arrows_scale = 0.16;
-    info_x = 35;
-  }
+  hamster_scale = phone ? 0.5 : 0.55;
+  Hamster_text_size = phone ? 0.01 : 100;
+  Shop_text_size = phone ? 0.01 : 70;
+  arrows = phone ? 130 : 200;
+  arrows_scale = phone ? 0.16 : 0.2;
+  info_x = phone ? 35 : 40;
+
   add([
     sprite("hamster"),
     pos(center()),
@@ -439,7 +423,6 @@ scene("menu", () => {
     ]);
   }
   function shop() {
-    let cap_text, shoes_text, buy_cap_button_color, buy_shoes_button_color;
     let buy_cap_text_scale = 0.7;
     let buy_shoes_text_scale = 0.7;
     let background = add([rect(width(), height()), color(50, 50, 50)]);
@@ -515,13 +498,13 @@ scene("menu", () => {
       }
     }
     function set(item, Wearing_or_Wear) {
-      eval(item + "_text = " + `"${Wearing_or_Wear}"`);
+      eval(`${item}_text = "${Wearing_or_Wear}"`);
       Wear = rgb(200, 0, 0);
       Wearing = rgb(0, 160, 0);
-      eval("buy_" + item + ".color = " + Wearing_or_Wear);
-      eval("buy_" + item + "_text.text = " + item + "_text");
+      eval(`buy_${item}.color = ${Wearing_or_Wear}`);
+      eval(`buy_${item}_text.text = ${item}_text`);
       (Wear = 0.7), (Wearing = 0.6);
-      eval("buy_" + item + "_text.scale = " + Wearing_or_Wear);
+      eval(`buy_${item}_text.scale = ${Wearing_or_Wear}`);
 
       localStorage.setItem(
         item == "cap" ? "Wearing" : "Shoes",
@@ -651,7 +634,7 @@ scene("menu", () => {
     onClick(direction + "_arrow", () => {
       hamster = updateHamsterImage();
       add([
-        sprite(loadSprite("hamster", "images/" + white + hamster + ".png")),
+        sprite(loadSprite("hamster", `images/${white + hamster}.png`)),
         pos(center()),
         scale(hamster_scale),
         anchor("center"),
@@ -659,12 +642,12 @@ scene("menu", () => {
     });
   }
   onClick("play", () => go("game"));
+  onKeyPress("space", () => go("game"));
   onClick("hamsters", () => hamsters());
   onClick("shop", () => shop());
   onClickArrow("left", "white_");
   onClickArrow("right", "");
   onClick("info", () => display_info());
-  onKeyPress("space", () => go("game"));
 });
 
 go("menu");
