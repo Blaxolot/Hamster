@@ -8,7 +8,6 @@ kaboom({
   height: window.innerHeight,
 });
 // load assets
-loadSprite("hamster", "images/hamster.png");
 loadSprite("seed", "images/seed.png");
 loadSprite("apple", "images/apple.png");
 loadSprite("banana", "images/banana.png");
@@ -27,7 +26,7 @@ loadSound("negative", "sounds/negative_beeps.mp3");
 loadSound("gameover", "sounds/gameover.mp3");
 loadSound("bonus", "sounds/bonus_heart.mp3");
 
-function updateLocalStorageVariables() {
+function updateLocalStorage() {
   seeds = localStorage.getItem("seeds");
   apples = localStorage.getItem("apples");
   bananas = localStorage.getItem("bananas");
@@ -36,18 +35,23 @@ function updateLocalStorageVariables() {
 }
 
 // Update the variables initially
-updateLocalStorageVariables();
+updateLocalStorage();
 
-setBackground(50, 50, 50);
-if (Wearing == "True" && Shoes !== "True") {
-  loadSprite("hamster", "images/hamster_cap.png");
-} else if (Shoes == "True" && Wearing !== "True") {
-  loadSprite("hamster", "images/hamster_shoes.png");
-} else if (Shoes == "True" && Wearing == "True") {
-  loadSprite("hamster", "images/hamster_cap_shoes.png");
-} else {
-  loadSprite("hamster", "images/hamster.png");
+function updateHamster() {
+  if (Wearing == "True" && Shoes !== "True") {
+    hamster = "hamster_cap";
+  } else if (Shoes == "True" && Wearing !== "True") {
+    hamster = "hamster_shoes";
+  } else if (Shoes == "True" && Wearing == "True") {
+    hamster = "hamster_cap_shoes";
+  } else {
+    hamster = "hamster";
+  }
+  return hamster;
 }
+
+loadSprite("hamster", `images/${updateHamster()}.png`);
+setBackground(50, 50, 50);
 
 scene("game", () => {
   // define gravity
@@ -97,29 +101,23 @@ scene("game", () => {
     setGravity(GRAVITY);
   });
   function spawnItem() {
-    const number = randi(5);
+    const food = ["chocolate", "seed", "apple", "banana"];
+    const randomFood = food[Math.floor(Math.random() * food.length)];
     parameters = [
       area(),
       anchor("botleft"),
       move(LEFT, SPEED),
-      pos(width(), height() - randi(65, 300)),
       offscreen({ destroy: true }),
     ];
-    if (number == 1) {
-      add([
-        sprite("chocolate"),
-        scale(chocolate_scale),
-        ...parameters,
-        pos(width(), height() - 65),
-        "chocolate",
-      ]);
-    } else if (number == 2) {
-      add([sprite("apple"), scale(apple_scale), ...parameters, "apple"]);
-    } else if (number == 3) {
-      add([sprite("banana"), scale(banana_scale), ...parameters, "banana"]);
-    } else {
-      add([sprite("seed"), scale(seed_scale), ...parameters, "seed"]);
-    }
+
+    food_pos = randomFood == "chocolate" ? 65 : randi(65, 300);
+    add([
+      sprite(randomFood),
+      scale(window[randomFood + "_scale"]),
+      pos(width(), height() - food_pos),
+      ...parameters,
+      randomFood,
+    ]);
 
     // wait a random amount of time to spawn next Item
     wait(rand(1, 2), spawnItem);
@@ -231,47 +229,26 @@ function display_info() {
       pos(0, -260),
       color(255, 255, 255),
     ]);
-    Credits.add([
-      text("Hamster Icon created by Freepik - Flaticon"),
-      pos(0, -220),
-      ...parameters,
-    ]);
-    Credits.add([
-      text("Seed Icon created by Smashicons - Flaticon"),
-      pos(0, -180),
-      ...parameters,
-    ]);
-    Credits.add([
-      text("Apple Icon created by Smashicons - Flaticon"),
-      pos(0, -140),
-      ...parameters,
-    ]);
-    Credits.add([
-      text("Heart Icon created by Pixel perfect - Flaticon"),
-      pos(0, -100),
-      ...parameters,
-    ]);
-    Credits.add([
-      text("Chocolate Bar Icon created by Iconic Panda"),
-      pos(0, -60),
-      ...parameters,
-    ]);
-    Credits.add([text("- Flaticon"), pos(0, -30), ...parameters]);
-    Credits.add([
-      text("Arrow Icons created by Freepik - Flaticon"),
-      pos(0, 0),
-      ...parameters,
-    ]);
-    Credits.add([
-      text("Banana Icon created by juicy_fish - Flaticon"),
-      pos(0, 40),
-      ...parameters,
-    ]);
-    Credits.add([
-      text("Cap Icon created by juicy_fish - Flaticon"),
-      pos(0, 80),
-      ...parameters,
-    ]);
+    const icons_Credits = [
+      "Hamster Icon created by Freepik - Flaticon",
+      "Seed Icon created by Smashicons - Flaticon",
+      "Apple Icon created by Smashicons - Flaticon",
+      "Heart Icon created by Pixel perfect - Flaticon",
+      "Chocolate Bar Icon created by Iconic Panda",
+      "- Flaticon",
+      "Arrow Icons created by Freepik - Flaticon",
+      "Banana Icon created by juicy_fish - Flaticon",
+      "Cap Icon created by juicy_fish - Flaticon",
+    ];
+
+    let posY = -220; // Initial vertical position
+
+    icons_Credits.forEach(Text => {
+      const gap = Text == "- Flaticon" || Text.includes("Chocolate") ? 30 : 40;
+      Credits.add([text(Text), pos(0, posY), ...parameters]); // Add text
+      posY += gap; // Increment posY by 30 or 40 based on the text
+    });
+
     Credits.add([
       text("x"),
       anchor("center"),
@@ -282,6 +259,7 @@ function display_info() {
       "x",
     ]);
   }
+
   onClick("x", () => {
     destroy(Credits);
     Credits = null;
@@ -292,7 +270,7 @@ function display_info() {
   });
 }
 scene("menu", () => {
-  updateLocalStorageVariables();
+  updateLocalStorage();
   hamster_scale = phone ? 0.5 : 0.55;
   Hamster_text_size = phone ? 0.01 : 100;
   Shop_text_size = phone ? 0.01 : 70;
@@ -511,22 +489,16 @@ scene("menu", () => {
         Wearing_or_Wear == "Wearing" ? "True" : "False"
       );
     }
-
-    onClick("buy_cap", () => {
-      if (cap_text == "Wear") {
-        set("cap", "Wearing");
-      } else if (cap_text == "Wearing") {
-        set("cap", "Wear");
+    function toggleItemStatus(item, currentText) {
+      if (currentText == "Wear") {
+        set(item, "Wearing");
+      } else if (currentText == "Wearing") {
+        set(item, "Wear");
       }
-    });
+    }
 
-    onClick("buy_shoes", () => {
-      if (shoes_text == "Wear") {
-        set("shoes", "Wearing");
-      } else if (shoes_text == "Wearing") {
-        set("shoes", "Wear");
-      }
-    });
+    onClick("buy_cap", () => toggleItemStatus("cap", cap_text));
+    onClick("buy_shoes", () => toggleItemStatus("shoes", shoes_text));
 
     const buy_cap = background.add([
       rect(100, 35, { radius: 8 }),
@@ -596,43 +568,21 @@ scene("menu", () => {
         alert("You don't have enough seeds and bananas");
       }
     });
-    function loadrighthamster() {
-      if (cap_text == "Wearing" && shoes_text !== "Wearing") {
-        loadSprite("hamster", "images/hamster_cap.png");
-      } else if (shoes_text == "Wearing" && cap_text !== "Wearing") {
-        loadSprite("hamster", "images/hamster_shoes.png");
-      } else if (shoes_text == "Wearing" && cap_text == "Wearing") {
-        loadSprite("hamster", "images/hamster_cap_shoes.png");
-      } else {
-        loadSprite("hamster", "images/hamster.png");
-      }
-    }
     onKeyPress("escape", () => {
-      loadrighthamster();
+      updateLocalStorage();
+      loadSprite("hamster", `images/${updateHamster()}.png`);
       go("menu");
     });
     onClick("x", () => {
-      loadrighthamster();
+      updateLocalStorage();
+      loadSprite("hamster", `images/${updateHamster()}.png`);
       go("menu");
     });
-  }
-
-  function updateHamsterImage() {
-    if (Wearing == "True" && Shoes !== "True") {
-      hamster = "hamster_cap";
-    } else if (Shoes == "True" && Wearing !== "True") {
-      hamster = "hamster_shoes";
-    } else if (Shoes == "True" && Wearing == "True") {
-      hamster = "hamster_cap_shoes";
-    } else {
-      hamster = "hamster";
-    }
-    return hamster;
   }
 
   function onClickArrow(direction, white) {
     onClick(direction + "_arrow", () => {
-      hamster = updateHamsterImage();
+      hamster = updateHamster();
       add([
         sprite(loadSprite("hamster", `images/${white + hamster}.png`)),
         pos(center()),
@@ -647,6 +597,7 @@ scene("menu", () => {
   onClick("shop", () => shop());
   onClickArrow("left", "white_");
   onClickArrow("right", "");
+  onClickArrow("", "");
   onClick("info", () => display_info());
 });
 
