@@ -25,7 +25,6 @@ loadSound("jump", "sounds/jump.wav");
 loadSound("negative", "sounds/negative_beeps.mp3");
 loadSound("gameover", "sounds/gameover.mp3");
 loadSound("bonus", "sounds/bonus_heart.mp3");
-
 function updateLocalStorage() {
   seeds = localStorage.getItem("seeds");
   apples = localStorage.getItem("apples");
@@ -269,14 +268,20 @@ function display_info() {
     Credits = null;
   });
 }
+let hi_views = "";
+let online;
+
+function Users_online(views) {
+  online.text = "Users online:" + views;
+}
 scene("menu", () => {
   updateLocalStorage();
-  hamster_scale = phone ? 0.5 : 0.55;
-  Hamster_text_size = phone ? 0.01 : 100;
-  Shop_text_size = phone ? 0.01 : 70;
-  arrows = phone ? 130 : 200;
-  arrows_scale = phone ? 0.16 : 0.2;
-  info_x = phone ? 35 : 40;
+  let hamster_scale = phone ? 0.5 : 0.55;
+  let Hamster_text_size = phone ? 0.01 : 100;
+  let Shop_text_size = phone ? 0.01 : 70;
+  let arrows = phone ? 130 : 200;
+  let arrows_scale = phone ? 0.16 : 0.2;
+  let info_x = phone ? 35 : 40;
 
   add([
     sprite("hamster"),
@@ -298,6 +303,12 @@ scene("menu", () => {
   add([text(apples || 0), pos(60, 110)]);
   add([sprite("left_banana"), scale(0.09), pos(10, 150)]);
   add([text(bananas || 0), pos(60, 160)]);
+  online = add([
+    text("Users online:" + hi_views, {
+      size: 28,
+    }),
+    pos(10, height() - 32.5),
+  ]);
 
   // display credits
   const info = add([
