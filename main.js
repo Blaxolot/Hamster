@@ -268,20 +268,21 @@ function display_info() {
     Credits = null;
   });
 }
-let hi_views = "";
+let views = "";
 let online;
 
 function Users_online(views) {
+  views = views;
   online.text = "Users online:" + views;
 }
 scene("menu", () => {
   updateLocalStorage();
-  let hamster_scale = phone ? 0.5 : 0.55;
-  let Hamster_text_size = phone ? 0.01 : 100;
-  let Shop_text_size = phone ? 0.01 : 70;
-  let arrows = phone ? 130 : 200;
-  let arrows_scale = phone ? 0.16 : 0.2;
-  let info_x = phone ? 35 : 40;
+  hamster_scale = phone ? 0.5 : 0.55;
+  Hamster_text_size = phone ? 0.01 : 100;
+  Shop_text_size = phone ? 0.01 : 70;
+  arrows = phone ? 130 : 200;
+  arrows_scale = phone ? 0.16 : 0.2;
+  info_x = phone ? 35 : 40;
 
   add([
     sprite("hamster"),
@@ -304,10 +305,8 @@ scene("menu", () => {
   add([sprite("left_banana"), scale(0.09), pos(10, 150)]);
   add([text(bananas || 0), pos(60, 160)]);
   online = add([
-    text("Users online:" + hi_views, {
-      size: 28,
-    }),
-    pos(10, height() - 32.5),
+    text("Users online:" + views, { size: 28 }),
+    pos(10, height() - 32),
   ]);
 
   // display credits
@@ -608,7 +607,6 @@ scene("menu", () => {
   onClick("shop", () => shop());
   onClickArrow("left", "white_");
   onClickArrow("right", "");
-  onClickArrow("", "");
   onClick("info", () => display_info());
 });
 

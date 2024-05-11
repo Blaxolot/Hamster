@@ -1,7 +1,7 @@
-let deviceToken = localStorage.getItem("DeviceToken");
-if (!deviceToken) {
-  deviceToken = Math.random().toString(36).substring(7);
-  localStorage.setItem("DeviceToken", deviceToken);
+let id = localStorage.getItem("DeviceToken");
+if (!id) {
+  id = Math.random().toString(36).substring(7);
+  localStorage.setItem("DeviceToken", id);
 }
 
 // Firebase configuration
@@ -9,7 +9,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyDb5wWE6RUBGf7906Cj0Yt_LqxIvYwFZb0",
   authDomain: "blaxolot-hamster-game.firebaseapp.com",
   databaseURL:
-    "https://blaxolot-hamster-game-default-rtdb.europe-west1.firebasedatabase.app",
+    "blaxolot-hamster-game-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "blaxolot-hamster-game",
   storageBucket: "blaxolot-hamster-game.appspot.com",
   messagingSenderId: "1040643858295",
@@ -23,27 +23,20 @@ firebase.analytics(app);
 // Get a reference to the Firebase Realtime Database
 const database = firebase.database();
 
-count_view(deviceToken);
-function count_view(id) {
-  // Set the page views in the database
-  database.ref("page_views/" + id).set(id);
+// Set the page views in the database
+database.ref(id).set("");
 
-  // Retrieve the number of views from the database
-  database.ref("page_views").on("value", function (snapshot) {
-    var views = snapshot.numChildren();
-    console.log("hi");
-    console.log("views", views);
-    Users_online(views);
-    if (window.innerWidth <= 500)
-      document.addEventListener("visibilitychange", function () {
-        if (document.visibilityState == "hidden") {
-          database.ref("page_views/" + id).remove();
-        }
-      });
-    else {
-      window.onbeforeunload = function (e) {
-        database.ref("page_views/" + id).remove();
-      };
-    }
-  });
-}
+// Retrieve the number of views from the database
+database.ref().on("value", snapshot => {
+  var views = snapshot.numChildren();
+  console.log("views", views);
+  Users_online(views);
+});
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState == "hidden") {
+    database.ref().child(id).remove();
+  } else {
+    database.ref(id).set("");
+  }
+});
