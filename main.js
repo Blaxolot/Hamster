@@ -268,12 +268,12 @@ function display_info() {
     Credits = null;
   });
 }
-let views = "";
+let new_views = "";
 let online;
 
 function Users_online(views) {
-  views = views;
-  online.text = "Users online:" + views;
+  new_views = views;
+  online.text = "Users online:" + new_views;
 }
 scene("menu", () => {
   updateLocalStorage();
@@ -305,7 +305,7 @@ scene("menu", () => {
   add([sprite("left_banana"), scale(0.09), pos(10, 150)]);
   add([text(bananas || 0), pos(60, 160)]);
   online = add([
-    text("Users online:" + views, { size: 28 }),
+    text("Users online:" + new_views, { size: 28 }),
     pos(10, height() - 32),
   ]);
 
