@@ -9,7 +9,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyDb5wWE6RUBGf7906Cj0Yt_LqxIvYwFZb0",
   authDomain: "blaxolot-hamster-game.firebaseapp.com",
   databaseURL:
-    "blaxolot-hamster-game-default-rtdb.europe-west1.firebasedatabase.app",
+    "https://blaxolot-hamster-game-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "blaxolot-hamster-game",
   storageBucket: "blaxolot-hamster-game.appspot.com",
   messagingSenderId: "1040643858295",
@@ -33,10 +33,32 @@ database.ref().on("value", snapshot => {
   Users_online(views);
 });
 
-document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState == "hidden") {
+var eventName;
+var visible = true;
+var propName = "hidden";
+if (propName in document) eventName = "visibilitychange";
+else if ((propName = "msHidden") in document) eventName = "msvisibilitychange";
+else if ((propName = "mozHidden") in document) eventName = "mozvisibilitychange";
+else if ((propName = "webkitHidden") in document) eventName = "webkitvisibilitychange";
+if (eventName) document.addEventListener(eventName, handleChange);
+
+if ("onfocusin" in document) document.onfocusin = document.onfocusout = handleChange; // IE 9
+window.onpageshow = window.onpagehide = window.onfocus = window.onblur = handleChange;  // Changing tab with alt+tab
+
+// Initialize state if Page Visibility API is supported
+if (document[propName] !== undefined) handleChange({ type: document[propName] ? "blur" : "focus" });
+
+function handleChange(evt) {
+  evt = evt || window.event;
+  if (visible && (["blur", "focusout", "pagehide"].includes(evt.type) || (this && this[propName]))) {
+    visible = false;
+    console.log("Out...")
     database.ref().child(id).remove();
-  } else {
-    database.ref(id).set("");
   }
-});
+  else if (!visible && (["focus", "focusin", "pageshow"].includes(evt.type) || (this && !this[propName]))) {
+    visible = true;
+    console.log("In...")
+    database.ref(id).set("");
+
+  }
+}
