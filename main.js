@@ -92,6 +92,7 @@ scene("game", () => {
   // jump when user press space
   onKeyPress("space", jump);
   onKeyPress("up", jump);
+  onKeyPress("w", jump);
   onClick(jump);
   // Increase speed gradually
   loop(0.5, () => {
@@ -172,14 +173,11 @@ scene("game", () => {
       }
     }
 
-    if (lives == 2) {
-      destroy(Live3);
+    for (let i = 3; i > lives; i--) {
+      destroy(eval("Live" + i));
     }
-    if (lives == 1) {
-      destroy(Live2);
-    }
+
     if (lives == 0) {
-      destroy(Live1);
       go("menu");
       localStorage.setItem("seeds", +seedScore + +seeds);
       localStorage.setItem("apples", +appleScore + +apples);
