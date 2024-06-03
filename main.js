@@ -101,21 +101,18 @@ scene("game", () => {
     setGravity(GRAVITY);
   });
   function spawnItem() {
-    const food = ["chocolate", "seed", "apple", "banana"];
+    const food = ["chocolate", "apple", "apple", "apple"];
     const randomFood = food[Math.floor(Math.random() * food.length)];
-    parameters = [
-      area(),
-      anchor("botleft"),
-      move(LEFT, SPEED),
-      offscreen({ destroy: true }),
-    ];
 
     food_pos = randomFood == "chocolate" ? 65 : randi(65, 300);
     add([
       sprite(randomFood),
       scale(window[randomFood + "_scale"]),
       pos(width(), height() - food_pos),
-      ...parameters,
+      area(),
+      anchor("botleft"),
+      move(LEFT, SPEED),
+      offscreen({ destroy: true }),
       randomFood,
     ]);
 
@@ -130,34 +127,33 @@ scene("game", () => {
   let bananaScore = 0;
   let lives = 3;
 
-  // collect if player collides with any game obj with tag "seed"
-  player.onCollide("seed", orzech => {
-    play("pickup");
-    destroy(orzech);
-    seedScore++;
-    seedScoreLabel.text = seedScore;
-    console.log("mniam");
-  });
+  function handleCollision(...foods) {
+    foods.forEach(food => {
+      player.onCollide(food, item => {
+        play("pickup");
+        destroy(item);
+        eval(`${food}Score++`);
+        eval(`${food}ScoreLabel.text = ${food}Score`);
+        console.log("mniam");
+      });
+    });
+  }
 
-  player.onCollide("apple", jabłuszko => {
-    play("pickup");
-    destroy(jabłuszko);
-    appleScore++;
-    appleScoreLabel.text = appleScore;
-    if (appleScore >= 10 && appleScore <= 1000 && appleScore % 10 == 0) {
+  handleCollision("seed", "apple", "banana");
+
+  player.onCollide("apple", () => {
+    if (appleScore >= 10 && appleScore % 10 == 0) {
       lives += 1;
       play("bonus");
-      parameters = [sprite("heart"), scale(0.08)];
 
       for (let i = 1; i <= 1000; i++) {
         if (lives == i) {
-          window["bonusLive" + i] = add([
+          eval(`Live${i} = add([
             pos(width() - 50 * i - 5, 15),
-            ...parameters,
-          ]);
+            sprite("heart"), scale(0.08)
+          ])`);
         }
       }
-      console.log("mniam");
     }
   });
 
@@ -166,16 +162,7 @@ scene("game", () => {
     play("negative");
     lives -= 1;
 
-    // Check and destroy bonus hearts based on the number of lives
-    for (let i = 0; i <= 1000; i++) {
-      if (lives == i - 1 && window["bonusLive" + i]) {
-        destroy(window["bonusLive" + i]);
-      }
-    }
-
-    for (let i = 3; i > lives; i--) {
-      destroy(eval("Live" + i));
-    }
+    destroy(eval("Live" + (lives + 1)));
 
     if (lives == 0) {
       go("menu");
@@ -186,13 +173,6 @@ scene("game", () => {
       play("gameover");
     }
     console.log("fu");
-  });
-  player.onCollide("banana", banan => {
-    play("pickup");
-    destroy(banan);
-    bananaScore++;
-    bananaScoreLabel.text = bananaScore;
-    console.log("mniam");
   });
 
   const seedScoreLabel = add([text(seedScore), pos(65, 24)]);
