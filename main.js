@@ -19,7 +19,7 @@ loadSprite("right_arrow", "images/right_arrow.png");
 loadSprite("left_banana", "images/left_banana.png");
 loadSprite("cap", "images/cap.png");
 loadSprite("shoes", "images/hamster_shoes.png");
-loadSprite("Winter_hat", "images/Winter_hat.png");
+loadSprite("winter_hat", "images/winter_hat.png");
 
 loadSound("pickup", "sounds/pickup.wav");
 loadSound("jump", "sounds/jump.wav");
@@ -434,7 +434,7 @@ scene("menu", () => {
     Winter_ha_t.add([text("10"), scale(0.9), pos(55, 13)]);
     Winter_ha_t.add([sprite("apple"), scale(0.085), pos(105, 5)]);
     Winter_ha_t.add([text("10"), scale(0.9), pos(150, 13)]);
-    Winter_ha_t.add([sprite("Winter_hat"), scale(0.22), pos(43, 40)]);
+    Winter_ha_t.add([sprite("winter_hat"), scale(0.22), pos(43, 40)]);
 
     // logic for cap button color and text
     if (localStorage.getItem("93rfDw") == "#%1d8*f@4p") {
