@@ -6,7 +6,7 @@ if (!id) {
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDb5wWE6RUBGf7906Cj0Yt_LqxIvYwFZb0",
+  // apiKey: "AIzaSyDb5wWE6RUBGf7906Cj0Yt_LqxIvYwFZb0",
   authDomain: "blaxolot-hamster-game.firebaseapp.com",
   databaseURL:
     "https://blaxolot-hamster-game-default-rtdb.europe-west1.firebasedatabase.app",

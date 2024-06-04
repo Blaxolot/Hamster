@@ -19,6 +19,7 @@ loadSprite("right_arrow", "images/right_arrow.png");
 loadSprite("left_banana", "images/left_banana.png");
 loadSprite("cap", "images/cap.png");
 loadSprite("shoes", "images/hamster_shoes.png");
+loadSprite("Winter_hat", "images/Winter_hat.png");
 
 loadSound("pickup", "sounds/pickup.wav");
 loadSound("jump", "sounds/jump.wav");
@@ -31,6 +32,7 @@ function updateLocalStorage() {
   bananas = localStorage.getItem("bananas");
   Wearing = localStorage.getItem("Wearing");
   Shoes = localStorage.getItem("Shoes");
+  Winter_hat = localStorage.getItem("Winter_hat");
 }
 
 // Update the variables initially
@@ -39,10 +41,14 @@ updateLocalStorage();
 function updateHamster() {
   if (Wearing == "True" && Shoes !== "True") {
     hamster = "hamster_cap";
-  } else if (Shoes == "True" && Wearing !== "True") {
+  } else if (Shoes == "True" && Wearing !== "True" && Winter_hat !== "True") {
     hamster = "hamster_shoes";
   } else if (Shoes == "True" && Wearing == "True") {
     hamster = "hamster_cap_shoes";
+  } else if (Winter_hat == "True" && Shoes !== "True") {
+    hamster = "hamster_winter_hat";
+  } else if (Winter_hat == "True" && Shoes == "True") {
+    hamster = "hamster_winter_hat_shoes";
   } else {
     hamster = "hamster";
   }
@@ -57,16 +63,15 @@ scene("game", () => {
   setGravity(GRAVITY);
 
   hamster_pos = phone ? 0 : 60;
-  hamster_scale = phone ? 0.18 : 0.2;
+  hamster_width = phone ? 90 : 105;
   chocolate_scale = phone ? 0.12 : 0.15;
   apple_scale = phone ? 0.12 : 0.16;
   banana_scale = phone ? 0.11 : 0.14;
   seed_scale = phone ? 0.09 : 0.1;
   // add a game object to screen
   const player = add([
-    sprite("hamster"),
+    sprite("hamster", { width: hamster_width }),
     pos(hamster_pos, 40),
-    scale(hamster_scale),
     area(),
     body(),
   ]);
@@ -255,7 +260,7 @@ function Users_online(views) {
 }
 scene("menu", () => {
   updateLocalStorage();
-  hamster_scale = phone ? 0.5 : 0.55;
+  hamster_width = phone ? 250 : 285;
   Hamster_text_size = phone ? 0.01 : 100;
   Shop_text_size = phone ? 0.01 : 70;
   arrows = phone ? 130 : 200;
@@ -263,9 +268,8 @@ scene("menu", () => {
   info_x = phone ? 35 : 40;
 
   add([
-    sprite("hamster"),
+    sprite("hamster", { width: hamster_width }),
     pos(center()),
-    scale(hamster_scale),
     anchor("center"),
   ]);
   add([
@@ -336,8 +340,8 @@ scene("menu", () => {
   ]);
   // animations
   play_button.onHoverUpdate(() => {
-    play_button.color = rgb(0, 125, 0);
     play_button.scale = vec2(1.025);
+    play_button.color = rgb(0, 125, 0);
     setCursor("pointer");
   });
   play_button.onHoverEnd(() => {
@@ -391,6 +395,7 @@ scene("menu", () => {
   function shop() {
     let buy_cap_text_scale = 0.7;
     let buy_shoes_text_scale = 0.7;
+    let buy_winter_hat_text_scale = 0.7;
     let background = add([rect(width(), height()), color(50, 50, 50)]);
     background.add([
       text("Shop", { size: Shop_text_size }),
@@ -398,27 +403,39 @@ scene("menu", () => {
       pos(width() / 2, 50),
     ]);
     // Cap
-    background.add([
+    const Cap = background.add([
       rect(200, 200, { radius: 15 }),
       pos(20, 20),
       color(100, 100, 100),
     ]);
-    background.add([sprite("seed"), scale(0.08), pos(35, 30)]);
-    background.add([text("10"), scale(0.9), pos(80, 33)]);
-    background.add([sprite("apple"), scale(0.085), pos(135, 25)]);
-    background.add([text("5"), scale(0.9), pos(180, 33)]);
-    background.add([sprite("cap"), scale(0.25), pos(56, 55)]);
+    Cap.add([sprite("seed"), scale(0.08), pos(15, 10)]);
+    Cap.add([text("10"), scale(0.9), pos(60, 13)]);
+    Cap.add([sprite("apple"), scale(0.085), pos(115, 5)]);
+    Cap.add([text("5"), scale(0.9), pos(160, 13)]);
+    Cap.add([sprite("cap"), scale(0.25), pos(36, 35)]);
     // Shoes
-    background.add([
+    const Shoes_s = background.add([
       rect(200, 200, { radius: 15 }),
       pos(20, 240),
       color(100, 100, 100),
     ]);
-    background.add([sprite("seed"), scale(0.08), pos(35, 250)]);
-    background.add([text("5"), scale(0.9), pos(80, 253)]);
-    background.add([sprite("left_banana"), scale(0.085), pos(132, 245)]);
-    background.add([text("5"), scale(0.9), pos(180, 253)]);
-    background.add([sprite("shoes"), scale(0.2), pos(69, 285)]);
+    Shoes_s.add([sprite("seed"), scale(0.08), pos(15, 10)]);
+    Shoes_s.add([text("5"), scale(0.9), pos(60, 13)]);
+    Shoes_s.add([sprite("left_banana"), scale(0.085), pos(112, 5)]);
+    Shoes_s.add([text("5"), scale(0.9), pos(160, 13)]);
+    Shoes_s.add([sprite("shoes"), scale(0.2), pos(49, 45)]);
+    // Winter hat
+    const Winter_ha_t = background.add([
+      rect(200, 200, { radius: 15 }),
+      pos(240, 20),
+      color(100, 100, 100),
+    ]);
+    Winter_ha_t.add([sprite("left_banana"), scale(0.085), pos(10, 5)]);
+    Winter_ha_t.add([text("10"), scale(0.9), pos(55, 13)]);
+    Winter_ha_t.add([sprite("apple"), scale(0.085), pos(105, 5)]);
+    Winter_ha_t.add([text("10"), scale(0.9), pos(150, 13)]);
+    Winter_ha_t.add([sprite("Winter_hat"), scale(0.22), pos(43, 40)]);
+
     // logic for cap button color and text
     if (localStorage.getItem("93rfDw") == "#%1d8*f@4p") {
       if (Wearing == "True") {
@@ -463,6 +480,28 @@ scene("menu", () => {
         buy_shoes_button_color = rgb(0, 200, 0);
       }
     }
+    // logic for winter_hat button color and text
+    if (localStorage.getItem("G8*m&a") == "W%*hjk") {
+      if (Winter_hat == "True") {
+        winter_hat_text = "Wearing";
+        buy_winter_hat_button_color = rgb(0, 160, 0);
+        buy_winter_hat_text_scale = 0.6;
+      }
+      if (Winter_hat == "False") {
+        winter_hat_text = "Wear";
+        buy_winter_hat_button_color = rgb(200, 0, 0);
+        buy_winter_hat_text_scale = 0.7;
+      }
+    } else {
+      if (bananas < 10 || apples < 10) {
+        winter_hat_text = "Buy";
+        buy_winter_hat_button_color = rgb(250, 25, 25);
+      }
+      if (seeds >= 5 && bananas >= 5) {
+        winter_hat_text = "Buy";
+        buy_winter_hat_button_color = rgb(0, 200, 0);
+      }
+    }
     function set(item, Wearing_or_Wear) {
       eval(`${item}_text = "${Wearing_or_Wear}"`);
       Wear = rgb(200, 0, 0);
@@ -473,7 +512,7 @@ scene("menu", () => {
       eval(`buy_${item}_text.scale = ${Wearing_or_Wear}`);
 
       localStorage.setItem(
-        item == "cap" ? "Wearing" : "Shoes",
+        item == "cap" ? "Wearing" : item == "shoes" ? "Shoes" : "Winter_hat",
         Wearing_or_Wear == "Wearing" ? "True" : "False"
       );
     }
@@ -487,6 +526,9 @@ scene("menu", () => {
 
     onClick("buy_cap", () => toggleItemStatus("cap", cap_text));
     onClick("buy_shoes", () => toggleItemStatus("shoes", shoes_text));
+    onClick("buy_winter_hat", () =>
+      toggleItemStatus("winter_hat", winter_hat_text)
+    );
 
     const buy_cap = background.add([
       rect(100, 35, { radius: 8 }),
@@ -516,6 +558,21 @@ scene("menu", () => {
       text(shoes_text),
       anchor("center"),
       scale(buy_shoes_text_scale),
+      color(0, 0, 0),
+    ]);
+    const buy_winter_hat = background.add([
+      rect(100, 35, { radius: 8 }),
+      color(buy_winter_hat_button_color),
+      pos(340, 195),
+      area(),
+      anchor("center"),
+      outline(4.5),
+      "buy_winter_hat",
+    ]);
+    const buy_winter_hat_text = buy_winter_hat.add([
+      text(winter_hat_text),
+      anchor("center"),
+      scale(buy_winter_hat_text_scale),
       color(0, 0, 0),
     ]);
     background.add([
@@ -556,6 +613,21 @@ scene("menu", () => {
         alert("You don't have enough seeds and bananas");
       }
     });
+    onClick("buy_winter_hat", () => {
+      if (bananas >= 10 && apples >= 10) {
+        if (localStorage.getItem("G8*m&a") !== "W%*hjk") {
+          localStorage.setItem("G8*m&a", "W%*hjk");
+          localStorage.setItem("bananas", bananas - 10);
+          localStorage.setItem("apples", apples - 10);
+          set("winter_hat", "Wearing");
+        }
+      } else if (
+        (bananas < 10 && localStorage.getItem("G8*m&a") !== "W%*hjk") ||
+        (apples < 10 && localStorage.getItem("G8*m&a") !== "W%*hjk")
+      ) {
+        alert("You don't have enough bananas and apples");
+      }
+    });
     onKeyPress("escape", () => {
       updateLocalStorage();
       loadSprite("hamster", `images/${updateHamster()}.png`);
@@ -572,9 +644,10 @@ scene("menu", () => {
     onClick(direction + "_arrow", () => {
       hamster = updateHamster();
       add([
-        sprite(loadSprite("hamster", `images/${white + hamster}.png`)),
+        sprite(loadSprite("hamster", `images/${white + hamster}.png`), {
+          width: hamster_width,
+        }),
         pos(center()),
-        scale(hamster_scale),
         anchor("center"),
       ]);
     });
