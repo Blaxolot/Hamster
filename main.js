@@ -101,7 +101,7 @@ scene("game", () => {
     setGravity(GRAVITY);
   });
   function spawnItem() {
-    const food = ["chocolate", "apple", "apple", "apple"];
+    const food = ["chocolate", "seed", "apple", "banana"];
     const randomFood = food[Math.floor(Math.random() * food.length)];
 
     food_pos = randomFood == "chocolate" ? 65 : randi(65, 300);
