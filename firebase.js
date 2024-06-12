@@ -33,6 +33,8 @@ database.ref().on("value", snapshot => {
   Users_online(views);
 });
 
+database.ref(id).onDisconnect().remove()
+
 var eventName;
 var visible = true;
 var propName = "hidden";

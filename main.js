@@ -393,115 +393,75 @@ scene("menu", () => {
     ]);
   }
   function shop() {
-    let buy_cap_text_scale = 0.7;
-    let buy_shoes_text_scale = 0.7;
-    let buy_winter_hat_text_scale = 0.7;
-    let background = add([rect(width(), height()), color(50, 50, 50)]);
+    background = add([rect(width(), height()), color(50, 50, 50)]);
     background.add([
       text("Shop", { size: Shop_text_size }),
       anchor("center"),
       pos(width() / 2, 50),
     ]);
     // Cap
-    const Cap = background.add([
+    const cap_box = background.add([
       rect(200, 200, { radius: 15 }),
       pos(20, 20),
       color(100, 100, 100),
     ]);
-    Cap.add([sprite("seed"), scale(0.08), pos(15, 10)]);
-    Cap.add([text("10"), scale(0.9), pos(60, 13)]);
-    Cap.add([sprite("apple"), scale(0.085), pos(115, 5)]);
-    Cap.add([text("5"), scale(0.9), pos(160, 13)]);
-    Cap.add([sprite("cap"), scale(0.25), pos(36, 35)]);
+    cap_box.add([sprite("seed"), scale(0.08), pos(15, 10)]);
+    cap_box.add([text("10"), scale(0.9), pos(60, 13)]);
+    cap_box.add([sprite("apple"), scale(0.085), pos(115, 5)]);
+    cap_box.add([text("5"), scale(0.9), pos(160, 13)]);
+    cap_box.add([sprite("cap"), scale(0.25), pos(36, 35)]);
     // Shoes
-    const Shoes_s = background.add([
+    const shoes_box = background.add([
       rect(200, 200, { radius: 15 }),
       pos(20, 240),
       color(100, 100, 100),
     ]);
-    Shoes_s.add([sprite("seed"), scale(0.08), pos(15, 10)]);
-    Shoes_s.add([text("5"), scale(0.9), pos(60, 13)]);
-    Shoes_s.add([sprite("left_banana"), scale(0.085), pos(112, 5)]);
-    Shoes_s.add([text("5"), scale(0.9), pos(160, 13)]);
-    Shoes_s.add([sprite("shoes"), scale(0.2), pos(49, 45)]);
+    shoes_box.add([sprite("seed"), scale(0.08), pos(15, 10)]);
+    shoes_box.add([text("5    5"), scale(0.9), pos(60, 13)]);
+    shoes_box.add([sprite("left_banana"), scale(0.085), pos(113, 5)]);
+    shoes_box.add([sprite("shoes"), scale(0.2), pos(49, 45)]);
     // Winter hat
-    const Winter_ha_t = background.add([
+    const winter_hat_box = background.add([
       rect(200, 200, { radius: 15 }),
       pos(240, 20),
       color(100, 100, 100),
     ]);
-    Winter_ha_t.add([sprite("left_banana"), scale(0.085), pos(10, 5)]);
-    Winter_ha_t.add([text("10"), scale(0.9), pos(55, 13)]);
-    Winter_ha_t.add([sprite("apple"), scale(0.085), pos(105, 5)]);
-    Winter_ha_t.add([text("10"), scale(0.9), pos(150, 13)]);
-    Winter_ha_t.add([sprite("winter_hat"), scale(0.22), pos(43, 40)]);
+    winter_hat_box.add([sprite("left_banana"), scale(0.085), pos(10, 5)]);
+    winter_hat_box.add([text("10   10"), scale(0.9), pos(55, 13)]);
+    winter_hat_box.add([sprite("apple"), scale(0.085), pos(105, 5)]);
+    // winter_hat_box.add([text("10"), scale(0.9), pos(150, 13)]);
+    winter_hat_box.add([sprite("winter_hat"), scale(0.22), pos(43, 40)]);
 
-    // logic for cap button color and text
-    if (localStorage.getItem("93rfDw") == "#%1d8*f@4p") {
-      if (Wearing == "True") {
-        cap_text = "Wearing";
-        buy_cap_button_color = rgb(0, 160, 0);
-        buy_cap_text_scale = 0.6;
+    const items = ["cap", "shoes", "winter_hat"];
+    const itemConditions = {
+      cap: { key: "93rfDw", value: "#%1d8*f@4p", var: "Wearing" },
+      shoes: { key: "Sk@3o&", value: "%01ns#9p", var: "Shoes" },
+      winter_hat: { key: "G8*m&a", value: "W%*hjk", var: "Winter_hat" },
+    };
+
+    items.forEach(item => {
+      const condition = itemConditions[item];
+      if (localStorage.getItem(condition.key) == condition.value) {
+        const status = eval(condition.var) == "True";
+
+        eval(`${item}_text = status ? "Wearing" : "Wear"`);
+        eval(`buy_${item}_button_color = status ? rgb(0, 160, 0) : rgb(200, 0, 0)`);
+        eval(`buy_${item}_text_scale = status ? 0.6 : 0.7`);
+
+      } else {
+        cap = [seeds, apples, 10, 5];
+        shoes = [seeds, bananas, 5, 5];
+        winter_hat = [bananas, apples, 10, 10];
+
+        const [food1, food2, number1, number2] = eval(item);
+        const con = food1 < number1 || food2 < number2;
+
+        eval(`${item}_text = "Buy"`);
+        eval(`buy_${item}_button_color = con ? rgb(250, 25, 25) : rgb(0, 200, 0)`);
+        eval(`buy_${item}_text_scale = 0.7`);
       }
-      if (Wearing == "False") {
-        cap_text = "Wear";
-        buy_cap_button_color = rgb(200, 0, 0);
-        buy_cap_text_scale = 0.7;
-      }
-    } else {
-      if (seeds < 10 || apples < 5) {
-        cap_text = "Buy";
-        buy_cap_button_color = rgb(250, 25, 25);
-      }
-      if (seeds >= 10 && apples >= 5) {
-        cap_text = "Buy";
-        buy_cap_button_color = rgb(0, 200, 0);
-      }
-    }
-    // logic for shoes button color and text
-    if (localStorage.getItem("Sk@3o&") == "%01ns#9p") {
-      if (Shoes == "True") {
-        shoes_text = "Wearing";
-        buy_shoes_button_color = rgb(0, 160, 0);
-        buy_shoes_text_scale = 0.6;
-      }
-      if (Shoes == "False") {
-        shoes_text = "Wear";
-        buy_shoes_button_color = rgb(200, 0, 0);
-        buy_shoes_text_scale = 0.7;
-      }
-    } else {
-      if (seeds < 5 || bananas < 5) {
-        shoes_text = "Buy";
-        buy_shoes_button_color = rgb(250, 25, 25);
-      }
-      if (seeds >= 5 && bananas >= 5) {
-        shoes_text = "Buy";
-        buy_shoes_button_color = rgb(0, 200, 0);
-      }
-    }
-    // logic for winter_hat button color and text
-    if (localStorage.getItem("G8*m&a") == "W%*hjk") {
-      if (Winter_hat == "True") {
-        winter_hat_text = "Wearing";
-        buy_winter_hat_button_color = rgb(0, 160, 0);
-        buy_winter_hat_text_scale = 0.6;
-      }
-      if (Winter_hat == "False") {
-        winter_hat_text = "Wear";
-        buy_winter_hat_button_color = rgb(200, 0, 0);
-        buy_winter_hat_text_scale = 0.7;
-      }
-    } else {
-      if (bananas < 10 || apples < 10) {
-        winter_hat_text = "Buy";
-        buy_winter_hat_button_color = rgb(250, 25, 25);
-      }
-      if (seeds >= 5 && bananas >= 5) {
-        winter_hat_text = "Buy";
-        buy_winter_hat_button_color = rgb(0, 200, 0);
-      }
-    }
+    });
+
     function set(item, Wearing_or_Wear) {
       eval(`${item}_text = "${Wearing_or_Wear}"`);
       Wear = rgb(200, 0, 0);
@@ -513,15 +473,11 @@ scene("menu", () => {
 
       localStorage.setItem(
         item == "cap" ? "Wearing" : item == "shoes" ? "Shoes" : "Winter_hat",
-        Wearing_or_Wear == "Wearing" ? "True" : "False"
-      );
+        Wearing_or_Wear == "Wearing" ? "True" : "False");
     }
-    function toggleItemStatus(item, currentText) {
-      if (currentText == "Wear") {
-        set(item, "Wearing");
-      } else if (currentText == "Wearing") {
-        set(item, "Wear");
-      }
+
+    function toggleItemStatus(item, text) {
+      text == "Wear" && set(item, "Wearing") || text == "Wearing" && set(item, "Wear");
     }
 
     onClick("buy_cap", () => toggleItemStatus("cap", cap_text));
@@ -529,52 +485,25 @@ scene("menu", () => {
     onClick("buy_winter_hat", () =>
       toggleItemStatus("winter_hat", winter_hat_text)
     );
+    items.forEach(item => {
+      window[`buy_${item}`] = eval(`${item}_box`).add([
+        rect(100, 35, { radius: 8 }),
+        color(window[`buy_${item}_button_color`]),
+        pos(100, 175),
+        area(),
+        anchor("center"),
+        outline(4.5),
+        ("buy_" + item),
+      ]);
 
-    const buy_cap = background.add([
-      rect(100, 35, { radius: 8 }),
-      color(buy_cap_button_color),
-      pos(120, 195),
-      area(),
-      anchor("center"),
-      outline(4.5),
-      "buy_cap",
-    ]);
-    const buy_cap_text = buy_cap.add([
-      text(cap_text),
-      anchor("center"),
-      scale(buy_cap_text_scale),
-      color(0, 0, 0),
-    ]);
-    const buy_shoes = background.add([
-      rect(100, 35, { radius: 8 }),
-      color(buy_shoes_button_color),
-      pos(120, 415),
-      area(),
-      anchor("center"),
-      outline(4.5),
-      "buy_shoes",
-    ]);
-    const buy_shoes_text = buy_shoes.add([
-      text(shoes_text),
-      anchor("center"),
-      scale(buy_shoes_text_scale),
-      color(0, 0, 0),
-    ]);
-    const buy_winter_hat = background.add([
-      rect(100, 35, { radius: 8 }),
-      color(buy_winter_hat_button_color),
-      pos(340, 195),
-      area(),
-      anchor("center"),
-      outline(4.5),
-      "buy_winter_hat",
-    ]);
-    const buy_winter_hat_text = buy_winter_hat.add([
-      text(winter_hat_text),
-      anchor("center"),
-      scale(buy_winter_hat_text_scale),
-      color(0, 0, 0),
-    ]);
+      window[`buy_${item}_text`] = window[`buy_${item}`].add([
+        text(window[`${item}_text`]),
+        anchor("center"),
+        scale(window[`buy_${item}_text_scale`]),
+        color(0, 0, 0),
+      ]);
+    });
+
     background.add([
       text("x"),
       area(),
