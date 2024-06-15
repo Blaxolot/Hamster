@@ -106,7 +106,7 @@ scene("game", () => {
     setGravity(GRAVITY);
   });
   let food = ["chocolate", "seed", "apple", "banana"];
-  let food_distance = rand(1, 2)
+  let food_distance = "";
   function spawnItem() {
     document.onkeyup = function (e) {
       var e = e || window.event; // for IE to cover IEs window object
@@ -139,7 +139,7 @@ scene("game", () => {
     ]);
 
     // wait a random amount of time to spawn next Item
-    wait(food_distance, spawnItem);
+    wait(food_distance == "" ? rand(1, 2) : food_distance, spawnItem);
   }
   spawnItem();
 
