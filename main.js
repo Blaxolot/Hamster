@@ -105,8 +105,25 @@ scene("game", () => {
     GRAVITY += 0.5;
     setGravity(GRAVITY);
   });
+  let food = ["chocolate", "seed", "apple", "banana"];
+  let food_distance = rand(1, 2)
   function spawnItem() {
-    const food = ["chocolate", "seed", "apple", "banana"];
+    document.onkeyup = function (e) {
+      var e = e || window.event; // for IE to cover IEs window object
+      if (e.ctrlKey && e.shiftKey) {
+        if (e.code == "Digit1") {
+          food = ["apple"];
+          food_distance = 0.1;
+          return false;
+        }
+        else if (e.code == "Digit2") {
+          food = ["chocolate"];
+          food_distance = 0.25;
+          return false;
+        }
+      }
+    };
+  
     const randomFood = food[Math.floor(Math.random() * food.length)];
 
     food_pos = randomFood == "chocolate" ? 65 : randi(65, 300);
@@ -122,7 +139,7 @@ scene("game", () => {
     ]);
 
     // wait a random amount of time to spawn next Item
-    wait(rand(1, 2), spawnItem);
+    wait(food_distance, spawnItem);
   }
   spawnItem();
 
@@ -243,7 +260,7 @@ function display_info() {
   }
 
   onClick("x", () => {
-    destroy(Credits);
+    go("menu");
     Credits = null;
   });
   onKeyPress("escape", () => {
@@ -427,9 +444,9 @@ scene("menu", () => {
       color(100, 100, 100),
     ]);
     winter_hat_box.add([sprite("left_banana"), scale(0.085), pos(10, 5)]);
-    winter_hat_box.add([text("10   10"), scale(0.9), pos(55, 13)]);
+    winter_hat_box.add([text("10"), scale(0.9), pos(55, 13)]);
     winter_hat_box.add([sprite("apple"), scale(0.085), pos(105, 5)]);
-    // winter_hat_box.add([text("10"), scale(0.9), pos(150, 13)]);
+    winter_hat_box.add([text("10"), scale(0.9), pos(150, 13)]);
     winter_hat_box.add([sprite("winter_hat"), scale(0.22), pos(43, 40)]);
 
     const items = ["cap", "shoes", "winter_hat"];
@@ -502,6 +519,15 @@ scene("menu", () => {
         scale(window[`buy_${item}_text_scale`]),
         color(0, 0, 0),
       ]);
+
+      window[`buy_${item}`].onHoverUpdate(() => {
+        window[`buy_${item}`].scale = vec2(1.025);
+        setCursor("pointer");
+      });
+      window[`buy_${item}`].onHoverEnd(() => {
+        window[`buy_${item}`].scale = vec2(1);
+        setCursor("default");
+      });
     });
 
     background.add([
