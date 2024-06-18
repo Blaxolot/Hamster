@@ -2,6 +2,7 @@ const phone = window.innerWidth <= 500;
 const JUMP_FORCE = 800;
 let SPEED = 350;
 let GRAVITY = 1250;
+let hamster_white = false;
 // initialize context
 kaboom({
   width: window.innerWidth,
@@ -59,6 +60,7 @@ loadSprite("hamster", `images/${updateHamster()}.png`);
 setBackground(50, 50, 50);
 
 scene("game", () => {
+  setCursor("default");
   // define gravity
   setGravity(GRAVITY);
 
@@ -167,10 +169,10 @@ scene("game", () => {
     if (appleScore >= 10 && appleScore % 10 == 0) {
       lives += 1;
       play("bonus");
-  
+
       const heartWidth = 50;  // The width of each heart slot
       const lineHeight = 50;  // The height of each line
-  
+
       for (let i = 1; i <= 1000; i++) {
         if (lives == i) {
           // Calculate the number of hearts that can fit in one line
@@ -178,21 +180,12 @@ scene("game", () => {
           // Calculate x and y position based on the current heart
           const xPos = width() - 5 - ((i - 1) % heartsPerLine) * heartWidth - heartWidth;
           const yPos = Math.floor((i - 1) / heartsPerLine) * lineHeight + 15;
-  
-          add([
-            pos(xPos, yPos),
-            sprite("heart"), 
-            scale(0.08)
-          ]);
+
+          add([pos(xPos, yPos), sprite("heart"), scale(0.08)]);
         }
       }
     }
   });
-  
-  
-
-  // pos(width() - 50 * i - 5, 15),
-  console.log(width())
 
 
   player.onCollide("chocolate", czekolada => {
@@ -224,7 +217,6 @@ scene("game", () => {
   let Live3 = add([sprite("heart"), pos(width() - 155, 15), scale(0.08)]);
 });
 let Credits; // Declare Credits in the global scope
-
 function display_info() {
   if (!Credits) {
     Credits = add([
@@ -264,7 +256,7 @@ function display_info() {
       posY += gap; // Increment posY by 30 or 40 based on the text
     });
 
-    Credits.add([
+    x = Credits.add([
       text("x"),
       anchor("center"),
       area(),
@@ -274,6 +266,14 @@ function display_info() {
       "x",
     ]);
   }
+  x.onHoverUpdate(() => {
+    x.color = rgb(240, 240, 240)
+    setCursor("pointer");
+  });
+  x.onHoverEnd(() => {
+    x.color = rgb(150, 150, 150)
+    setCursor("default");
+  });
 
   onClick("x", () => {
     go("menu");
@@ -406,6 +406,7 @@ scene("menu", () => {
     info.color = rgb(140, 140, 140);
     setCursor("default");
   });
+  let left_arrow, right_arrow
   function hamsters() {
     left_arrow = add([
       sprite("left_arrow"),
@@ -421,20 +422,17 @@ scene("menu", () => {
       pos(width() / 2 + arrows, height() / 2),
       area(),
       anchor("center"),
+      opacity(0.25),
       "right_arrow",
     ]);
-    function setupArrowHover(arrow) {
-      arrow.onHoverUpdate(() => {
-        arrow.scale = vec2(0.21);
-        setCursor("pointer");
-      });
-      arrow.onHoverEnd(() => {
-        arrow.scale = vec2(0.2);
-        setCursor("default");
-      });
-    }
-    setupArrowHover(left_arrow);
-    setupArrowHover(right_arrow);    
+    left_arrow.onHoverUpdate(() => {
+      setCursor("pointer");
+      left_arrow.scale = vec2(0.21);
+    });
+    left_arrow.onHoverEnd(() => {
+      setCursor("default");
+      left_arrow.scale = vec2(0.2);
+    });
   }
   function shop() {
     background = add([rect(width(), height()), color(50, 50, 50)]);
@@ -557,13 +555,21 @@ scene("menu", () => {
       });
     });
 
-    background.add([
+    x = background.add([
       text("x"),
       area(),
       pos(width() - 50, 15),
       color(150, 150, 150),
       "x",
     ]);
+    x.onHoverUpdate(() => {
+      x.color = rgb(240, 240, 240)
+      setCursor("pointer");
+    });
+    x.onHoverEnd(() => {
+      x.color = rgb(150, 150, 150)
+      setCursor("default");
+    });
 
     onClick("buy_cap", () => {
       if (seeds >= 10 && apples >= 5) {
@@ -625,6 +631,7 @@ scene("menu", () => {
   function onClickArrow(direction, white) {
     onClick(direction + "_arrow", () => {
       hamster = updateHamster();
+      white !== "" ? hamster_white = true : hamster_white = false;
       add([
         sprite(loadSprite("hamster", `images/${white + hamster}.png`), {
           width: hamster_width,
@@ -632,6 +639,31 @@ scene("menu", () => {
         pos(center()),
         anchor("center"),
       ]);
+      if (hamster_white == true) {
+        left_arrow.opacity = 0.25;
+        right_arrow.opacity = 1;
+        left_arrow.onHoverUpdate(() => {
+          setCursor("default");
+          left_arrow.scale = vec2(0.2);
+        });
+        right_arrow.onHoverUpdate(() => {
+          setCursor("pointer");
+          right_arrow.scale = vec2(0.21);
+        });
+
+      }
+      else if (hamster_white == false) {
+        right_arrow.opacity = 0.25;
+        left_arrow.opacity = 1;
+        right_arrow.onHoverUpdate(() => {
+          setCursor("default");
+          right_arrow.scale = vec2(0.2);
+        });
+        left_arrow.onHoverUpdate(() => {
+          setCursor("pointer");
+          left_arrow.scale = vec2(0.21);
+        });
+      }
     });
   }
   onClick("play", () => go("game"));
