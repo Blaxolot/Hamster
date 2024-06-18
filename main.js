@@ -181,7 +181,7 @@ scene("game", () => {
           const xPos = width() - 5 - ((i - 1) % heartsPerLine) * heartWidth - heartWidth;
           const yPos = Math.floor((i - 1) / heartsPerLine) * lineHeight + 15;
 
-          add([pos(xPos, yPos), sprite("heart"), scale(0.08)]);
+          eval(`Live${i} = add([pos(xPos, yPos), sprite("heart"), scale(0.08)])`);
         }
       }
     }
