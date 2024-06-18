@@ -123,7 +123,7 @@ scene("game", () => {
         }
       }
     };
-  
+
     const randomFood = food[Math.floor(Math.random() * food.length)];
 
     food_pos = randomFood == "chocolate" ? 65 : randi(65, 300);
@@ -167,17 +167,33 @@ scene("game", () => {
     if (appleScore >= 10 && appleScore % 10 == 0) {
       lives += 1;
       play("bonus");
-
+  
+      const heartWidth = 50;  // The width of each heart slot
+      const lineHeight = 50;  // The height of each line
+  
       for (let i = 1; i <= 1000; i++) {
         if (lives == i) {
-          eval(`Live${i} = add([
-            pos(width() - 50 * i - 5, 15),
-            sprite("heart"), scale(0.08)
-          ])`);
+          // Calculate the number of hearts that can fit in one line
+          const heartsPerLine = Math.floor(width() / heartWidth);
+          // Calculate x and y position based on the current heart
+          const xPos = width() - 5 - ((i - 1) % heartsPerLine) * heartWidth - heartWidth;
+          const yPos = Math.floor((i - 1) / heartsPerLine) * lineHeight + 15;
+  
+          add([
+            pos(xPos, yPos),
+            sprite("heart"), 
+            scale(0.08)
+          ]);
         }
       }
     }
   });
+  
+  
+
+  // pos(width() - 50 * i - 5, 15),
+  console.log(width())
+
 
   player.onCollide("chocolate", czekolada => {
     destroy(czekolada);
@@ -390,9 +406,8 @@ scene("menu", () => {
     info.color = rgb(140, 140, 140);
     setCursor("default");
   });
-
   function hamsters() {
-    add([
+    left_arrow = add([
       sprite("left_arrow"),
       scale(arrows_scale),
       pos(width() / 2 - arrows, height() / 2),
@@ -400,7 +415,7 @@ scene("menu", () => {
       anchor("center"),
       "left_arrow",
     ]);
-    add([
+    right_arrow = add([
       sprite("right_arrow"),
       scale(arrows_scale),
       pos(width() / 2 + arrows, height() / 2),
@@ -408,6 +423,18 @@ scene("menu", () => {
       anchor("center"),
       "right_arrow",
     ]);
+    function setupArrowHover(arrow) {
+      arrow.onHoverUpdate(() => {
+        arrow.scale = vec2(0.21);
+        setCursor("pointer");
+      });
+      arrow.onHoverEnd(() => {
+        arrow.scale = vec2(0.2);
+        setCursor("default");
+      });
+    }
+    setupArrowHover(left_arrow);
+    setupArrowHover(right_arrow);    
   }
   function shop() {
     background = add([rect(width(), height()), color(50, 50, 50)]);
@@ -510,7 +537,7 @@ scene("menu", () => {
         area(),
         anchor("center"),
         outline(4.5),
-        ("buy_" + item),
+        "buy_" + item,
       ]);
 
       window[`buy_${item}_text`] = window[`buy_${item}`].add([
