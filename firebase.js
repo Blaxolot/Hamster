@@ -29,8 +29,8 @@ database.ref(id).set("");
 // Retrieve the number of views from the database
 database.ref().on("value", snapshot => {
   var views = snapshot.numChildren();
-  console.log("views", views);
   Users_online(views);
+  console.log("views", views);
 });
 
 database.ref(id).onDisconnect().remove()
@@ -54,13 +54,12 @@ function handleChange(evt) {
   evt = evt || window.event;
   if (visible && (["blur", "focusout", "pagehide"].includes(evt.type) || (this && this[propName]))) {
     visible = false;
+    database.ref(id).remove();
     console.log("Out...")
-    database.ref().child(id).remove();
   }
   else if (!visible && (["focus", "focusin", "pageshow"].includes(evt.type) || (this && !this[propName]))) {
     visible = true;
-    console.log("In...")
     database.ref(id).set("");
-
+    console.log("In...")
   }
 }

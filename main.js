@@ -11,22 +11,12 @@ kaboom({
 // load assets
 loadSprite("seed", "images/seed.png");
 loadSprite("apple", "images/apple.png");
-loadSprite("banana", "images/banana.png");
-loadSprite("chocolate", "images/chocolate_bar.png");
-loadSprite("heart", "images/heart.png");
+loadSprite("left_banana", "images/left_banana.png");
 loadSprite("dirt", "images/dirt.png");
+
 loadSprite("left_arrow", "images/left_arrow.png");
 loadSprite("right_arrow", "images/right_arrow.png");
-loadSprite("left_banana", "images/left_banana.png");
-loadSprite("cap", "images/cap.png");
-loadSprite("shoes", "images/hamster_shoes.png");
-loadSprite("winter_hat", "images/winter_hat.png");
 
-loadSound("pickup", "sounds/pickup.wav");
-loadSound("jump", "sounds/jump.wav");
-loadSound("negative", "sounds/negative_beeps.mp3");
-loadSound("gameover", "sounds/gameover.mp3");
-loadSound("bonus", "sounds/bonus_heart.mp3");
 function updateLocalStorage() {
   seeds = localStorage.getItem("seeds");
   apples = localStorage.getItem("apples");
@@ -38,7 +28,6 @@ function updateLocalStorage() {
 
 // Update the variables initially
 updateLocalStorage();
-
 function updateHamster() {
   if (Wearing == "True" && Shoes !== "True") {
     hamster = "hamster_cap";
@@ -58,13 +47,22 @@ function updateHamster() {
 
 loadSprite("hamster", `images/${updateHamster()}.png`);
 setBackground(50, 50, 50);
-
 scene("game", () => {
+  loadSprite("banana", "images/banana.png");
+  loadSprite("chocolate", "images/chocolate_bar.png");
+  loadSprite("heart", "images/heart.png");
+
+  loadSound("pickup", "sounds/pickup.wav");
+  loadSound("jump", "sounds/jump.wav");
+  loadSound("negative", "sounds/negative_beeps.mp3");
+  loadSound("gameover", "sounds/gameover.mp3");
+  loadSound("bonus", "sounds/bonus_heart.mp3");
+
   setCursor("default");
   // define gravity
   setGravity(GRAVITY);
 
-  hamster_pos = phone ? 0 : 60;
+  hamster_pos = phone ? 40 : 100;
   hamster_width = phone ? 90 : 105;
   chocolate_scale = phone ? 0.12 : 0.15;
   apple_scale = phone ? 0.12 : 0.16;
@@ -74,7 +72,8 @@ scene("game", () => {
   const player = add([
     sprite("hamster", { width: hamster_width }),
     pos(hamster_pos, 40),
-    area(),
+    anchor("center"),
+    area({ scale: vec2(0.7, 1) }),
     body(),
   ]);
 
@@ -126,7 +125,7 @@ scene("game", () => {
       }
     };
 
-    const randomFood = food[Math.floor(Math.random() * food.length)];
+    const randomFood = choose(food);
 
     food_pos = randomFood == "chocolate" ? 65 : randi(65, 300);
     add([
@@ -168,18 +167,16 @@ scene("game", () => {
   player.onCollide("apple", () => {
     if (appleScore >= 10 && appleScore % 10 == 0) {
       lives += 1;
-      play("bonus");
-
-      const heartWidth = 50;  // The width of each heart slot
-      const lineHeight = 50;  // The height of each line
+      play("bonus",{volume : 0.7});
 
       for (let i = 1; i <= 1000; i++) {
         if (lives == i) {
+          const heartWidth = 50;  // The width of each heart slot
           // Calculate the number of hearts that can fit in one line
           const heartsPerLine = Math.floor(width() / heartWidth);
           // Calculate x and y position based on the current heart
           const xPos = width() - 5 - ((i - 1) % heartsPerLine) * heartWidth - heartWidth;
-          const yPos = Math.floor((i - 1) / heartsPerLine) * lineHeight + 15;
+          const yPos = Math.floor((i - 1) / heartsPerLine) * heartWidth + 15;
 
           eval(`Live${i} = add([pos(xPos, yPos), sprite("heart"), scale(0.08)])`);
         }
@@ -435,6 +432,9 @@ scene("menu", () => {
     });
   }
   function shop() {
+    loadSprite("cap", "images/cap.png");
+    loadSprite("shoes", "images/hamster_shoes.png");
+    loadSprite("winter_hat", "images/winter_hat.png");
     background = add([rect(width(), height()), color(50, 50, 50)]);
     background.add([
       text("Shop", { size: Shop_text_size }),
