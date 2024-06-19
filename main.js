@@ -14,8 +14,6 @@ loadSprite("apple", "images/apple.png");
 loadSprite("left_banana", "images/left_banana.png");
 loadSprite("dirt", "images/dirt.png");
 
-loadSprite("left_arrow", "images/left_arrow.png");
-loadSprite("right_arrow", "images/right_arrow.png");
 
 function updateLocalStorage() {
   seeds = localStorage.getItem("seeds");
@@ -167,7 +165,7 @@ scene("game", () => {
   player.onCollide("apple", () => {
     if (appleScore >= 10 && appleScore % 10 == 0) {
       lives += 1;
-      play("bonus",{volume : 0.7});
+      play("bonus", { volume: 0.7 });
 
       for (let i = 1; i <= 1000; i++) {
         if (lives == i) {
@@ -213,74 +211,7 @@ scene("game", () => {
   let Live2 = add([sprite("heart"), pos(width() - 105, 15), scale(0.08)]);
   let Live3 = add([sprite("heart"), pos(width() - 155, 15), scale(0.08)]);
 });
-let Credits; // Declare Credits in the global scope
-function display_info() {
-  if (!Credits) {
-    Credits = add([
-      rect(650, 650, { radius: 8 }),
-      color(0, 0, 0),
-      opacity(0.8),
-      pos(center()),
-      area(),
-      anchor("center"),
-      outline(5),
-      "credits",
-    ]);
-    parameters = [anchor("center"), color(255, 255, 255), scale(0.6)];
-    Credits.add([
-      text("Icon Credits"),
-      anchor("center"),
-      pos(0, -260),
-      color(255, 255, 255),
-    ]);
-    const icons_Credits = [
-      "Hamster Icon created by Freepik - Flaticon",
-      "Seed Icon created by Smashicons - Flaticon",
-      "Apple Icon created by Smashicons - Flaticon",
-      "Heart Icon created by Pixel perfect - Flaticon",
-      "Chocolate Bar Icon created by Iconic Panda",
-      "- Flaticon",
-      "Arrow Icons created by Freepik - Flaticon",
-      "Banana Icon created by juicy_fish - Flaticon",
-      "Cap Icon created by juicy_fish - Flaticon",
-    ];
 
-    let posY = -220; // Initial vertical position
-
-    icons_Credits.forEach(Text => {
-      const gap = Text == "- Flaticon" || Text.includes("Chocolate") ? 30 : 40;
-      Credits.add([text(Text), pos(0, posY), ...parameters]); // Add text
-      posY += gap; // Increment posY by 30 or 40 based on the text
-    });
-
-    x = Credits.add([
-      text("x"),
-      anchor("center"),
-      area(),
-      pos(-305, -305),
-      color(150, 150, 150),
-      scale(0.8),
-      "x",
-    ]);
-  }
-  x.onHoverUpdate(() => {
-    x.color = rgb(240, 240, 240)
-    setCursor("pointer");
-  });
-  x.onHoverEnd(() => {
-    x.color = rgb(150, 150, 150)
-    setCursor("default");
-  });
-
-  onClick("x", () => {
-    go("menu");
-    Credits = null;
-  });
-  onKeyPress("escape", () => {
-    go("menu");
-    Credits = null;
-  });
-}
 let new_views = "";
 let online;
 
@@ -288,6 +219,7 @@ function Users_online(views) {
   new_views = views;
   online.text = "Users online:" + new_views;
 }
+
 scene("menu", () => {
   updateLocalStorage();
   hamster_width = phone ? 250 : 285;
@@ -405,6 +337,8 @@ scene("menu", () => {
   });
   let left_arrow, right_arrow
   function hamsters() {
+    loadSprite("left_arrow", "images/left_arrow.png");
+    loadSprite("right_arrow", "images/right_arrow.png");
     left_arrow = add([
       sprite("left_arrow"),
       scale(arrows_scale),
@@ -480,6 +414,11 @@ scene("menu", () => {
       shoes: { key: "Sk@3o&", value: "%01ns#9p", var: "Shoes" },
       winter_hat: { key: "G8*m&a", value: "W%*hjk", var: "Winter_hat" },
     };
+    const itemPricing = {
+      cap: { food1: "seeds", food2: "apples", price1: 10, price2: 5 },
+      shoes: { food1: "seeds", food2: "bananas", price1: 5, price2: 5 },
+      winter_hat: { food1: "bananas", food2: "apples", price1: 10, price2: 10 },
+    }
 
     items.forEach(item => {
       const condition = itemConditions[item];
@@ -571,51 +510,26 @@ scene("menu", () => {
       setCursor("default");
     });
 
-    onClick("buy_cap", () => {
-      if (seeds >= 10 && apples >= 5) {
-        if (localStorage.getItem("93rfDw") !== "#%1d8*f@4p") {
-          localStorage.setItem("93rfDw", "#%1d8*f@4p");
-          localStorage.setItem("seeds", seeds - 10);
-          localStorage.setItem("apples", apples - 5);
-          set("cap", "Wearing");
+    items.forEach((item) => {
+      const { food1, food2, price1, price2 } = itemPricing[item];
+      const { key, value } = itemConditions[item];
+
+      onClick(`buy_${item}`, () => {
+        if (eval(food1) >= price1 && eval(food2) >= price2) {
+          if (localStorage.getItem(key) !== value) {
+            localStorage.setItem(key, value);
+            localStorage.setItem(food1, eval(food1) - price1);
+            localStorage.setItem(food2, eval(food2) - price2);
+            set(item, "Wearing");
+          }
+        } else if (localStorage.getItem(key) !== value) {
+          if (eval(food1) < price1 || eval(food2) < price2) {
+            alert(`You don't have enough ${food1} and ${food2}`);
+          }
         }
-      } else if (
-        (seeds < 10 && localStorage.getItem("93rfDw") !== "#%1d8*f@4p") ||
-        (apples < 5 && localStorage.getItem("93rfDw") !== "#%1d8*f@4p")
-      ) {
-        alert("You don't have enough seeds and apples");
-      }
+      });
     });
-    onClick("buy_shoes", () => {
-      if (seeds >= 5 && bananas >= 5) {
-        if (localStorage.getItem("Sk@3o&") !== "%01ns#9p") {
-          localStorage.setItem("Sk@3o&", "%01ns#9p");
-          localStorage.setItem("seeds", seeds - 5);
-          localStorage.setItem("bananas", bananas - 5);
-          set("shoes", "Wearing");
-        }
-      } else if (
-        (seeds < 5 && localStorage.getItem("Sk@3o&") !== "%01ns#9p") ||
-        (bananas < 5 && localStorage.getItem("Sk@3o&") !== "%01ns#9p")
-      ) {
-        alert("You don't have enough seeds and bananas");
-      }
-    });
-    onClick("buy_winter_hat", () => {
-      if (bananas >= 10 && apples >= 10) {
-        if (localStorage.getItem("G8*m&a") !== "W%*hjk") {
-          localStorage.setItem("G8*m&a", "W%*hjk");
-          localStorage.setItem("bananas", bananas - 10);
-          localStorage.setItem("apples", apples - 10);
-          set("winter_hat", "Wearing");
-        }
-      } else if (
-        (bananas < 10 && localStorage.getItem("G8*m&a") !== "W%*hjk") ||
-        (apples < 10 && localStorage.getItem("G8*m&a") !== "W%*hjk")
-      ) {
-        alert("You don't have enough bananas and apples");
-      }
-    });
+
     onKeyPress("escape", () => {
       updateLocalStorage();
       loadSprite("hamster", `images/${updateHamster()}.png`);
@@ -628,50 +542,50 @@ scene("menu", () => {
     });
   }
 
-  function onClickArrow(direction, white) {
-    onClick(direction + "_arrow", () => {
-      hamster = updateHamster();
-      white !== "" ? hamster_white = true : hamster_white = false;
-      add([
-        sprite(loadSprite("hamster", `images/${white + hamster}.png`), {
-          width: hamster_width,
-        }),
-        pos(center()),
-        anchor("center"),
-      ]);
-      if (hamster_white == true) {
-        left_arrow.opacity = 0.25;
-        right_arrow.opacity = 1;
-        left_arrow.onHoverUpdate(() => {
-          setCursor("default");
-          left_arrow.scale = vec2(0.2);
-        });
-        right_arrow.onHoverUpdate(() => {
-          setCursor("pointer");
-          right_arrow.scale = vec2(0.21);
-        });
+  function updateHamsterAppearance(white) {
+    add([
+      sprite(loadSprite("hamster", `images/${white + updateHamster()}.png`), {
+        width: hamster_width,
+      }),
+      pos(center()),
+      anchor("center"),
+    ]);
 
-      }
-      else if (hamster_white == false) {
-        right_arrow.opacity = 0.25;
-        left_arrow.opacity = 1;
-        right_arrow.onHoverUpdate(() => {
-          setCursor("default");
-          right_arrow.scale = vec2(0.2);
-        });
-        left_arrow.onHoverUpdate(() => {
-          setCursor("pointer");
-          left_arrow.scale = vec2(0.21);
-        });
-      }
-    });
+    if (white !== "") {
+      left_arrow.opacity = 0.25;
+      right_arrow.opacity = 1;
+      left_arrow.onHoverUpdate(() => {
+        setCursor("default");
+        left_arrow.scale = vec2(0.2);
+      });
+      right_arrow.onHoverUpdate(() => {
+        setCursor("pointer");
+        right_arrow.scale = vec2(0.21);
+      });
+    } else {
+      right_arrow.opacity = 0.25;
+      left_arrow.opacity = 1;
+      right_arrow.onHoverUpdate(() => {
+        setCursor("default");
+        right_arrow.scale = vec2(0.2);
+      });
+      left_arrow.onHoverUpdate(() => {
+        setCursor("pointer");
+        left_arrow.scale = vec2(0.21);
+      });
+    }
   }
+
+  // Bind the onClickArrow function to the arrow keys
+  onKeyPress("left", () => { getSprite("left_arrow") ? updateHamsterAppearance("white_") : "" });
+  onKeyPress("right", () => { getSprite("right_arrow") ? updateHamsterAppearance("") : "" });
+  onClick("left_arrow", () => { updateHamsterAppearance("white_") });
+  onClick("right_arrow", () => { updateHamsterAppearance("") });
+
   onClick("play", () => go("game"));
   onKeyPress("space", () => go("game"));
   onClick("hamsters", () => hamsters());
   onClick("shop", () => shop());
-  onClickArrow("left", "white_");
-  onClickArrow("right", "");
   onClick("info", () => display_info());
 });
 
