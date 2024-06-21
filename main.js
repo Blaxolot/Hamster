@@ -4,7 +4,7 @@ let SPEED = 350;
 let GRAVITY = 1250;
 let hamster_white = false;
 // initialize context
-kaboom({
+kaplay({
   width: window.innerWidth,
   height: window.innerHeight,
 });
@@ -13,7 +13,6 @@ loadSprite("seed", "images/seed.png");
 loadSprite("apple", "images/apple.png");
 loadSprite("left_banana", "images/left_banana.png");
 loadSprite("dirt", "images/dirt.png");
-
 
 function updateLocalStorage() {
   seeds = localStorage.getItem("seeds");
@@ -45,6 +44,7 @@ function updateHamster() {
 
 loadSprite("hamster", `images/${updateHamster()}.png`);
 setBackground(50, 50, 50);
+
 scene("game", () => {
   loadSprite("banana", "images/banana.png");
   loadSprite("chocolate", "images/chocolate_bar.png");
@@ -61,11 +61,12 @@ scene("game", () => {
   setGravity(GRAVITY);
 
   hamster_pos = phone ? 40 : 100;
-  hamster_width = phone ? 90 : 105;
-  chocolate_scale = phone ? 0.12 : 0.15;
-  apple_scale = phone ? 0.12 : 0.16;
-  banana_scale = phone ? 0.11 : 0.14;
-  seed_scale = phone ? 0.09 : 0.1;
+  hamster_width = 105 / (phone ? 1.25 : 1);
+  chocolate_scale = 75 / (phone ? 1.25 : 1);
+  apple_scale = 80 / (phone ? 1.25 : 1);
+  banana_scale = 70 / (phone ? 1.25 : 1);
+  seed_scale = 50 / (phone ? 1.25 : 1);
+
   // add a game object to screen
   const player = add([
     sprite("hamster", { width: hamster_width }),
@@ -93,11 +94,49 @@ scene("game", () => {
     }
   }
 
-  // jump when user press space
-  onKeyPress("space", jump);
-  onKeyPress("up", jump);
-  onKeyPress("w", jump);
+  // jump when user press space, up or w
+  onKeyPress(["space", "up", "w"], jump);
   onClick(jump);
+  onKeyPress("escape", () => {
+    let box = add([
+      rect(600, 300, { radius: 25 }),
+      anchor("center"),
+      pos(center()),
+      color(0, 0, 0),
+    ]);
+
+    box.add([text("Do you want to quit?"), anchor("center"), pos(0, -100)]);
+    box.add([
+      text("!!! You will lose your food !!!"),
+      scale(0.8),
+      anchor("center"),
+      pos(0, -50),
+      color(255, 0, 0),
+    ]);
+
+    const yes = box.add([
+      rect(200, 50, { radius: 10 }),
+      pos(-150, 80),
+      anchor("center"),
+      color(0, 255, 0),
+      area(),
+      "yes",
+    ]);
+    const no = box.add([
+      rect(200, 50, { radius: 10 }),
+      pos(150, 80),
+      anchor("center"),
+      color(255, 0, 0),
+      area(),
+      "no",
+    ]);
+    yes.add([text("YES"), anchor("center"), color(0, 0, 0), scale(0.9), pos(0, 2)]);
+    no.add([text("NO"), anchor("center"), color(0, 0, 0), scale(0.9), pos(0, 2)]);
+    onClick("yes", () => { go("menu"), debug.paused = false; });
+    onClick("no", () => { debug.paused = false, destroy(box); });
+    debug.paused = true;
+  })
+
   // Increase speed gradually
   loop(0.5, () => {
     SPEED += 1;
@@ -107,6 +146,8 @@ scene("game", () => {
   let food = ["chocolate", "seed", "apple", "banana"];
   let food_distance = "";
   function spawnItem() {
+    const randomFood = choose(food);
+    food_pos = randomFood == "chocolate" ? 65 : randi(65, 300);
     document.onkeyup = function (e) {
       var e = e || window.event; // for IE to cover IEs window object
       if (e.ctrlKey && e.shiftKey) {
@@ -123,12 +164,8 @@ scene("game", () => {
       }
     };
 
-    const randomFood = choose(food);
-
-    food_pos = randomFood == "chocolate" ? 65 : randi(65, 300);
     add([
-      sprite(randomFood),
-      scale(window[randomFood + "_scale"]),
+      sprite(randomFood, { width: window[randomFood + "_scale"] }),
       pos(width(), height() - food_pos),
       area(),
       anchor("botleft"),
@@ -284,8 +321,7 @@ scene("menu", () => {
   hamsters_button.add([
     text("Hamsters", { size: 30 }),
     anchor("center"),
-    color(0, 0, 0),
-  ]);
+    color(0, 0, 0)]);
   const shop_button = add([
     rect(120, 40, { radius: 8 }),
     color(70, 70, 70),
@@ -298,8 +334,7 @@ scene("menu", () => {
   shop_button.add([
     text("Shop", { size: 30 }),
     anchor("center"),
-    color(0, 0, 0),
-  ]);
+    color(0, 0, 0)]);
   // animations
   play_button.onHoverUpdate(() => {
     play_button.scale = vec2(1.025);
@@ -369,7 +404,7 @@ scene("menu", () => {
     loadSprite("cap", "images/cap.png");
     loadSprite("shoes", "images/hamster_shoes.png");
     loadSprite("winter_hat", "images/winter_hat.png");
-    background = add([rect(width(), height()), color(50, 50, 50)]);
+    background = add([rect(width(), height()), color(50, 50, 50), z(1)]);
     background.add([
       text("Shop", { size: Shop_text_size }),
       anchor("center"),
@@ -430,12 +465,8 @@ scene("menu", () => {
         eval(`buy_${item}_text_scale = status ? 0.6 : 0.7`);
 
       } else {
-        cap = [seeds, apples, 10, 5];
-        shoes = [seeds, bananas, 5, 5];
-        winter_hat = [bananas, apples, 10, 10];
-
-        const [food1, food2, number1, number2] = eval(item);
-        const con = food1 < number1 || food2 < number2;
+        const { food1, food2, price1, price2 } = itemPricing[item];
+        const con = eval(food1) < price1 || eval(food2) < price2;
 
         eval(`${item}_text = "Buy"`);
         eval(`buy_${item}_button_color = con ? rgb(250, 25, 25) : rgb(0, 200, 0)`);
@@ -449,7 +480,7 @@ scene("menu", () => {
       Wearing = rgb(0, 160, 0);
       eval(`buy_${item}.color = ${Wearing_or_Wear}`);
       eval(`buy_${item}_text.text = ${item}_text`);
-      (Wear = 0.7), (Wearing = 0.6);
+      Wear = 0.7, Wearing = 0.6;
       eval(`buy_${item}_text.scale = ${Wearing_or_Wear}`);
 
       localStorage.setItem(
@@ -457,15 +488,6 @@ scene("menu", () => {
         Wearing_or_Wear == "Wearing" ? "True" : "False");
     }
 
-    function toggleItemStatus(item, text) {
-      text == "Wear" && set(item, "Wearing") || text == "Wearing" && set(item, "Wear");
-    }
-
-    onClick("buy_cap", () => toggleItemStatus("cap", cap_text));
-    onClick("buy_shoes", () => toggleItemStatus("shoes", shoes_text));
-    onClick("buy_winter_hat", () =>
-      toggleItemStatus("winter_hat", winter_hat_text)
-    );
     items.forEach(item => {
       window[`buy_${item}`] = eval(`${item}_box`).add([
         rect(100, 35, { radius: 8 }),
@@ -515,6 +537,10 @@ scene("menu", () => {
       const { key, value } = itemConditions[item];
 
       onClick(`buy_${item}`, () => {
+        item_text = eval(item + "_text");
+        item_text == "Wear" && set(item, "Wearing") ||
+          item_text == "Wearing" && set(item, "Wear");
+
         if (eval(food1) >= price1 && eval(food2) >= price2) {
           if (localStorage.getItem(key) !== value) {
             localStorage.setItem(key, value);
@@ -542,7 +568,7 @@ scene("menu", () => {
     });
   }
 
-  function updateHamsterAppearance(white) {
+  function handleArrowClick(white) {
     add([
       sprite(loadSprite("hamster", `images/${white + updateHamster()}.png`), {
         width: hamster_width,
@@ -551,36 +577,27 @@ scene("menu", () => {
       anchor("center"),
     ]);
 
-    if (white !== "") {
-      left_arrow.opacity = 0.25;
-      right_arrow.opacity = 1;
-      left_arrow.onHoverUpdate(() => {
-        setCursor("default");
-        left_arrow.scale = vec2(0.2);
-      });
-      right_arrow.onHoverUpdate(() => {
-        setCursor("pointer");
-        right_arrow.scale = vec2(0.21);
-      });
-    } else {
-      right_arrow.opacity = 0.25;
-      left_arrow.opacity = 1;
-      right_arrow.onHoverUpdate(() => {
-        setCursor("default");
-        right_arrow.scale = vec2(0.2);
-      });
-      left_arrow.onHoverUpdate(() => {
-        setCursor("pointer");
-        left_arrow.scale = vec2(0.21);
-      });
-    }
+    const primary = white !== "" ? right_arrow : left_arrow;
+    const secondary = white !== "" ? left_arrow : right_arrow;
+
+    primary.opacity = 1;
+    secondary.opacity = 0.25;
+
+    primary.onHoverUpdate(() => {
+      setCursor("pointer");
+      primary.scale = vec2(0.21);
+    });
+    secondary.onHoverUpdate(() => {
+      setCursor("default");
+      secondary.scale = vec2(0.2);
+    });
   }
 
   // Bind the onClickArrow function to the arrow keys
-  onKeyPress("left", () => { getSprite("left_arrow") ? updateHamsterAppearance("white_") : "" });
-  onKeyPress("right", () => { getSprite("right_arrow") ? updateHamsterAppearance("") : "" });
-  onClick("left_arrow", () => { updateHamsterAppearance("white_") });
-  onClick("right_arrow", () => { updateHamsterAppearance("") });
+  onKeyPress("left", () => { getSprite("left_arrow") && handleArrowClick("white_") });
+  onKeyPress("right", () => { getSprite("right_arrow") && handleArrowClick("") });
+  onClick("left_arrow", () => { handleArrowClick("white_") });
+  onClick("right_arrow", () => { handleArrowClick("") });
 
   onClick("play", () => go("game"));
   onKeyPress("space", () => go("game"));

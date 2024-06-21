@@ -52,12 +52,12 @@ if (document[propName] !== undefined) handleChange({ type: document[propName] ? 
 
 function handleChange(evt) {
   evt = evt || window.event;
-  if (visible && (["blur", "focusout", "pagehide"].includes(evt.type) || (this && this[propName]))) {
+  if (visible && (["focusout", "pagehide"].includes(evt.type) || (this && this[propName]))) {
     visible = false;
     database.ref(id).remove();
     console.log("Out...")
   }
-  else if (!visible && (["focus", "focusin", "pageshow"].includes(evt.type) || (this && !this[propName]))) {
+  else if (!visible && (["focusin", "pageshow"].includes(evt.type) || (this && !this[propName]))) {
     visible = true;
     database.ref(id).set("");
     console.log("In...")
