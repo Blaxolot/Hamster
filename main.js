@@ -1,5 +1,5 @@
 const phone = window.innerWidth <= 500;
-const JUMP_FORCE = 800;
+const JUMP_FORCE = 700;
 let SPEED = 350;
 let GRAVITY = 1250;
 let hamster_white = false;
@@ -70,7 +70,7 @@ scene("game", () => {
   // add a game object to screen
   const player = add([
     sprite("hamster", { width: hamster_width }),
-    pos(hamster_pos, 40),
+    pos(hamster_pos, -65),
     anchor("center"),
     area({ scale: vec2(0.7, 1) }),
     body(),
@@ -96,8 +96,12 @@ scene("game", () => {
 
   // jump when user press space, up or w
   onKeyPress(["space", "up", "w"], jump);
+  onKeyDown(["space", "up", "w"], jump);
   onClick(jump);
+  onMouseDown(jump);
+
   onKeyPress("escape", () => {
+    let selected
     let box = add([
       rect(600, 300, { radius: 25 }),
       anchor("center"),
@@ -134,6 +138,12 @@ scene("game", () => {
     no.add([text("NO"), anchor("center"), color(0, 0, 0), scale(0.9), pos(0, 2)]);
     onClick("yes", () => { go("menu"), debug.paused = false; });
     onClick("no", () => { debug.paused = false, destroy(box); });
+    onKeyPress("enter", () => {
+      if (selected == "yes") { go("menu"), debug.paused = false }
+      else if (selected == "no") { debug.paused = false, destroy(box) }
+    })
+    onKeyPress("left", () => { yes.outline = 1; no.outline = 0; selected = "yes" });
+    onKeyPress("right", () => { no.outline = 1; yes.outline = 0; selected = "no" });
     debug.paused = true;
   })
 
