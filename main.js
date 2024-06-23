@@ -12,12 +12,14 @@ kaplay({
 loadSprite("seed", "images/seed.png");
 loadSprite("apple", "images/apple.png");
 loadSprite("left_banana", "images/left_banana.png");
+loadSprite("tomato", "images/tomato.png");
 loadSprite("dirt", "images/dirt.png");
 
 function updateLocalStorage() {
   seeds = localStorage.getItem("seeds");
   apples = localStorage.getItem("apples");
   bananas = localStorage.getItem("bananas");
+  tomatoes = localStorage.getItem("tomatoes");
   Wearing = localStorage.getItem("Wearing");
   Shoes = localStorage.getItem("Shoes");
   Winter_hat = localStorage.getItem("Winter_hat");
@@ -48,6 +50,7 @@ setBackground(50, 50, 50);
 scene("game", () => {
   loadSprite("banana", "images/banana.png");
   loadSprite("chocolate", "images/chocolate_bar.png");
+  loadSprite("rotten_tomato", "images/rotten_tomato.png");
   loadSprite("heart", "images/heart.png");
 
   loadSound("pickup", "sounds/pickup.wav");
@@ -66,8 +69,10 @@ scene("game", () => {
   apple_scale = 80 / (phone ? 1.25 : 1);
   banana_scale = 70 / (phone ? 1.25 : 1);
   seed_scale = 50 / (phone ? 1.25 : 1);
+  tomato_scale = 70 / (phone ? 1.25 : 1);
+  rotten_tomato_scale = 70 / (phone ? 1.25 : 1);
 
-  // add a game object to screen
+  // add hamster
   const player = add([
     sprite("hamster", { width: hamster_width }),
     pos(hamster_pos, -65),
@@ -94,7 +99,7 @@ scene("game", () => {
     }
   }
 
-  // jump when user press space, up or w
+  // jump when user press space, up or w or clicks
   onKeyPress(["space", "up", "w"], jump);
   onKeyDown(["space", "up", "w"], jump);
   onClick(jump);
@@ -153,22 +158,22 @@ scene("game", () => {
     GRAVITY += 0.5;
     setGravity(GRAVITY);
   });
-  let food = ["chocolate", "seed", "apple", "banana"];
-  let food_distance = "";
-  function spawnItem() {
-    const randomFood = choose(food);
+  let food = ["chocolate", "seed", "apple", "banana", "tomato"];
+  let distance = "";
+  function spawnFood() {
+    const randomFood = randi(16) == 5 ? "rotten_tomato" : choose(food);
     food_pos = randomFood == "chocolate" ? 65 : randi(65, 300);
     document.onkeyup = function (e) {
       var e = e || window.event; // for IE to cover IEs window object
       if (e.ctrlKey && e.shiftKey) {
         if (e.code == "Digit1") {
           food = ["apple"];
-          food_distance = 0.1;
+          distance = 0.1;
           return false;
         }
         else if (e.code == "Digit2") {
           food = ["chocolate"];
-          food_distance = 0.25;
+          distance = 0.25;
           return false;
         }
       }
@@ -184,15 +189,16 @@ scene("game", () => {
       randomFood,
     ]);
 
-    // wait a random amount of time to spawn next Item
-    wait(food_distance == "" ? rand(1, 2) : food_distance, spawnItem);
+    // wait a random amount of time to spawn next Food
+    wait(distance == "" ? rand(1, 2) : distance, spawnFood);
   }
-  spawnItem();
+  spawnFood();
 
   // keep track of score
   let seedScore = 0;
   let appleScore = 0;
   let bananaScore = 0;
+  let tomatoScore = 0;
   let lives = 3;
 
   function handleCollision(...foods) {
@@ -207,7 +213,7 @@ scene("game", () => {
     });
   }
 
-  handleCollision("seed", "apple", "banana");
+  handleCollision("seed", "apple", "banana", "tomato");
 
   player.onCollide("apple", () => {
     if (appleScore >= 10 && appleScore % 10 == 0) {
@@ -229,6 +235,25 @@ scene("game", () => {
     }
   });
 
+  player.onCollide("rotten_tomato", zepsuty_pomidor => {
+    destroy(zepsuty_pomidor);
+    play("negative");
+    lives -= 1;
+
+    destroy(eval("Live" + (lives + 1)));
+
+    if (lives == 0) {
+      go("menu");
+      localStorage.setItem("seeds", +seedScore + +seeds);
+      localStorage.setItem("apples", +appleScore + +apples);
+      localStorage.setItem("bananas", +bananaScore + +bananas);
+      localStorage.setItem("tomatoes", +tomatoScore + +tomatoes);
+
+      SPEED = 350;
+      play("gameover");
+    }
+    console.log("fu");
+  });
 
   player.onCollide("chocolate", czekolada => {
     destroy(czekolada);
@@ -242,6 +267,8 @@ scene("game", () => {
       localStorage.setItem("seeds", +seedScore + +seeds);
       localStorage.setItem("apples", +appleScore + +apples);
       localStorage.setItem("bananas", +bananaScore + +bananas);
+      localStorage.setItem("tomatoes", +tomatoScore + +tomatoes);
+
       SPEED = 350;
       play("gameover");
     }
@@ -254,24 +281,25 @@ scene("game", () => {
   add([sprite("apple"), scale(0.1), pos(120, 10)]);
   const bananaScoreLabel = add([text(bananaScore), pos(65, 80)]);
   add([sprite("left_banana"), scale(0.1), pos(14, 75)]);
+  const tomatoScoreLabel = add([text(tomatoScore), pos(65, 136)]);
+  add([sprite("tomato"), scale(0.085), pos(14, 130)]);
   let Live1 = add([sprite("heart"), pos(width() - 55, 15), scale(0.08)]);
   let Live2 = add([sprite("heart"), pos(width() - 105, 15), scale(0.08)]);
   let Live3 = add([sprite("heart"), pos(width() - 155, 15), scale(0.08)]);
 });
 
-let new_views = "";
+let new_views = " "
 let online;
 
 function Users_online(views) {
   new_views = views;
-  online.text = "Users online:" + new_views;
+  online && (online.text = "Users online:" + new_views);
 }
 
 scene("menu", () => {
   updateLocalStorage();
   hamster_width = phone ? 250 : 285;
   Hamster_text_size = phone ? 0.01 : 100;
-  Shop_text_size = phone ? 0.01 : 70;
   arrows = phone ? 130 : 200;
   arrows_scale = phone ? 0.16 : 0.2;
   info_x = phone ? 35 : 40;
@@ -295,6 +323,8 @@ scene("menu", () => {
   add([text(apples || 0), pos(60, 110)]);
   add([sprite("left_banana"), scale(0.09), pos(10, 150)]);
   add([text(bananas || 0), pos(60, 160)]);
+  add([sprite("tomato"), scale(0.085), pos(10, 202.5)]);
+  add([text(tomatoes || 0), pos(60, 210)]);
   online = add([
     text("Users online:" + new_views, { size: 28 }),
     pos(10, height() - 32),
@@ -410,173 +440,6 @@ scene("menu", () => {
       left_arrow.scale = vec2(0.2);
     });
   }
-  function shop() {
-    loadSprite("cap", "images/cap.png");
-    loadSprite("shoes", "images/hamster_shoes.png");
-    loadSprite("winter_hat", "images/winter_hat.png");
-    background = add([rect(width(), height()), color(50, 50, 50), z(1)]);
-    background.add([
-      text("Shop", { size: Shop_text_size }),
-      anchor("center"),
-      pos(width() / 2, 50),
-    ]);
-    // Cap
-    const cap_box = background.add([
-      rect(200, 200, { radius: 15 }),
-      pos(20, 20),
-      color(100, 100, 100),
-    ]);
-    cap_box.add([sprite("seed"), scale(0.08), pos(15, 10)]);
-    cap_box.add([text("10"), scale(0.9), pos(60, 13)]);
-    cap_box.add([sprite("apple"), scale(0.085), pos(115, 5)]);
-    cap_box.add([text("5"), scale(0.9), pos(160, 13)]);
-    cap_box.add([sprite("cap"), scale(0.25), pos(36, 35)]);
-    // Shoes
-    const shoes_box = background.add([
-      rect(200, 200, { radius: 15 }),
-      pos(20, 240),
-      color(100, 100, 100),
-    ]);
-    shoes_box.add([sprite("seed"), scale(0.08), pos(15, 10)]);
-    shoes_box.add([text("5    5"), scale(0.9), pos(60, 13)]);
-    shoes_box.add([sprite("left_banana"), scale(0.085), pos(113, 5)]);
-    shoes_box.add([sprite("shoes"), scale(0.2), pos(49, 45)]);
-    // Winter hat
-    const winter_hat_box = background.add([
-      rect(200, 200, { radius: 15 }),
-      pos(240, 20),
-      color(100, 100, 100),
-    ]);
-    winter_hat_box.add([sprite("left_banana"), scale(0.085), pos(10, 5)]);
-    winter_hat_box.add([text("10"), scale(0.9), pos(55, 13)]);
-    winter_hat_box.add([sprite("apple"), scale(0.085), pos(105, 5)]);
-    winter_hat_box.add([text("10"), scale(0.9), pos(150, 13)]);
-    winter_hat_box.add([sprite("winter_hat"), scale(0.22), pos(43, 40)]);
-
-    const items = ["cap", "shoes", "winter_hat"];
-    const itemConditions = {
-      cap: { key: "93rfDw", value: "#%1d8*f@4p", var: "Wearing" },
-      shoes: { key: "Sk@3o&", value: "%01ns#9p", var: "Shoes" },
-      winter_hat: { key: "G8*m&a", value: "W%*hjk", var: "Winter_hat" },
-    };
-    const itemPricing = {
-      cap: { food1: "seeds", food2: "apples", price1: 10, price2: 5 },
-      shoes: { food1: "seeds", food2: "bananas", price1: 5, price2: 5 },
-      winter_hat: { food1: "bananas", food2: "apples", price1: 10, price2: 10 },
-    }
-
-    items.forEach(item => {
-      const condition = itemConditions[item];
-      if (localStorage.getItem(condition.key) == condition.value) {
-        const status = eval(condition.var) == "True";
-
-        eval(`${item}_text = status ? "Wearing" : "Wear"`);
-        eval(`buy_${item}_button_color = status ? rgb(0, 160, 0) : rgb(200, 0, 0)`);
-        eval(`buy_${item}_text_scale = status ? 0.6 : 0.7`);
-
-      } else {
-        const { food1, food2, price1, price2 } = itemPricing[item];
-        const con = eval(food1) < price1 || eval(food2) < price2;
-
-        eval(`${item}_text = "Buy"`);
-        eval(`buy_${item}_button_color = con ? rgb(250, 25, 25) : rgb(0, 200, 0)`);
-        eval(`buy_${item}_text_scale = 0.7`);
-      }
-    });
-
-    function set(item, Wearing_or_Wear) {
-      eval(`${item}_text = "${Wearing_or_Wear}"`);
-      Wear = rgb(200, 0, 0);
-      Wearing = rgb(0, 160, 0);
-      eval(`buy_${item}.color = ${Wearing_or_Wear}`);
-      eval(`buy_${item}_text.text = ${item}_text`);
-      Wear = 0.7, Wearing = 0.6;
-      eval(`buy_${item}_text.scale = ${Wearing_or_Wear}`);
-
-      localStorage.setItem(
-        item == "cap" ? "Wearing" : item == "shoes" ? "Shoes" : "Winter_hat",
-        Wearing_or_Wear == "Wearing" ? "True" : "False");
-    }
-
-    items.forEach(item => {
-      window[`buy_${item}`] = eval(`${item}_box`).add([
-        rect(100, 35, { radius: 8 }),
-        color(window[`buy_${item}_button_color`]),
-        pos(100, 175),
-        area(),
-        anchor("center"),
-        outline(4.5),
-        "buy_" + item,
-      ]);
-
-      window[`buy_${item}_text`] = window[`buy_${item}`].add([
-        text(window[`${item}_text`]),
-        anchor("center"),
-        scale(window[`buy_${item}_text_scale`]),
-        color(0, 0, 0),
-      ]);
-
-      window[`buy_${item}`].onHoverUpdate(() => {
-        window[`buy_${item}`].scale = vec2(1.025);
-        setCursor("pointer");
-      });
-      window[`buy_${item}`].onHoverEnd(() => {
-        window[`buy_${item}`].scale = vec2(1);
-        setCursor("default");
-      });
-    });
-
-    x = background.add([
-      text("x"),
-      area(),
-      pos(width() - 50, 15),
-      color(150, 150, 150),
-      "x",
-    ]);
-    x.onHoverUpdate(() => {
-      x.color = rgb(240, 240, 240)
-      setCursor("pointer");
-    });
-    x.onHoverEnd(() => {
-      x.color = rgb(150, 150, 150)
-      setCursor("default");
-    });
-
-    items.forEach((item) => {
-      const { food1, food2, price1, price2 } = itemPricing[item];
-      const { key, value } = itemConditions[item];
-
-      onClick(`buy_${item}`, () => {
-        item_text = eval(item + "_text");
-        item_text == "Wear" && set(item, "Wearing") ||
-          item_text == "Wearing" && set(item, "Wear");
-
-        if (eval(food1) >= price1 && eval(food2) >= price2) {
-          if (localStorage.getItem(key) !== value) {
-            localStorage.setItem(key, value);
-            localStorage.setItem(food1, eval(food1) - price1);
-            localStorage.setItem(food2, eval(food2) - price2);
-            set(item, "Wearing");
-          }
-        } else if (localStorage.getItem(key) !== value) {
-          if (eval(food1) < price1 || eval(food2) < price2) {
-            alert(`You don't have enough ${food1} and ${food2}`);
-          }
-        }
-      });
-    });
-
-    onKeyPress("escape", () => {
-      updateLocalStorage();
-      loadSprite("hamster", `images/${updateHamster()}.png`);
-      go("menu");
-    });
-    onClick("x", () => {
-      updateLocalStorage();
-      loadSprite("hamster", `images/${updateHamster()}.png`);
-      go("menu");
-    });
-  }
 
   function handleArrowClick(white) {
     add([
@@ -612,7 +475,7 @@ scene("menu", () => {
   onClick("play", () => go("game"));
   onKeyPress("space", () => go("game"));
   onClick("hamsters", () => hamsters());
-  onClick("shop", () => shop());
+  onClick("shop", () => go("shop"));
   onClick("info", () => display_info());
 });
 
