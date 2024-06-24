@@ -14,6 +14,13 @@ loadSprite("apple", "images/apple.png");
 loadSprite("left_banana", "images/left_banana.png");
 loadSprite("tomato", "images/tomato.png");
 loadSprite("dirt", "images/dirt.png");
+loadSprite("hej", "images/tlo_homik.png");
+
+
+loadSprite("drzewo1", "images/drzewo_1.png");
+loadSprite("drzewo2", "images/drzewo2.png");
+loadSprite("drzewo3", "images/drzewo3.png");
+loadSprite("chmura", "images/chmura.png");
 
 function updateLocalStorage() {
   seeds = localStorage.getItem("seeds");
@@ -48,6 +55,13 @@ loadSprite("hamster", `images/${updateHamster()}.png`);
 setBackground(50, 50, 50);
 
 scene("game", () => {
+  setBackground(0, 120, 180);
+  add([sprite("drzewo1"), fixed(), scale((width() + height()) / 180), anchor("botleft"), pos(width() / 10, height() / 1.05)]);
+  add([sprite("drzewo2"), fixed(), scale((width() + height()) / 180), anchor("botleft"), pos(width() / 2.8, height() / 1.05)]);
+  add([sprite("drzewo3"), fixed(), scale((width() + height()) / 180), anchor("botleft"), pos(width() / 1.5, height() / 1.05)]);
+  add([sprite("chmura"), fixed(), scale((width() + height()) / 180), anchor("center"), pos(width() / 2, height() / 2 - 180)]);
+
+
   loadSprite("banana", "images/banana.png");
   loadSprite("chocolate", "images/chocolate_bar.png");
   loadSprite("rotten_tomato", "images/rotten_tomato.png");
@@ -161,7 +175,7 @@ scene("game", () => {
   let food = ["chocolate", "seed", "apple", "banana", "tomato"];
   let distance = "";
   function spawnFood() {
-    const randomFood = randi(16) == 5 ? "rotten_tomato" : choose(food);
+    const randomFood = randi(21) == 0 ? "rotten_tomato" : choose(food);
     food_pos = randomFood == "chocolate" ? 65 : randi(65, 300);
     document.onkeyup = function (e) {
       var e = e || window.event; // for IE to cover IEs window object
@@ -297,6 +311,7 @@ function Users_online(views) {
 }
 
 scene("menu", () => {
+  setBackground(50, 50, 50);
   updateLocalStorage();
   hamster_width = phone ? 250 : 285;
   Hamster_text_size = phone ? 0.01 : 100;
