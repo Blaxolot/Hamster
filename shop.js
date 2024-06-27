@@ -129,20 +129,7 @@ scene("shop", () => {
       item_text = eval(item + "_text");
       (item_text == "Wear" && set(item, "Wearing")) ||
         (item_text == "Wearing" && set(item, "Wear"));
-      if (cap_text == "Wearing" && shoes_text !== "Wearing") {
-        hamster = "hamster_cap";
-      } else if (shoes_text == "Wearing" && cap_text !== "Wearing" && winter_hat_text !== "Wearing") {
-        hamster = "hamster_shoes";
-      } else if (shoes_text == "Wearing" && cap_text == "Wearing") {
-        hamster = "hamster_cap_shoes";
-      } else if (winter_hat_text == "Wearing" && shoes_text !== "Wearing") {
-        hamster = "hamster_winter_hat";
-      } else if (winter_hat_text == "Wearing" && shoes_text == "Wearing") {
-        hamster = "hamster_winter_hat_shoes";
-      } else {
-        hamster = "hamster";
-      }
-      loadSprite("hamster", `images/${hamster}.png`);
+      loadSprite("hamster", `images/${updateHamster()}.png`);
 
       if (localStorage.getItem(key) !== value) {
         if (eval(food1) >= price1 && eval(food2) >= price2) {
@@ -150,6 +137,7 @@ scene("shop", () => {
           localStorage.setItem(food1, eval(food1) - price1);
           localStorage.setItem(food2, eval(food2) - price2);
           set(item, "Wearing");
+          loadSprite("hamster", `images/${updateHamster()}.png`);
         } else if (eval(food1) < price1 || eval(food2) < price2) {
           alert(`You don't have enough ${food1} and ${food2}`);
         }

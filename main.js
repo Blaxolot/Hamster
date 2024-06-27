@@ -34,6 +34,7 @@ function updateLocalStorage() {
 // Update the variables initially
 updateLocalStorage();
 function updateHamster() {
+  updateLocalStorage();
   if (Wearing == "True" && Shoes !== "True") {
     hamster = "hamster_cap";
   } else if (Shoes == "True" && Wearing !== "True" && Winter_hat !== "True") {
@@ -174,9 +175,9 @@ scene("game", () => {
     GRAVITY += 0.5;
     setGravity(GRAVITY);
   });
+  let food = ["chocolate", "seed", "apple", "banana", "tomato", "rotten_tomato"];
+  let distance = "";
   function spawnFood() {
-    let food = ["chocolate", "seed", "apple", "banana", "tomato", "rotten_tomato"];
-    let distance = "";
     const randomFood = choose(food) == "rotten_tomato" && randi(15) == 5 ? "rotten_tomato" : choose(food);
 
     food_pos = randomFood == "chocolate" ? 65 : randi(65, 300);
