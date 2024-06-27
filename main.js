@@ -14,7 +14,6 @@ loadSprite("apple", "images/apple.png");
 loadSprite("left_banana", "images/left_banana.png");
 loadSprite("tomato", "images/tomato.png");
 loadSprite("dirt", "images/dirt.png");
-loadSprite("hej", "images/tlo_homik.png");
 
 
 loadSprite("drzewo1", "images/drzewo_1.png");
@@ -56,22 +55,25 @@ setBackground(50, 50, 50);
 
 scene("game", () => {
   setBackground(0, 120, 180);
-  add([sprite("drzewo1"), fixed(), scale((width() + height()) / 180), anchor("botleft"), pos(width() / 10, height() / 1.05)]);
-  add([sprite("drzewo2"), fixed(), scale((width() + height()) / 180), anchor("botleft"), pos(width() / 2.8, height() / 1.05)]);
-  add([sprite("drzewo3"), fixed(), scale((width() + height()) / 180), anchor("botleft"), pos(width() / 1.5, height() / 1.05)]);
+  let para = [fixed(), scale((width() + height()) / 180), anchor("botleft")]
+
+  add([sprite("drzewo1"), ...para, pos(width() / 10, height() / 1.05)]);
+  add([sprite("drzewo2"), ...para, pos(width() / 2.8, height() / 1.05)]);
+  add([sprite("drzewo3"), ...para, pos(width() / 1.5, height() / 1.05)]);
+
   add([sprite("chmura"), fixed(), scale((width() + height()) / 180), anchor("center"), pos(width() / 2, height() / 2 - 180)]);
 
 
-  loadSprite("banana", "images/banana.png");
-  loadSprite("chocolate", "images/chocolate_bar.png");
-  loadSprite("rotten_tomato", "images/rotten_tomato.png");
-  loadSprite("heart", "images/heart.png");
+  !getSprite("banana") && loadSprite("banana", "images/banana.png");
+  !getSprite("chocolate") && loadSprite("chocolate", "images/chocolate_bar.png");
+  !getSprite("rotten_tomato") && loadSprite("rotten_tomato", "images/rotten_tomato.png");
+  !getSprite("heart") && loadSprite("heart", "images/heart.png");
 
-  loadSound("pickup", "sounds/pickup.wav");
-  loadSound("jump", "sounds/jump.wav");
-  loadSound("negative", "sounds/negative_beeps.mp3");
-  loadSound("gameover", "sounds/gameover.mp3");
-  loadSound("bonus", "sounds/bonus_heart.mp3");
+  !getSound("pickup") && loadSound("pickup", "sounds/pickup.wav");
+  !getSound("jump") && loadSound("jump", "sounds/jump.wav");
+  !getSound("negative") && loadSound("negative", "sounds/negative_beeps.mp3");
+  !getSound("gameover") && loadSound("gameover", "sounds/gameover.mp3");
+  !getSound("bonus") && loadSound("bonus", "sounds/bonus_heart.mp3");
 
   setCursor("default");
   // define gravity
@@ -172,10 +174,11 @@ scene("game", () => {
     GRAVITY += 0.5;
     setGravity(GRAVITY);
   });
-  let food = ["chocolate", "seed", "apple", "banana", "tomato"];
-  let distance = "";
   function spawnFood() {
-    const randomFood = randi(21) == 0 ? "rotten_tomato" : choose(food);
+    let food = ["chocolate", "seed", "apple", "banana", "tomato", "rotten_tomato"];
+    let distance = "";
+    const randomFood = choose(food) == "rotten_tomato" && randi(15) == 5 ? "rotten_tomato" : choose(food);
+
     food_pos = randomFood == "chocolate" ? 65 : randi(65, 300);
     document.onkeyup = function (e) {
       var e = e || window.event; // for IE to cover IEs window object
@@ -215,19 +218,16 @@ scene("game", () => {
   let tomatoScore = 0;
   let lives = 3;
 
-  function handleCollision(...foods) {
-    foods.forEach(food => {
-      player.onCollide(food, item => {
-        play("pickup");
-        destroy(item);
-        eval(`${food}Score++`);
-        eval(`${food}ScoreLabel.text = ${food}Score`);
-        console.log("mniam");
-      });
+  let foods = ["seed", "apple", "banana", "tomato"]
+  foods.forEach(food => {
+    player.onCollide(food, item => {
+      play("pickup");
+      destroy(item);
+      eval(`${food}Score++`);
+      eval(`${food}Text.text = ${food}Score`);
+      console.log("mniam");
     });
-  }
-
-  handleCollision("seed", "apple", "banana", "tomato");
+  });
 
   player.onCollide("apple", () => {
     if (appleScore >= 10 && appleScore % 10 == 0) {
@@ -236,7 +236,7 @@ scene("game", () => {
 
       for (let i = 1; i <= 1000; i++) {
         if (lives == i) {
-          const heartWidth = 50;  // The width of each heart slot
+          const heartWidth = 50; // The width of each heart slot
           // Calculate the number of hearts that can fit in one line
           const heartsPerLine = Math.floor(width() / heartWidth);
           // Calculate x and y position based on the current heart
@@ -278,10 +278,10 @@ scene("game", () => {
 
     if (lives == 0) {
       go("menu");
-      localStorage.setItem("seeds", +seedScore + +seeds);
-      localStorage.setItem("apples", +appleScore + +apples);
-      localStorage.setItem("bananas", +bananaScore + +bananas);
-      localStorage.setItem("tomatoes", +tomatoScore + +tomatoes);
+      localStorage.setItem("seeds", seedScore + +seeds);
+      localStorage.setItem("apples", appleScore + +apples);
+      localStorage.setItem("bananas", bananaScore + +bananas);
+      localStorage.setItem("tomatoes", tomatoScore + +tomatoes);
 
       SPEED = 350;
       play("gameover");
@@ -289,13 +289,13 @@ scene("game", () => {
     console.log("fu");
   });
 
-  const seedScoreLabel = add([text(seedScore), pos(65, 24)]);
+  const seedText = add([text(seedScore), pos(65, 24)]);
   add([sprite("seed"), scale(0.08), pos(16, 20)]);
-  const appleScoreLabel = add([text(appleScore), pos(175, 24)]);
+  const appleText = add([text(appleScore), pos(175, 24)]);
   add([sprite("apple"), scale(0.1), pos(120, 10)]);
-  const bananaScoreLabel = add([text(bananaScore), pos(65, 80)]);
+  const bananaText = add([text(bananaScore), pos(65, 80)]);
   add([sprite("left_banana"), scale(0.1), pos(14, 75)]);
-  const tomatoScoreLabel = add([text(tomatoScore), pos(65, 136)]);
+  const tomatoText = add([text(tomatoScore), pos(65, 136)]);
   add([sprite("tomato"), scale(0.085), pos(14, 130)]);
   let Live1 = add([sprite("heart"), pos(width() - 55, 15), scale(0.08)]);
   let Live2 = add([sprite("heart"), pos(width() - 105, 15), scale(0.08)]);
@@ -490,8 +490,33 @@ scene("menu", () => {
   onClick("play", () => go("game"));
   onKeyPress("space", () => go("game"));
   onClick("hamsters", () => hamsters());
-  onClick("shop", () => go("shop"));
-  onClick("info", () => display_info());
+  function isScriptLoaded(src) {
+    return Array.from(document.getElementsByTagName('script')).some(script => script.src.includes(src));
+  }
+
+  onClick("shop", () => {
+    if (!isScriptLoaded("shop.js")) {
+      let script = document.createElement('script');
+      script.src = "shop.js";
+      script.onload = () => go("shop");
+      document.head.appendChild(script);
+    } else {
+      go("shop");
+    }
+  });
+
+  onClick("info", () => {
+    if (!isScriptLoaded("credits.js")) {
+      let script = document.createElement('script');
+      script.src = "credits.js";
+      script.onload = () => display_info();
+      document.head.appendChild(script);
+    } else {
+      display_info();
+    }
+  });
+
+
 });
 
 go("menu");

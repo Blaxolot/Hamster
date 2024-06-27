@@ -1,8 +1,8 @@
 scene("shop", () => {
   setCursor("default");
-  loadSprite("cap", "images/cap.png");
-  loadSprite("shoes", "images/hamster_shoes.png");
-  loadSprite("winter_hat", "images/winter_hat.png");
+  !getSprite("cap") && loadSprite("cap", "images/cap.png");
+  !getSprite("shoes") && loadSprite("shoes", "images/hamster_shoes.png");
+  !getSprite("winter_hat") && loadSprite("winter_hat", "images/winter_hat.png");
   add([
     text("Shop", { size: phone ? 0.01 : 70 }),
     anchor("center"),
@@ -99,7 +99,6 @@ scene("shop", () => {
     area(),
     pos(width() - 50, 15),
     color(150, 150, 150),
-    "x",
   ]);
   x.onHoverUpdate(() => {
     x.color = rgb(240, 240, 240);
@@ -130,6 +129,20 @@ scene("shop", () => {
       item_text = eval(item + "_text");
       (item_text == "Wear" && set(item, "Wearing")) ||
         (item_text == "Wearing" && set(item, "Wear"));
+      if (cap_text == "Wearing" && shoes_text !== "Wearing") {
+        hamster = "hamster_cap";
+      } else if (shoes_text == "Wearing" && cap_text !== "Wearing" && winter_hat_text !== "Wearing") {
+        hamster = "hamster_shoes";
+      } else if (shoes_text == "Wearing" && cap_text == "Wearing") {
+        hamster = "hamster_cap_shoes";
+      } else if (winter_hat_text == "Wearing" && shoes_text !== "Wearing") {
+        hamster = "hamster_winter_hat";
+      } else if (winter_hat_text == "Wearing" && shoes_text == "Wearing") {
+        hamster = "hamster_winter_hat_shoes";
+      } else {
+        hamster = "hamster";
+      }
+      loadSprite("hamster", `images/${hamster}.png`);
 
       if (localStorage.getItem(key) !== value) {
         if (eval(food1) >= price1 && eval(food2) >= price2) {
@@ -143,14 +156,6 @@ scene("shop", () => {
       }
     });
   });
-  onKeyPress("escape", () => {
-    updateLocalStorage();
-    loadSprite("hamster", `images/${updateHamster()}.png`);
-    go("menu");
-  });
-  onClick("x", () => {
-    updateLocalStorage();
-    loadSprite("hamster", `images/${updateHamster()}.png`);
-    go("menu");
-  });
+  onKeyPress("escape", () => go("menu"));
+  x.onClick(() => go("menu"));
 });
