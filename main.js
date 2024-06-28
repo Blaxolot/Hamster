@@ -178,7 +178,14 @@ scene("game", () => {
   let food = ["chocolate", "seed", "apple", "banana", "tomato", "rotten_tomato"];
   let distance = "";
   function spawnFood() {
-    const randomFood = choose(food) == "rotten_tomato" && randi(15) == 5 ? "rotten_tomato" : choose(food);
+    let randomFood = choose(food)
+    if (randomFood == "rotten_tomato") {
+      if (!chance(0.5)) {
+        do {
+          randomFood = choose(food);
+        } while (randomFood == "rotten_tomato");
+      }
+    }
 
     food_pos = randomFood == "chocolate" ? 65 : randi(65, 300);
     document.onkeyup = function (e) {
