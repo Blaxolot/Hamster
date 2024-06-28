@@ -15,12 +15,6 @@ loadSprite("left_banana", "images/left_banana.png");
 loadSprite("tomato", "images/tomato.png");
 loadSprite("dirt", "images/dirt.png");
 
-
-loadSprite("drzewo1", "images/drzewo_1.png");
-loadSprite("drzewo2", "images/drzewo2.png");
-loadSprite("drzewo3", "images/drzewo3.png");
-loadSprite("chmura", "images/chmura.png");
-
 function updateLocalStorage() {
   seeds = localStorage.getItem("seeds");
   apples = localStorage.getItem("apples");
@@ -56,6 +50,21 @@ setBackground(50, 50, 50);
 
 scene("game", () => {
   setBackground(0, 120, 180);
+  !getSprite("banana") && loadSprite("banana", "images/banana.png");
+  !getSprite("chocolate") && loadSprite("chocolate", "images/chocolate_bar.png");
+  !getSprite("rotten_tomato") && loadSprite("rotten_tomato", "images/rotten_tomato.png");
+  !getSprite("heart") && loadSprite("heart", "images/heart.png");
+  !getSprite("drzewo1") && loadSprite("drzewo1", "images/drzewo_1.png");
+  !getSprite("drzewo2") && loadSprite("drzewo2", "images/drzewo2.png");
+  !getSprite("drzewo3") && loadSprite("drzewo3", "images/drzewo3.png");
+  !getSprite("chmura") && loadSprite("chmura", "images/chmura.png");
+
+  !getSound("pickup") && loadSound("pickup", "sounds/pickup.wav");
+  !getSound("jump") && loadSound("jump", "sounds/jump.wav");
+  !getSound("negative") && loadSound("negative", "sounds/negative_beeps.mp3");
+  !getSound("gameover") && loadSound("gameover", "sounds/gameover.mp3");
+  !getSound("bonus") && loadSound("bonus", "sounds/bonus_heart.mp3");
+
   let para = [fixed(), scale((width() + height()) / 180), anchor("botleft")]
 
   add([sprite("drzewo1"), ...para, pos(width() / 10, height() / 1.05)]);
@@ -65,16 +74,6 @@ scene("game", () => {
   add([sprite("chmura"), fixed(), scale((width() + height()) / 180), anchor("center"), pos(width() / 2, height() / 2 - 180)]);
 
 
-  !getSprite("banana") && loadSprite("banana", "images/banana.png");
-  !getSprite("chocolate") && loadSprite("chocolate", "images/chocolate_bar.png");
-  !getSprite("rotten_tomato") && loadSprite("rotten_tomato", "images/rotten_tomato.png");
-  !getSprite("heart") && loadSprite("heart", "images/heart.png");
-
-  !getSound("pickup") && loadSound("pickup", "sounds/pickup.wav");
-  !getSound("jump") && loadSound("jump", "sounds/jump.wav");
-  !getSound("negative") && loadSound("negative", "sounds/negative_beeps.mp3");
-  !getSound("gameover") && loadSound("gameover", "sounds/gameover.mp3");
-  !getSound("bonus") && loadSound("bonus", "sounds/bonus_heart.mp3");
 
   setCursor("default");
   // define gravity
@@ -123,7 +122,6 @@ scene("game", () => {
   onMouseDown(jump);
 
   onKeyPress("escape", () => {
-    let selected
     let box = add([
       rect(600, 300, { radius: 25 }),
       anchor("center"),
@@ -146,7 +144,6 @@ scene("game", () => {
       anchor("center"),
       color(0, 255, 0),
       area(),
-      "yes",
     ]);
     const no = box.add([
       rect(200, 50, { radius: 10 }),
@@ -154,12 +151,11 @@ scene("game", () => {
       anchor("center"),
       color(255, 0, 0),
       area(),
-      "no",
     ]);
     yes.add([text("YES"), anchor("center"), color(0, 0, 0), scale(0.9), pos(0, 2)]);
     no.add([text("NO"), anchor("center"), color(0, 0, 0), scale(0.9), pos(0, 2)]);
-    onClick("yes", () => { go("menu"), debug.paused = false; });
-    onClick("no", () => { debug.paused = false, destroy(box); });
+    yes.onClick(() => { go("menu"), debug.paused = false; });
+    no.onClick(() => { debug.paused = false, destroy(box); });
     onKeyPress("enter", () => {
       if (selected == "yes") { go("menu"), debug.paused = false }
       else if (selected == "no") { debug.paused = false, destroy(box) }
@@ -359,7 +355,6 @@ scene("menu", () => {
     pos(width() - info_x, height() - 45),
     color(140, 140, 140),
     area(),
-    "info",
   ]);
 
   const play_button = add([
@@ -369,7 +364,6 @@ scene("menu", () => {
     area(),
     anchor("center"),
     outline(5),
-    "play",
   ]);
   play_button.add([text("Play"), anchor("center"), color(0, 0, 0)]);
   const hamsters_button = add([
@@ -379,7 +373,6 @@ scene("menu", () => {
     area(),
     anchor("center"),
     outline(4.5),
-    "hamsters",
   ]);
   hamsters_button.add([
     text("Hamsters", { size: 30 }),
@@ -392,7 +385,6 @@ scene("menu", () => {
     area(),
     anchor("center"),
     outline(4.5),
-    "shop",
   ]);
   shop_button.add([
     text("Shop", { size: 30 }),
@@ -435,8 +427,8 @@ scene("menu", () => {
   });
   let left_arrow, right_arrow
   function hamsters() {
-    loadSprite("left_arrow", "images/left_arrow.png");
-    loadSprite("right_arrow", "images/right_arrow.png");
+    !getSprite("left_arrow") && loadSprite("left_arrow", "images/left_arrow.png");
+    !getSprite("right_arrow") && loadSprite("right_arrow", "images/right_arrow.png");
     left_arrow = add([
       sprite("left_arrow"),
       scale(arrows_scale),
@@ -494,15 +486,14 @@ scene("menu", () => {
   onKeyPress("right", () => { getSprite("right_arrow") && handleArrowClick("") });
   onClick("left_arrow", () => { handleArrowClick("white_") });
   onClick("right_arrow", () => { handleArrowClick("") });
-
-  onClick("play", () => go("game"));
+  play_button.onClick(() => go("game"));
   onKeyPress("space", () => go("game"));
-  onClick("hamsters", () => hamsters());
+  hamsters_button.onClick(() => hamsters());
+
   function isScriptLoaded(src) {
     return Array.from(document.getElementsByTagName('script')).some(script => script.src.includes(src));
   }
-
-  onClick("shop", () => {
+  shop_button.onClick(() => {
     if (!isScriptLoaded("shop.js")) {
       let script = document.createElement('script');
       script.src = "shop.js";
@@ -513,7 +504,7 @@ scene("menu", () => {
     }
   });
 
-  onClick("info", () => {
+  info.onClick(() => {
     if (!isScriptLoaded("credits.js")) {
       let script = document.createElement('script');
       script.src = "credits.js";
@@ -523,8 +514,6 @@ scene("menu", () => {
       display_info();
     }
   });
-
-
 });
 
 go("menu");

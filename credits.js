@@ -46,7 +46,6 @@ function display_info() {
       pos(-305, -305),
       color(150, 150, 150),
       scale(0.8),
-      "x",
     ]);
   }
   x.onHoverUpdate(() => {
@@ -58,7 +57,7 @@ function display_info() {
     setCursor("default");
   });
 
-  onClick("x", () => {
+  x.onClick(() => {
     go("menu");
     Credits = null;
   });

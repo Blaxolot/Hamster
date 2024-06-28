@@ -52,6 +52,7 @@ scene("shop", () => {
     shoes: { food1: "seeds", food2: "bananas", price1: 5, price2: 5 },
     winter_hat: { food1: "bananas", food2: "apples", price1: 10, price2: 10 },
   };
+  // set buttons text, colors and scale at start
   items.forEach(item => {
     const condition = itemConditions[item];
     if (localStorage.getItem(condition.key) == condition.value) {
@@ -77,7 +78,6 @@ scene("shop", () => {
       area(),
       anchor("center"),
       outline(4.5),
-      "buy_" + item,
     ]);
     window[`buy_${item}_text`] = window[`buy_${item}`].add([
       text(window[`${item}_text`]),
@@ -125,7 +125,7 @@ scene("shop", () => {
   items.forEach(item => {
     const { food1, food2, price1, price2 } = itemPricing[item];
     const { key, value } = itemConditions[item];
-    onClick(`buy_${item}`, () => {
+    eval(`buy_${item}`).onClick(() => {
       item_text = eval(item + "_text");
       (item_text == "Wear" && set(item, "Wearing")) ||
         (item_text == "Wearing" && set(item, "Wear"));
