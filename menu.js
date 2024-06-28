@@ -13,7 +13,6 @@ loadSprite("seed", "images/seed.png");
 loadSprite("apple", "images/apple.png");
 loadSprite("left_banana", "images/left_banana.png");
 loadSprite("tomato", "images/tomato.png");
-loadSprite("dirt", "images/dirt.png");
 
 function updateLocalStorage() {
     seeds = localStorage.getItem("seeds");
@@ -231,17 +230,17 @@ scene("menu", () => {
             script.src = "shop.js";
             script.onload = () => go("shop");
             document.head.appendChild(script);
-        } else {
+        } else if (isScriptLoaded("shop.js")) {
             go("shop");
         }
     });
     info.onClick(() => {
-        if (!isScriptLoaded("credits.js")) {
+        if (!isScriptLoaded("others/credits.js")) {
             let script = document.createElement('script');
             script.src = "others/credits.js";
             script.onload = () => display_info();
             document.head.appendChild(script);
-        } else {
+        } else if (isScriptLoaded("others/credits.js")) {
             display_info();
         }
     });

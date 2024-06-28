@@ -15,14 +15,13 @@ scene("game", () => {
   !getSound("gameover") && loadSound("gameover", "sounds/gameover.mp3");
   !getSound("bonus") && loadSound("bonus", "sounds/bonus_heart.mp3");
 
-  let para = [fixed(), scale((width() + height()) / 180), anchor("botleft")]
+  let para = [fixed(), scale((width() + height()) / 180), anchor("botleft")];
 
   add([sprite("drzewo1"), ...para, pos(width() / 10, height() / 1.05)]);
   add([sprite("drzewo2"), ...para, pos(width() / 2.8, height() / 1.05)]);
   add([sprite("drzewo3"), ...para, pos(width() / 1.5, height() / 1.05)]);
 
   add([sprite("chmura"), fixed(), scale((width() + height()) / 180), anchor("center"), pos(width() / 2, height() / 2 - 180)]);
-
 
 
   setCursor("default");
@@ -51,10 +50,17 @@ scene("game", () => {
   for (let x = 0; x < width(); x += 60) {
     add([
       pos(x, height()),
-      sprite("dirt"),
+      rect(60, 60),
+      color(rgb(20, 170, 0)),
       anchor("botleft"),
       area(),
       body({ isStatic: true }),
+    ]);
+    add([
+      pos(x, height()),
+      rect(60, 43),
+      color(rgb(90, 50, 0)),
+      anchor("botleft"),
     ]);
   }
 
@@ -107,13 +113,13 @@ scene("game", () => {
     yes.onClick(() => { go("menu"), debug.paused = false; });
     no.onClick(() => { debug.paused = false, destroy(box); });
     onKeyPress("enter", () => {
-      if (selected == "yes") { go("menu"), debug.paused = false }
-      else if (selected == "no") { debug.paused = false, destroy(box) }
-    })
-    onKeyPress("left", () => { yes.outline = 1; no.outline = 0; selected = "yes" });
-    onKeyPress("right", () => { no.outline = 1; yes.outline = 0; selected = "no" });
+      if (selected == "yes") { go("menu"), debug.paused = false; }
+      else if (selected == "no") { debug.paused = false, destroy(box); }
+    });
+    onKeyPress("left", () => { yes.outline = 1; no.outline = 0; selected = "yes"; });
+    onKeyPress("right", () => { no.outline = 1; yes.outline = 0; selected = "no"; });
     debug.paused = true;
-  })
+  });
 
   // Increase speed gradually
   loop(0.5, () => {
@@ -124,7 +130,7 @@ scene("game", () => {
   let food = ["chocolate", "seed", "apple", "banana", "tomato", "rotten_tomato"];
   let distance = "";
   function spawnFood() {
-    let randomFood = choose(food)
+    let randomFood = choose(food);
     if (randomFood == "rotten_tomato") {
       if (!chance(0.5)) {
         do {
@@ -172,7 +178,7 @@ scene("game", () => {
   let tomatoScore = 0;
   let lives = 3;
 
-  let foods = ["seed", "apple", "banana", "tomato"]
+  let foods = ["seed", "apple", "banana", "tomato"];
   foods.forEach(food => {
     player.onCollide(food, item => {
       play("pickup");
