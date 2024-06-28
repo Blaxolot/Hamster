@@ -59,7 +59,7 @@ scene("game", () => {
     add([
       pos(x, height()),
       rect(60, 43),
-      color(rgb(90, 50, 0)),
+      color(rgb(90, 60, 0)),
       anchor("botleft"),
     ]);
   }
