@@ -13,6 +13,8 @@ loadSprite("seed", "images/seed.png");
 loadSprite("apple", "images/apple.png");
 loadSprite("left_banana", "images/left_banana.png");
 loadSprite("tomato", "images/tomato.png");
+loadSprite("winter_hat", "images/winter_hat.png");
+loadSprite("cap", "images/cap.png");
 
 function updateLocalStorage() {
   seeds = localStorage.getItem("seeds");
@@ -26,18 +28,20 @@ function updateLocalStorage() {
 
 // Update the variables initially
 updateLocalStorage();
+let hello;
+let hello_2;
 function updateHamster() {
   updateLocalStorage();
   if (Wearing == "True" && Shoes !== "True") {
-    hamster = "hamster_cap";
+    hamster = "hamster"; hello_2 = true; hello = false;
   } else if (Shoes == "True" && Wearing !== "True" && Winter_hat !== "True") {
     hamster = "hamster_shoes";
   } else if (Shoes == "True" && Wearing == "True") {
-    hamster = "hamster_cap_shoes";
+    hamster = "hamster_shoes"; hello_2 = true; hello = false;
   } else if (Winter_hat == "True" && Shoes !== "True") {
-    hamster = "hamster_winter_hat";
+    hamster = "hamster"; hello = true; hello_2 = false;
   } else if (Winter_hat == "True" && Shoes == "True") {
-    hamster = "hamster_winter_hat_shoes";
+    hamster = "hamster_shoes"; hello = true; hello_2 = false;
   } else {
     hamster = "hamster";
   }
@@ -64,11 +68,38 @@ scene("menu", () => {
   arrows = phone ? 130 : 200;
   arrows_scale = phone ? 0.16 : 0.2;
   info_x = phone ? 35 : 40;
-  add([
+
+  let hi = add([
     sprite("hamster", { width: hamster_width }),
-    pos(center()),
+    pos(width() / 2, height() / 2 + ((hello || hello_2) == true ? 25 : 0)),
     anchor("center"),
   ]);
+  let hello2_hi;
+  let hello_hi;
+
+  if (hello == true) {
+    hello2_hi && destroy(hello2_hi);
+    hello2_hi == undefined;
+
+    hello_hi = hi.add([
+      sprite("winter_hat", { width: hamster_width / 2 }),
+      scale(vec2(0.9, 0.65)),
+      anchor("center"),
+      pos(0, -147),
+    ]);
+  }
+  if (hello_2 == true) {
+    hello_hi && destroy(hello_hi);
+    hello_hi == undefined;
+
+    hello2_hi = hi.add([
+      sprite("cap", { width: hamster_width / 2 }),
+      scale(vec2(0.9, 0.7)),
+      anchor("center"),
+      pos(0, -141),
+    ]);
+  }
+
   add([
     text("Hamster", { size: Hamster_text_size }),
     pos(width() / 2, height() / 2 - 230),
@@ -193,13 +224,29 @@ scene("menu", () => {
     });
   }
   function handleArrowClick(white) {
-    add([
+    let hi = add([
       sprite(loadSprite("hamster", `images/${white + updateHamster()}.png`), {
         width: hamster_width,
       }),
-      pos(center()),
+      pos(width() / 2, height() / 2 + ((hello || hello_2) == true ? 25 : 0)),
       anchor("center"),
     ]);
+    if (hello == true) {
+      hi.add([
+        sprite("winter_hat", { width: hamster_width / 2 }),
+        scale(vec2(0.9, 0.65)),
+        anchor("center"),
+        pos(0, -147),
+      ]);
+    }
+    if (hello_2 == true) {
+      hi.add([
+        sprite("cap", { width: hamster_width / 2 }),
+        scale(vec2(0.9, 0.7)),
+        anchor("center"),
+        pos(0, -141),
+      ]);
+    }
     const primary = white !== "" ? right_arrow : left_arrow;
     const secondary = white !== "" ? left_arrow : right_arrow;
     primary.opacity = 1;

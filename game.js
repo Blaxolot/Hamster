@@ -62,6 +62,25 @@ scene("game", () => {
     body(),
   ]);
 
+  if (hello == true) {
+    player.add([
+      sprite("winter_hat", { width: hamster_width / 2 }),
+      scale(vec2(0.9, 0.65)),
+      anchor("center"),
+      pos(0, -54),
+      area(),
+    ]);
+  }
+  if (hello_2 == true) {
+    player.add([
+      sprite("cap", { width: hamster_width / 2 }),
+      scale(vec2(0.9, 0.7)),
+      anchor("center"),
+      pos(0, -52),
+      area(),
+    ]);
+  }
+
   // floor
   for (let x = 0; x < width(); x += 60) {
     add([
@@ -72,7 +91,12 @@ scene("game", () => {
       area(),
       body({ isStatic: true }),
     ]);
-    add([pos(x, height()), rect(60, 43), color(rgb(90, 60, 0)), anchor("botleft")]);
+    add([
+      pos(x, height()),
+      rect(60, 43),
+      color(rgb(90, 60, 0)),
+      anchor("botleft"),
+    ]);
   }
 
   function jump() {
