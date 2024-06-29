@@ -4,7 +4,7 @@ function display_info() {
     Credits = add([
       rect(650, 650, { radius: 8 }),
       color(0, 0, 0),
-      opacity(0.8),
+      opacity(0.85),
       pos(center()),
       area(),
       anchor("center"),
@@ -15,7 +15,7 @@ function display_info() {
     Credits.add([
       text("Icon Credits"),
       anchor("center"),
-      pos(0, -260),
+      pos(0, -280),
       color(255, 255, 255),
     ]);
     const icons_Credits = [
@@ -31,7 +31,7 @@ function display_info() {
       "Tomato Icon created by VectorPortal - Flaticon"
     ];
 
-    let posY = -220; // Initial vertical position
+    let posY = -230; // Initial vertical position
 
     icons_Credits.forEach(Text => {
       const gap = Text == "- Flaticon" || Text.includes("Chocolate") ? 30 : 40;

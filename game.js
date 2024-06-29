@@ -15,14 +15,30 @@ scene("game", () => {
   !getSound("gameover") && loadSound("gameover", "sounds/gameover.mp3");
   !getSound("bonus") && loadSound("bonus", "sounds/bonus_heart.mp3");
 
-  let para = [fixed(), scale((width() + height()) / 180), anchor("botleft")];
+  let para = [fixed(), anchor("botleft")];
 
-  add([sprite("drzewo1"), ...para, pos(width() / 10, height() / 1.05)]);
-  add([sprite("drzewo2"), ...para, pos(width() / 2.8, height() / 1.05)]);
-  add([sprite("drzewo3"), ...para, pos(width() / 1.5, height() / 1.05)]);
+  add([
+    sprite("drzewo1", { width: (width() + height()) / 10 }),
+    pos(width() / 10, height() - 60),
+    ...para,
+  ]);
+  add([
+    sprite("drzewo2", { width: (width() + height()) / 20 }),
+    pos(width() / 2.8, height() - 60),
+    ...para,
+  ]);
+  add([
+    sprite("drzewo3", { width: (width() + height()) / 11 }),
+    pos(width() / 1.5, height() - 60),
+    ...para,
+  ]);
 
-  add([sprite("chmura"), fixed(), scale((width() + height()) / 180), anchor("center"), pos(width() / 2, height() / 2 - 180)]);
-
+  add([
+    sprite("chmura", { width: (width() + height()) / 9 }),
+    fixed(),
+    anchor("center"),
+    pos(width() / 2, height() / 2 - 180),
+  ]);
 
   setCursor("default");
   // define gravity
@@ -56,12 +72,7 @@ scene("game", () => {
       area(),
       body({ isStatic: true }),
     ]);
-    add([
-      pos(x, height()),
-      rect(60, 43),
-      color(rgb(90, 60, 0)),
-      anchor("botleft"),
-    ]);
+    add([pos(x, height()), rect(60, 43), color(rgb(90, 60, 0)), anchor("botleft")]);
   }
 
   function jump() {
@@ -113,11 +124,22 @@ scene("game", () => {
     yes.onClick(() => { go("menu"), debug.paused = false; });
     no.onClick(() => { debug.paused = false, destroy(box); });
     onKeyPress("enter", () => {
-      if (selected == "yes") { go("menu"), debug.paused = false; }
-      else if (selected == "no") { debug.paused = false, destroy(box); }
+      if (selected == "yes") {
+        go("menu"), (debug.paused = false);
+      } else if (selected == "no") {
+        (debug.paused = false), destroy(box);
+      }
     });
-    onKeyPress("left", () => { yes.outline = 1; no.outline = 0; selected = "yes"; });
-    onKeyPress("right", () => { no.outline = 1; yes.outline = 0; selected = "no"; });
+    onKeyPress("left", () => {
+      yes.outline = 1;
+      no.outline = 0;
+      selected = "yes";
+    });
+    onKeyPress("right", () => {
+      no.outline = 1;
+      yes.outline = 0;
+      selected = "no";
+    });
     debug.paused = true;
   });
 
@@ -147,8 +169,7 @@ scene("game", () => {
           food = ["apple"];
           distance = 0.1;
           return false;
-        }
-        else if (e.code == "Digit2") {
+        } else if (e.code == "Digit2") {
           food = ["chocolate"];
           distance = 0.25;
           return false;
@@ -181,11 +202,24 @@ scene("game", () => {
   let foods = ["seed", "apple", "banana", "tomato"];
   foods.forEach(food => {
     player.onCollide(food, item => {
-      play("pickup");
-      destroy(item);
-      eval(`${food}Score++`);
-      eval(`${food}Text.text = ${food}Score`);
-      console.log("mniam");
+      if (item.scale == undefined) {
+        play("pickup");
+        eval(`${food}Score++`);
+        eval(`${food}Text.text = ${food}Score`);
+        console.log("mniam");
+
+        let scaleFactor = 1;
+        // Loop to decrease size at regular intervals
+        loop(0.075, () => {
+          scaleFactor -= 0.2;
+          item.scale = vec2(scaleFactor);
+
+          // Stop and destroy when scale factor is too small
+          if (scaleFactor <= 0.2) {
+            destroy(item);
+          }
+        });
+      }
     });
   });
 
@@ -209,45 +243,39 @@ scene("game", () => {
     }
   });
 
-  player.onCollide("rotten_tomato", zepsuty_pomidor => {
-    destroy(zepsuty_pomidor);
-    play("negative");
-    lives -= 1;
+  function BAD(bad) {
+    if (bad.scale == undefined) {
+      let scaleFactor = 1;
+      // Loop to decrease size at regular intervals
+      loop(0.075, () => {
+        scaleFactor -= 0.2;
+        bad.scale = vec2(scaleFactor);
 
-    destroy(eval("Live" + (lives + 1)));
+        // Stop an destroy when scale factor is too small
+        if (scaleFactor <= 0.2) {
+          destroy(bad);
+        }
+      });
+      play("negative");
+      lives -= 1;
 
-    if (lives == 0) {
-      go("menu");
-      localStorage.setItem("seeds", +seedScore + +seeds);
-      localStorage.setItem("apples", +appleScore + +apples);
-      localStorage.setItem("bananas", +bananaScore + +bananas);
-      localStorage.setItem("tomatoes", +tomatoScore + +tomatoes);
+      destroy(eval("Live" + (lives + 1)));
 
-      SPEED = 350;
-      play("gameover");
+      if (lives == 0) {
+        go("menu");
+        localStorage.setItem("seeds", seedScore + +seeds);
+        localStorage.setItem("apples", appleScore + +apples);
+        localStorage.setItem("bananas", bananaScore + +bananas);
+        localStorage.setItem("tomatoes", tomatoScore + +tomatoes);
+
+        SPEED = 350;
+        play("gameover");
+      }
+      console.log("fu");
     }
-    console.log("fu");
-  });
-
-  player.onCollide("chocolate", czekolada => {
-    destroy(czekolada);
-    play("negative");
-    lives -= 1;
-
-    destroy(eval("Live" + (lives + 1)));
-
-    if (lives == 0) {
-      go("menu");
-      localStorage.setItem("seeds", seedScore + +seeds);
-      localStorage.setItem("apples", appleScore + +apples);
-      localStorage.setItem("bananas", bananaScore + +bananas);
-      localStorage.setItem("tomatoes", tomatoScore + +tomatoes);
-
-      SPEED = 350;
-      play("gameover");
-    }
-    console.log("fu");
-  });
+  }
+  player.onCollide("chocolate", bad => BAD(bad));
+  player.onCollide("rotten_tomato", bad => BAD(bad));
 
   const seedText = add([text(seedScore), pos(65, 24)]);
   add([sprite("seed"), scale(0.08), pos(16, 20)]);

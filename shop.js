@@ -52,7 +52,7 @@ scene("shop", () => {
     shoes: { food1: "seeds", food2: "bananas", price1: 5, price2: 5 },
     winter_hat: { food1: "bananas", food2: "apples", price1: 10, price2: 10 },
   };
-  // set buttons text, colors and scale at start
+  // create buttons with corresponding text, color and size
   items.forEach(item => {
     const condition = itemConditions[item];
     if (localStorage.getItem(condition.key) == condition.value) {
@@ -67,10 +67,7 @@ scene("shop", () => {
       eval(`buy_${item}_button_color = con ? rgb(250, 25, 25) : rgb(0, 200, 0)`);
       eval(`buy_${item}_text_scale = 0.7`);
     }
-  });
-
-  // add buttons
-  items.forEach(item => {
+    // add buttons
     window[`buy_${item}`] = eval(`${item}_box`).add([
       rect(100, 35, { radius: 8 }),
       color(window[`buy_${item}_button_color`]),
@@ -85,6 +82,7 @@ scene("shop", () => {
       scale(window[`buy_${item}_text_scale`]),
       color(0, 0, 0),
     ]);
+    // hovers
     window[`buy_${item}`].onHoverUpdate(() => {
       window[`buy_${item}`].scale = vec2(1.025);
       setCursor("pointer");
