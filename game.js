@@ -55,7 +55,7 @@ scene("game", () => {
 
   // add hamster
   const player = add([
-    sprite("hamster", { width: hamster_width }),
+    sprite(updateHamster(), { width: hamster_width }),
     pos(hamster_pos, -65),
     anchor("center"),
     area({ scale: vec2(0.7, 1) }),
