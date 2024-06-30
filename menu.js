@@ -13,8 +13,6 @@ loadSprite("seed", "images/seed.png");
 loadSprite("apple", "images/apple.png");
 loadSprite("left_banana", "images/left_banana.png");
 loadSprite("tomato", "images/tomato.png");
-loadSprite("winter_hat", "images/winter_hat.png");
-loadSprite("cap", "images/cap.png");
 
 function updateLocalStorage() {
   seeds = localStorage.getItem("seeds");
@@ -48,9 +46,15 @@ function updateHamster() {
   return hamster;
 }
 
-loadSprite("hamster", `images/${updateHamster()}.png`);
+loadSprite(updateHamster(), `images/${updateHamster()}.png`);
 setBackground(50, 50, 50);
 
+if (hello == true) {
+  loadSprite("winter_hat", "images/winter_hat.png");
+}
+else if (hello_2 == true) {
+  loadSprite("cap", "images/cap.png");
+}
 
 let new_views = " ";
 let online;
@@ -70,7 +74,7 @@ scene("menu", () => {
   info_x = phone ? 35 : 40;
 
   let hi = add([
-    sprite("hamster", { width: hamster_width }),
+    sprite(updateHamster(), { width: hamster_width }),
     pos(width() / 2, height() / 2 + ((hello || hello_2) == true ? 25 : 0)),
     anchor("center"),
   ]);
@@ -79,8 +83,6 @@ scene("menu", () => {
 
   if (hello == true) {
     hello2_hi && destroy(hello2_hi);
-    hello2_hi == undefined;
-
     hello_hi = hi.add([
       sprite("winter_hat", { width: hamster_width / 2 }),
       scale(vec2(0.9, 0.65)),
@@ -90,8 +92,6 @@ scene("menu", () => {
   }
   if (hello_2 == true) {
     hello_hi && destroy(hello_hi);
-    hello_hi == undefined;
-
     hello2_hi = hi.add([
       sprite("cap", { width: hamster_width / 2 }),
       scale(vec2(0.9, 0.7)),

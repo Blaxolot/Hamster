@@ -68,7 +68,6 @@ scene("game", () => {
       scale(vec2(0.9, 0.65)),
       anchor("center"),
       pos(0, -54),
-      area(),
     ]);
   }
   if (hello_2 == true) {
@@ -77,7 +76,6 @@ scene("game", () => {
       scale(vec2(0.9, 0.7)),
       anchor("center"),
       pos(0, -52),
-      area(),
     ]);
   }
 

@@ -1,7 +1,7 @@
 scene("shop", () => {
   setCursor("default");
   !getSprite("cap") && loadSprite("cap", "images/cap.png");
-  !getSprite("shoes") && loadSprite("shoes", "images/hamster_shoes.png");
+  !getSprite("hamster_shoes") && loadSprite("hamster_shoes", "images/hamster_shoes.png");
   !getSprite("winter_hat") && loadSprite("winter_hat", "images/winter_hat.png");
   add([
     text("Shop", { size: phone ? 0.01 : 70 }),
@@ -28,7 +28,7 @@ scene("shop", () => {
   shoes_box.add([sprite("seed"), scale(0.08), pos(15, 10)]);
   shoes_box.add([text("5    5"), scale(0.9), pos(60, 13)]);
   shoes_box.add([sprite("left_banana"), scale(0.085), pos(113, 5)]);
-  shoes_box.add([sprite("shoes"), scale(0.2), pos(49, 45)]);
+  shoes_box.add([sprite("hamster_shoes"), scale(0.2), pos(49, 45)]);
   // Winter hat
   const winter_hat_box = add([
     rect(200, 200, { radius: 15 }),
@@ -53,45 +53,48 @@ scene("shop", () => {
     winter_hat: { food1: "bananas", food2: "apples", price1: 10, price2: 10 },
   };
   // create buttons with corresponding text, color and size
-  items.forEach(item => {
-    const condition = itemConditions[item];
-    if (localStorage.getItem(condition.key) == condition.value) {
-      const status = eval(condition.var) == "True";
-      eval(`${item}_text = status ? "Wearing" : "Wear"`);
-      eval(`buy_${item}_button_color = status ? rgb(0, 160, 0) : rgb(200, 0, 0)`);
-      eval(`buy_${item}_text_scale = status ? 0.6 : 0.7`);
-    } else {
-      const { food1, food2, price1, price2 } = itemPricing[item];
-      const con = eval(food1) < price1 || eval(food2) < price2;
-      eval(`${item}_text = "Buy"`);
-      eval(`buy_${item}_button_color = con ? rgb(250, 25, 25) : rgb(0, 200, 0)`);
-      eval(`buy_${item}_text_scale = 0.7`);
-    }
-    // add buttons
-    window[`buy_${item}`] = eval(`${item}_box`).add([
-      rect(100, 35, { radius: 8 }),
-      color(window[`buy_${item}_button_color`]),
-      pos(100, 175),
-      area(),
-      anchor("center"),
-      outline(4.5),
-    ]);
-    window[`buy_${item}_text`] = window[`buy_${item}`].add([
-      text(window[`${item}_text`]),
-      anchor("center"),
-      scale(window[`buy_${item}_text_scale`]),
-      color(0, 0, 0),
-    ]);
-    // hovers
-    window[`buy_${item}`].onHoverUpdate(() => {
-      window[`buy_${item}`].scale = vec2(1.025);
-      setCursor("pointer");
+  function createButtons() {
+    items.forEach(item => {
+      const condition = itemConditions[item];
+      if (localStorage.getItem(condition.key) == condition.value) {
+        const status = eval(condition.var) == "True";
+        eval(`${item}_text = status ? "Wearing" : "Wear"`);
+        eval(`buy_${item}_button_color = status ? rgb(0, 160, 0) : rgb(200, 0, 0)`);
+        eval(`buy_${item}_text_scale = status ? 0.6 : 0.7`);
+      } else {
+        const { food1, food2, price1, price2 } = itemPricing[item];
+        const con = eval(food1) < price1 || eval(food2) < price2;
+        eval(`${item}_text = "Buy"`);
+        eval(`buy_${item}_button_color = con ? rgb(250, 25, 25) : rgb(0, 200, 0)`);
+        eval(`buy_${item}_text_scale = 0.7`);
+      }
+      // add buttons
+      window[`buy_${item}`] = eval(`${item}_box`).add([
+        rect(100, 35, { radius: 8 }),
+        color(window[`buy_${item}_button_color`]),
+        pos(100, 175),
+        area(),
+        anchor("center"),
+        outline(4.5),
+      ]);
+      window[`buy_${item}_text`] = window[`buy_${item}`].add([
+        text(window[`${item}_text`]),
+        anchor("center"),
+        scale(window[`buy_${item}_text_scale`]),
+        color(0, 0, 0),
+      ]);
+      // hovers
+      window[`buy_${item}`].onHoverUpdate(() => {
+        window[`buy_${item}`].scale = vec2(1.025);
+        setCursor("pointer");
+      });
+      window[`buy_${item}`].onHoverEnd(() => {
+        window[`buy_${item}`].scale = vec2(1);
+        setCursor("default");
+      });
     });
-    window[`buy_${item}`].onHoverEnd(() => {
-      window[`buy_${item}`].scale = vec2(1);
-      setCursor("default");
-    });
-  });
+  }
+  createButtons();
   x = add([
     text("x"),
     area(),
@@ -127,7 +130,7 @@ scene("shop", () => {
       item_text = eval(item + "_text");
       (item_text == "Wear" && set(item, "Wearing")) ||
         (item_text == "Wearing" && set(item, "Wear"));
-      loadSprite("hamster", `images/${updateHamster()}.png`);
+      !getSprite(updateHamster()) && loadSprite(updateHamster(), `images/${updateHamster()}.png`);
 
       if (localStorage.getItem(key) !== value) {
         if (eval(food1) >= price1 && eval(food2) >= price2) {
@@ -135,7 +138,8 @@ scene("shop", () => {
           localStorage.setItem(food1, eval(food1) - price1);
           localStorage.setItem(food2, eval(food2) - price2);
           set(item, "Wearing");
-          loadSprite("hamster", `images/${updateHamster()}.png`);
+          !getSprite(updateHamster()) && loadSprite(updateHamster(), `images/${updateHamster()}.png`);
+          createButtons();
         } else if (eval(food1) < price1 || eval(food2) < price2) {
           alert(`You don't have enough ${food1} and ${food2}`);
         }
