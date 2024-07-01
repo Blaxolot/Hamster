@@ -263,7 +263,7 @@ scene("menu", () => {
   }
   function handleArrowClick(white) {
     let hi = add([
-      sprite(loadSprite("hamster", `images/${white + updateHamster()}.png`), {
+      sprite(loadSprite(updateHamster(), `images/${white + updateHamster()}.png`), {
         width: hamster_width,
       }),
       pos(width() / 2, height() / 2 + ((hello || hello_2) == true ? 25 : 0)),
