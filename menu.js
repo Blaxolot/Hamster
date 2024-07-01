@@ -103,6 +103,7 @@ function Users_online(views) {
 }
 
 scene("menu", () => {
+  setCursor("default");
   setBackground(50, 50, 50);
   updateLocalStorage();
   hamster_width = phone ? 250 : 285;
