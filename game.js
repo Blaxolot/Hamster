@@ -232,7 +232,7 @@ scene("game", () => {
 
         let scaleFactor = 1;
         // Loop to decrease size at regular intervals
-        loop(0.075, () => {
+        loop(0.1, () => {
           scaleFactor -= 0.2;
           item.scale = vec2(scaleFactor);
 
@@ -269,7 +269,7 @@ scene("game", () => {
     if (bad.scale == undefined) {
       let scaleFactor = 1;
       // Loop to decrease size at regular intervals
-      loop(0.075, () => {
+      loop(0.1, () => {
         scaleFactor -= 0.2;
         bad.scale = vec2(scaleFactor);
 
