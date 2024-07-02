@@ -51,7 +51,7 @@ scene("game", () => {
 
   // add hamster
   const player = add([
-    sprite(updateHamster(), { width: hamster_width }),
+    sprite(isWhite + updateHamster(), { width: hamster_width }),
     pos(hamster_pos, -65),
     anchor("center"),
     area({ scale: vec2(0.7, 1) }),
@@ -63,7 +63,7 @@ scene("game", () => {
       sprite("winter_hat", { width: hamster_width / 2 }),
       scale(vec2(0.9, 0.65)),
       anchor("center"),
-      pos(0, -54),
+      pos(0, phone ? - 43.5 : -54),
     ]);
   }
   if (cap == true) {
@@ -71,7 +71,7 @@ scene("game", () => {
       sprite("cap", { width: hamster_width / 2 }),
       scale(vec2(0.9, 0.7)),
       anchor("center"),
-      pos(0, -52),
+      pos(0, phone ? - 42 : -52),
     ]);
   }
 

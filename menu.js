@@ -2,6 +2,7 @@ const phone = window.innerWidth <= 500;
 const JUMP_FORCE = 700;
 let SPEED = 350;
 let GRAVITY = 1250;
+let isWhite = "";
 // initialize context
 kaplay({
   width: window.innerWidth,
@@ -25,8 +26,6 @@ function updateLocalStorage() {
   Gloves = localStorage.getItem("Gloves");
 }
 
-let winter_hat;
-let cap;
 function updateHamster() {
   updateLocalStorage();
   const isWearing = Wearing === "True";
@@ -34,7 +33,7 @@ function updateHamster() {
   const hasWinterHat = Winter_hat === "True";
   const hasGloves = Gloves === "True";
 
-  if (isWearing && !hasShoes) {
+  if (isWearing && !hasShoes && !hasWinterHat && !hasGloves) {
     hamster = "hamster";
     cap = true;
     winter_hat = false;
@@ -74,6 +73,10 @@ function updateHamster() {
     hamster = "hamster_shoes_gloves";
     winter_hat = false;
     cap = false;
+  } else if (!hasWinterHat && isWearing && !hasShoes && hasGloves) {
+    hamster = "hamster_gloves";
+    winter_hat = false;
+    cap = true;
   } else {
     hamster = "hamster";
     winter_hat = false;
@@ -115,7 +118,6 @@ function getFirstBrowserLanguage() {
       }
     }
   }
-
   // support for other well known properties in browsers
   for (i = 0; i < browserLanguagePropertyKeys.length; i++) {
     language = nav[browserLanguagePropertyKeys[i]];
@@ -123,7 +125,6 @@ function getFirstBrowserLanguage() {
       return language;
     }
   }
-
   return null;
 };
 
@@ -140,32 +141,41 @@ scene("menu", () => {
   arrows_scale = phone ? 0.16 : 0.2;
   info_x = phone ? 35 : 40;
 
-  let menuHamster = add([
-    sprite(updateHamster(), { width: hamster_width }),
-    pos(width() / 2, height() / 2 + ((winter_hat || cap) == true && 25)),
-    anchor("center"),
-  ]);
-  let addCap;
-  let addWinter_hat;
+  AddHamster("");
+  function AddHamster(white) {
+    if (white !== "" && !getSprite(white + updateHamster())) {
+      loadSprite(white + updateHamster(), `images/${white + updateHamster()}.png`);
+      isWhite = "white_";
+    }
+    menuHamster = add([
+      sprite(white + updateHamster(), { width: hamster_width }),
+      pos(width() / 2, height() / 2 + ((winter_hat || cap) == true && 25)),
+      anchor("center"),
+    ]);
 
-  if (winter_hat == true) {
-    addCap && destroy(addCap);
-    addWinter_hat = menuHamster.add([
-      sprite("winter_hat", { width: hamster_width / 2 }),
-      scale(vec2(0.9, 0.65)),
-      anchor("center"),
-      pos(0, phone ? -130 : -147),
-    ]);
+    let addCap;
+    let addWinter_hat;
+
+    if (winter_hat == true) {
+      addCap && destroy(addCap);
+      addWinter_hat = menuHamster.add([
+        sprite("winter_hat", { width: hamster_width / 2 }),
+        scale(vec2(0.9, 0.65)),
+        anchor("center"),
+        pos(0, phone ? -130 : -147),
+      ]);
+    }
+    if (cap == true) {
+      addWinter_hat && destroy(addWinter_hat);
+      addCap = menuHamster.add([
+        sprite("cap", { width: hamster_width / 2 }),
+        scale(vec2(0.9, 0.7)),
+        anchor("center"),
+        pos(0, phone ? -124 : -141),
+      ]);
+    }
   }
-  if (cap == true) {
-    addWinter_hat && destroy(addWinter_hat);
-    addCap = menuHamster.add([
-      sprite("cap", { width: hamster_width / 2 }),
-      scale(vec2(0.9, 0.7)),
-      anchor("center"),
-      pos(0, phone ? -124 : -141), ,
-    ]);
-  }
+
   add([
     text(MenuText, { size: Hamster_text_size - ((MenuText == "Game Over" || MenuText == "Koniec Gry") && 15) }),
     pos(width() / 2, height() / 2 - 230),
@@ -181,6 +191,7 @@ scene("menu", () => {
   add([text(bananas || 0), pos(60, 160)]);
   add([sprite("tomato"), scale(0.085), pos(10, 202.5)]);
   add([text(tomatoes || 0), pos(60, 210)]);
+  // display users online
   online = add([
     text((polish ? "Użytkownicy online:" : "Users online:") + new_views, { size: 28 }),
     pos(10, height() - 32),
@@ -290,29 +301,7 @@ scene("menu", () => {
     });
   }
   function handleArrowClick(white) {
-    let hi = add([
-      sprite(loadSprite(updateHamster(), `images/${white + updateHamster()}.png`), {
-        width: hamster_width,
-      }),
-      pos(width() / 2, height() / 2 + ((winter_hat || cap) == true ? 25 : 0)),
-      anchor("center"),
-    ]);
-    if (winter_hat == true) {
-      hi.add([
-        sprite("winter_hat", { width: hamster_width / 2 }),
-        scale(vec2(0.9, 0.65)),
-        anchor("center"),
-        pos(0, -147),
-      ]);
-    }
-    if (cap == true) {
-      hi.add([
-        sprite("cap", { width: hamster_width / 2 }),
-        scale(vec2(0.9, 0.7)),
-        anchor("center"),
-        pos(0, -141),
-      ]);
-    }
+    AddHamster(white);
     const primary = white !== "" ? right_arrow : left_arrow;
     const secondary = white !== "" ? left_arrow : right_arrow;
     primary.opacity = 1;
