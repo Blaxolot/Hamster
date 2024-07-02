@@ -166,11 +166,12 @@ scene("game", () => {
   });
 
   // Increase speed gradually
-  loop(0.5, () => {
-    SPEED += 1;
-    GRAVITY += 0.5;
+  player.onUpdate(() => {
+    SPEED += 2 * dt();
+    GRAVITY += 1 * dt();
     setGravity(GRAVITY);
   });
+
   let food = ["chocolate", "seed", "apple", "banana", "tomato", "rotten_tomato"];
   let distance = "";
   function spawnFood() {
