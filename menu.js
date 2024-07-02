@@ -2,7 +2,6 @@ const phone = window.innerWidth <= 500;
 const JUMP_FORCE = 700;
 let SPEED = 350;
 let GRAVITY = 1250;
-let hamster_white = false;
 // initialize context
 kaplay({
   width: window.innerWidth,
@@ -14,6 +13,7 @@ loadSprite("apple", "images/apple.png");
 loadSprite("left_banana", "images/left_banana.png");
 loadSprite("tomato", "images/tomato.png");
 
+updateLocalStorage();
 function updateLocalStorage() {
   seeds = localStorage.getItem("seeds");
   apples = localStorage.getItem("apples");
@@ -25,10 +25,8 @@ function updateLocalStorage() {
   Gloves = localStorage.getItem("Gloves");
 }
 
-// Update the variables initially
-updateLocalStorage();
-let hello;
-let hello_2;
+let winter_hat;
+let cap;
 function updateHamster() {
   updateLocalStorage();
   const isWearing = Wearing === "True";
@@ -38,48 +36,48 @@ function updateHamster() {
 
   if (isWearing && !hasShoes) {
     hamster = "hamster";
-    hello_2 = true;
-    hello = false;
+    cap = true;
+    winter_hat = false;
   } else if (hasShoes && !isWearing && !hasWinterHat && !hasGloves) {
     hamster = "hamster_shoes";
-    hello = false;
-    hello_2 = false;
+    winter_hat = false;
+    cap = false;
   } else if (hasShoes && isWearing && !hasGloves) {
     hamster = "hamster_shoes";
-    hello_2 = true;
-    hello = false;
+    cap = true;
+    winter_hat = false;
   } else if (hasWinterHat && !hasShoes && !hasGloves) {
     hamster = "hamster";
-    hello = true;
-    hello_2 = false;
+    winter_hat = true;
+    cap = false;
   } else if (hasWinterHat && hasShoes && !hasGloves) {
     hamster = "hamster_shoes";
-    hello = true;
-    hello_2 = false;
+    winter_hat = true;
+    cap = false;
   } else if (!hasWinterHat && !isWearing && !hasShoes && hasGloves) {
     hamster = "hamster_gloves";
-    hello = false;
-    hello_2 = false;
+    winter_hat = false;
+    cap = false;
   } else if (hasWinterHat && !hasShoes && hasGloves) {
     hamster = "hamster_gloves";
-    hello = true;
-    hello_2 = false;
+    winter_hat = true;
+    cap = false;
   } else if (hasWinterHat && hasShoes && hasGloves) {
     hamster = "hamster_shoes_gloves";
-    hello = true;
-    hello_2 = false;
+    winter_hat = true;
+    cap = false;
   } else if (!hasWinterHat && isWearing && hasShoes && hasGloves) {
     hamster = "hamster_shoes_gloves";
-    hello = false;
-    hello_2 = true;
+    winter_hat = false;
+    cap = true;
   } else if (!hasWinterHat && !isWearing && hasShoes && hasGloves) {
     hamster = "hamster_shoes_gloves";
-    hello = false;
-    hello_2 = false;
+    winter_hat = false;
+    cap = false;
   } else {
     hamster = "hamster";
-    hello = false;
-    hello_2 = false;
+    winter_hat = false;
+    cap = false;
   }
   return hamster;
 }
@@ -87,10 +85,10 @@ function updateHamster() {
 loadSprite(updateHamster(), `images/${updateHamster()}.png`);
 setBackground(50, 50, 50);
 
-if (hello == true) {
+if (winter_hat == true) {
   loadSprite("winter_hat", "images/winter_hat.png");
 }
-else if (hello_2 == true) {
+else if (cap == true) {
   loadSprite("cap", "images/cap.png");
 }
 
@@ -99,10 +97,10 @@ let online;
 
 function Users_online(views) {
   new_views = views;
-  online && (online.text = (language ? "Użytkownicy online:" : "Users online:") + new_views);
+  online && (online.text = (polish ? "Użytkownicy online:" : "Users online:") + new_views);
 }
 
-var getFirstBrowserLanguage = function () {
+function getFirstBrowserLanguage() {
   var nav = window.navigator,
     browserLanguagePropertyKeys = ['language', 'browserLanguage', 'systemLanguage', 'userLanguage'],
     i,
@@ -129,8 +127,8 @@ var getFirstBrowserLanguage = function () {
   return null;
 };
 
-const language = getFirstBrowserLanguage().includes("pl");
-let MenuText = language ? "Chomik" : "Hamster";
+const polish = getFirstBrowserLanguage().includes("pl");
+let MenuText = polish ? "Chomik" : "Hamster";
 
 scene("menu", () => {
   setCursor("default");
@@ -144,24 +142,24 @@ scene("menu", () => {
 
   let menuHamster = add([
     sprite(updateHamster(), { width: hamster_width }),
-    pos(width() / 2, height() / 2 + ((hello || hello_2) == true ? 25 : 0)),
+    pos(width() / 2, height() / 2 + ((winter_hat || cap) == true && 25)),
     anchor("center"),
   ]);
-  let hello2_hi;
-  let hello_hi;
+  let addCap;
+  let addWinter_hat;
 
-  if (hello == true) {
-    hello2_hi && destroy(hello2_hi);
-    hello_hi = menuHamster.add([
+  if (winter_hat == true) {
+    addCap && destroy(addCap);
+    addWinter_hat = menuHamster.add([
       sprite("winter_hat", { width: hamster_width / 2 }),
       scale(vec2(0.9, 0.65)),
       anchor("center"),
       pos(0, -147),
     ]);
   }
-  if (hello_2 == true) {
-    hello_hi && destroy(hello_hi);
-    hello2_hi = menuHamster.add([
+  if (cap == true) {
+    addWinter_hat && destroy(addWinter_hat);
+    addCap = menuHamster.add([
       sprite("cap", { width: hamster_width / 2 }),
       scale(vec2(0.9, 0.7)),
       anchor("center"),
@@ -174,7 +172,7 @@ scene("menu", () => {
     anchor("center"),
   ]);
   // display score
-  add([text(language ? "Masz:" : "You have:"), pos(10, 10)]);
+  add([text(polish ? "Masz:" : "You have:"), pos(10, 10)]);
   add([sprite("seed"), scale(0.08), pos(10, 50)]);
   add([text(seeds || 0), pos(60, 53)]);
   add([sprite("apple"), scale(0.09), pos(8, 100)]);
@@ -184,7 +182,7 @@ scene("menu", () => {
   add([sprite("tomato"), scale(0.085), pos(10, 202.5)]);
   add([text(tomatoes || 0), pos(60, 210)]);
   online = add([
-    text((language ? "Użytkownicy online:" : "Users online:") + new_views, { size: 28 }),
+    text((polish ? "Użytkownicy online:" : "Users online:") + new_views, { size: 28 }),
     pos(10, height() - 32),
   ]);
   // display credits
@@ -202,7 +200,7 @@ scene("menu", () => {
     anchor("center"),
     outline(5),
   ]);
-  play_button.add([text(language ? "Graj" : "Play"), anchor("center"), color(0, 0, 0)]);
+  play_button.add([text(polish ? "Graj" : "Play"), anchor("center"), color(0, 0, 0)]);
   const hamsters_button = add([
     rect(180, 40, { radius: 8 }),
     color(70, 70, 70),
@@ -212,7 +210,7 @@ scene("menu", () => {
     outline(4.5),
   ]);
   hamsters_button.add([
-    text(language ? "Chomiki" : "Hamsters", { size: 30 }),
+    text(polish ? "Chomiki" : "Hamsters", { size: 30 }),
     anchor("center"),
     color(0, 0, 0)]);
   const shop_button = add([
@@ -224,7 +222,7 @@ scene("menu", () => {
     outline(4.5),
   ]);
   shop_button.add([
-    text(language ? "Sklep" : "Shop", { size: 30 }),
+    text(polish ? "Sklep" : "Shop", { size: 30 }),
     anchor("center"),
     color(0, 0, 0)]);
   // animations
@@ -296,10 +294,10 @@ scene("menu", () => {
       sprite(loadSprite(updateHamster(), `images/${white + updateHamster()}.png`), {
         width: hamster_width,
       }),
-      pos(width() / 2, height() / 2 + ((hello || hello_2) == true ? 25 : 0)),
+      pos(width() / 2, height() / 2 + ((winter_hat || cap) == true ? 25 : 0)),
       anchor("center"),
     ]);
-    if (hello == true) {
+    if (winter_hat == true) {
       hi.add([
         sprite("winter_hat", { width: hamster_width / 2 }),
         scale(vec2(0.9, 0.65)),
@@ -307,7 +305,7 @@ scene("menu", () => {
         pos(0, -147),
       ]);
     }
-    if (hello_2 == true) {
+    if (cap == true) {
       hi.add([
         sprite("cap", { width: hamster_width / 2 }),
         scale(vec2(0.9, 0.7)),

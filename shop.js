@@ -5,7 +5,7 @@ scene("shop", () => {
   !getSprite("winter_hat") && loadSprite("winter_hat", "images/winter_hat.png");
   !getSprite("hamster_gloves") && loadSprite("hamster_gloves", "images/hamster_gloves.png");
   add([
-    text(language ? "Sklep" : "Shop", { size: phone ? 0.01 : 70 }),
+    text(polish ? "Sklep" : "Shop", { size: phone ? 0.01 : 70 }),
     anchor("center"),
     pos(width() / 2, 50),
   ]);
@@ -72,7 +72,7 @@ scene("shop", () => {
       const condition = itemConditions[item];
       if (localStorage.getItem(condition.key) == condition.value) {
         const status = eval(condition.var) == "True";
-        eval(`${item}_text = status ? (language ? "Ubrane" : "Wearing") : (language ? "Ubierz" : "Wear")`);
+        eval(`${item}_text = status ? (polish ? "Ubrane" : "Wearing") : (polish ? "Ubierz" : "Wear")`);
         eval(`buy_${item}_button_color = status ? rgb(0, 160, 0) : rgb(200, 0, 0)`);
         eval(`buy_${item}_text_scale = status ? 0.6 : 0.7`);
       } else {
@@ -145,8 +145,8 @@ scene("shop", () => {
     const { key, value } = itemConditions[item];
     eval(`buy_${item}`).onClick(() => {
       item_text = eval(item + "_text");
-      (item_text == (language ? "Ubierz" : "Wear") && set(item, language ? "Ubrane" : "Wearing")) ||
-        (item_text == (language ? "Ubrane" : "Wearing") && set(item, language ? "Ubierz" : "Wear"));
+      (item_text == (polish ? "Ubierz" : "Wear") && set(item, polish ? "Ubrane" : "Wearing")) ||
+        (item_text == (polish ? "Ubrane" : "Wearing") && set(item, polish ? "Ubierz" : "Wear"));
       !getSprite(updateHamster()) && loadSprite(updateHamster(), `images/${updateHamster()}.png`);
 
       if (localStorage.getItem(key) !== value) {

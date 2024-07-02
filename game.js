@@ -1,5 +1,4 @@
 scene("game", () => {
-  let menuHamsterText = "Hamster";
   setBackground(0, 120, 180);
   !getSprite("banana") && loadSprite("banana", "images/banana.png");
   !getSprite("chocolate") && loadSprite("chocolate", "images/chocolate_bar.png");
@@ -16,22 +15,19 @@ scene("game", () => {
   !getSound("gameover") && loadSound("gameover", "sounds/gameover.mp3");
   !getSound("bonus") && loadSound("bonus", "sounds/bonus_heart.mp3");
 
-  let para = [fixed(), anchor("botleft")];
+  let parameters = [fixed(), anchor("botleft")];
 
   add([
     sprite("drzewo1", { width: (width() + height()) / 10 }),
-    pos(width() / 10, height() - 60),
-    ...para,
+    pos(width() / 10, height() - 60), ...parameters,
   ]);
   add([
     sprite("drzewo2", { width: (width() + height()) / 20 }),
-    pos(width() / 2.8, height() - 60),
-    ...para,
+    pos(width() / 2.8, height() - 60), ...parameters,
   ]);
   add([
     sprite("drzewo3", { width: (width() + height()) / 11 }),
-    pos(width() / 1.5, height() - 60),
-    ...para,
+    pos(width() / 1.5, height() - 60), ...parameters,
   ]);
 
   add([
@@ -40,9 +36,8 @@ scene("game", () => {
     anchor("center"),
     pos(width() / 2, height() / 2 - 180),
   ]);
-
+  // set Cursor and define gravity
   setCursor("default");
-  // define gravity
   setGravity(GRAVITY);
 
   hamster_pos = phone ? 40 : 100;
@@ -63,7 +58,7 @@ scene("game", () => {
     body(),
   ]);
 
-  if (hello == true) {
+  if (winter_hat == true) {
     player.add([
       sprite("winter_hat", { width: hamster_width / 2 }),
       scale(vec2(0.9, 0.65)),
@@ -71,7 +66,7 @@ scene("game", () => {
       pos(0, -54),
     ]);
   }
-  if (hello_2 == true) {
+  if (cap == true) {
     player.add([
       sprite("cap", { width: hamster_width / 2 }),
       scale(vec2(0.9, 0.7)),
@@ -105,11 +100,12 @@ scene("game", () => {
     }
   }
 
-  // jump when user press space, up or w or clicks
+  // handle jumping
   onKeyPress(["space", "up", "w"], jump);
   onKeyDown(["space", "up", "w"], jump);
   onClick(jump);
   onMouseDown(jump);
+  onMouseRelease(jump);
 
   onKeyPress("escape", () => {
     let box = add([
@@ -119,15 +115,14 @@ scene("game", () => {
       color(0, 0, 0),
     ]);
 
-    box.add([text("Do you want to quit?"), anchor("center"), pos(0, -100)]);
+    box.add([text(polish ? "Czy Chcesz Zakończyć grę?" : "Do you want to quit?"), anchor("center"), pos(0, -100)]);
     box.add([
-      text("!!! You will lose your food !!!"),
+      text(polish ? "!!! Stracisz swoje jedzenie !!!" : "!!! You will lose your food !!!"),
       scale(0.8),
       anchor("center"),
       pos(0, -50),
       color(255, 0, 0),
     ]);
-
     const yes = box.add([
       rect(200, 50, { radius: 10 }),
       pos(-150, 80),
@@ -142,8 +137,9 @@ scene("game", () => {
       color(255, 0, 0),
       area(),
     ]);
-    yes.add([text("YES"), anchor("center"), color(0, 0, 0), scale(0.9), pos(0, 2)]);
-    no.add([text("NO"), anchor("center"), color(0, 0, 0), scale(0.9), pos(0, 2)]);
+    yes.add([text(polish ? "TAK" : "YES", { size: 35 }), anchor("center"), color(0, 0, 0), pos(0, 2)]);
+    no.add([text(polish ? "NIE" : "NO", { size: 35 }), anchor("center"), color(0, 0, 0), pos(0, 2)]);
+
     yes.onClick(() => { go("menu"), debug.paused = false; });
     no.onClick(() => { debug.paused = false, destroy(box); });
     onKeyPress("enter", () => {
@@ -174,7 +170,7 @@ scene("game", () => {
   });
 
   let food = ["chocolate", "seed", "apple", "banana", "tomato", "rotten_tomato"];
-  let distance = "";
+  let distance;
   function spawnFood() {
     let randomFood = choose(food);
     if (randomFood == "rotten_tomato") {
@@ -185,7 +181,6 @@ scene("game", () => {
       }
     }
 
-    food_pos = randomFood == "chocolate" ? 65 : randi(65, 300);
     document.onkeyup = function (e) {
       var e = e || window.event; // for IE to cover IEs window object
       if (e.ctrlKey && e.shiftKey) {
@@ -201,6 +196,7 @@ scene("game", () => {
       }
     };
 
+    food_pos = randomFood == "chocolate" ? 65 : randi(65, 300);
     add([
       sprite(randomFood, { width: window[randomFood + "_scale"] }),
       pos(width(), height() - food_pos),
@@ -212,7 +208,7 @@ scene("game", () => {
     ]);
 
     // wait a random amount of time to spawn next Food
-    wait(distance == "" ? rand(1, 2) : distance, spawnFood);
+    wait(distance == null ? rand(1, 2) : distance, spawnFood);
   }
   spawnFood();
 
@@ -294,7 +290,8 @@ scene("game", () => {
 
         SPEED = 350;
         play("gameover");
-        MenuText = language ? "Koniec Gry" : "Game Over";
+        MenuText = polish ? "Koniec Gry" : "Game Over";
+        hamster;
       }
       console.log("fu");
     }

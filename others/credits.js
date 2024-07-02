@@ -1,4 +1,4 @@
-let Credits
+let Credits;
 function display_info() {
   if (!Credits) {
     Credits = add([
@@ -13,7 +13,7 @@ function display_info() {
     ]);
     parameters = [anchor("center"), color(255, 255, 255), scale(0.6)];
     Credits.add([
-      text("Icon Credits"),
+      text(polish ? "Autorzy ikon" : "Icon Credits"),
       anchor("center"),
       pos(0, -280),
       color(255, 255, 255),
@@ -49,11 +49,11 @@ function display_info() {
     ]);
   }
   x.onHoverUpdate(() => {
-    x.color = rgb(240, 240, 240)
+    x.color = rgb(240, 240, 240);
     setCursor("pointer");
   });
   x.onHoverEnd(() => {
-    x.color = rgb(150, 150, 150)
+    x.color = rgb(150, 150, 150);
     setCursor("default");
   });
 
