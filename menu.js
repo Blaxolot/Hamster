@@ -101,7 +101,7 @@ function Users_online(views) {
   new_views = views;
   online && (online.text = "Users online:" + new_views);
 }
-
+let MenuText = "Hamster";
 scene("menu", () => {
   setCursor("default");
   setBackground(50, 50, 50);
@@ -138,9 +138,8 @@ scene("menu", () => {
       pos(0, -141),
     ]);
   }
-
   add([
-    text("Hamster", { size: Hamster_text_size }),
+    text(MenuText, { size: Hamster_text_size - (MenuText == "Game Over" && 15) }),
     pos(width() / 2, height() / 2 - 230),
     anchor("center"),
   ]);

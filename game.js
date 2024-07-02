@@ -1,4 +1,5 @@
 scene("game", () => {
+  let menuHamsterText = "Hamster";
   setBackground(0, 120, 180);
   !getSprite("banana") && loadSprite("banana", "images/banana.png");
   !getSprite("chocolate") && loadSprite("chocolate", "images/chocolate_bar.png");
@@ -293,6 +294,7 @@ scene("game", () => {
 
         SPEED = 350;
         play("gameover");
+        MenuText = "Game Over";
       }
       console.log("fu");
     }
