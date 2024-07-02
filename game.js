@@ -294,7 +294,7 @@ scene("game", () => {
 
         SPEED = 350;
         play("gameover");
-        MenuText = "Game Over";
+        MenuText = language ? "Koniec Gry" : "Game Over";
       }
       console.log("fu");
     }

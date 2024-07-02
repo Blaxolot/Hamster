@@ -5,7 +5,7 @@ scene("shop", () => {
   !getSprite("winter_hat") && loadSprite("winter_hat", "images/winter_hat.png");
   !getSprite("hamster_gloves") && loadSprite("hamster_gloves", "images/hamster_gloves.png");
   add([
-    text("Shop", { size: phone ? 0.01 : 70 }),
+    text(language ? "Sklep" : "Shop", { size: phone ? 0.01 : 70 }),
     anchor("center"),
     pos(width() / 2, 50),
   ]);
@@ -72,7 +72,7 @@ scene("shop", () => {
       const condition = itemConditions[item];
       if (localStorage.getItem(condition.key) == condition.value) {
         const status = eval(condition.var) == "True";
-        eval(`${item}_text = status ? "Wearing" : "Wear"`);
+        eval(`${item}_text = status ? (language ? "Ubrane" : "Wearing") : (language ? "Ubierz" : "Wear")`);
         eval(`buy_${item}_button_color = status ? rgb(0, 160, 0) : rgb(200, 0, 0)`);
         eval(`buy_${item}_text_scale = status ? 0.6 : 0.7`);
       } else {
@@ -126,14 +126,17 @@ scene("shop", () => {
   function set(item, Wearing_or_Wear) {
     eval(`${item}_text = "${Wearing_or_Wear}"`);
     Wear = rgb(200, 0, 0);
+    Ubierz = rgb(200, 0, 0);
     Wearing = rgb(0, 160, 0);
+    Ubrane = rgb(0, 160, 0);
     eval(`buy_${item}.color = ${Wearing_or_Wear}`);
     eval(`buy_${item}_text.text = ${item}_text`);
     (Wear = 0.7), (Wearing = 0.6);
+    (Ubierz = 0.7), (Ubrane = 0.6);
     eval(`buy_${item}_text.scale = ${Wearing_or_Wear}`);
     localStorage.setItem(
       item == "cap" ? "Wearing" : item == "shoes" ? "Shoes" : item == "winter_hat" ? "Winter_hat" : "Gloves",
-      Wearing_or_Wear == "Wearing" ? "True" : "False"
+      Wearing_or_Wear == "Wearing" ? "True" : Wearing_or_Wear == "Ubrane" ? "True" : "False"
     );
   }
 
@@ -142,8 +145,8 @@ scene("shop", () => {
     const { key, value } = itemConditions[item];
     eval(`buy_${item}`).onClick(() => {
       item_text = eval(item + "_text");
-      (item_text == "Wear" && set(item, "Wearing")) ||
-        (item_text == "Wearing" && set(item, "Wear"));
+      (item_text == (language ? "Ubierz" : "Wear") && set(item, language ? "Ubrane" : "Wearing")) ||
+        (item_text == (language ? "Ubrane" : "Wearing") && set(item, language ? "Ubierz" : "Wear"));
       !getSprite(updateHamster()) && loadSprite(updateHamster(), `images/${updateHamster()}.png`);
 
       if (localStorage.getItem(key) !== value) {

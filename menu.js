@@ -99,9 +99,39 @@ let online;
 
 function Users_online(views) {
   new_views = views;
-  online && (online.text = "Users online:" + new_views);
+  online && (online.text = (language ? "Użytkownicy online:" : "Users online:") + new_views);
 }
-let MenuText = "Hamster";
+
+var getFirstBrowserLanguage = function () {
+  var nav = window.navigator,
+    browserLanguagePropertyKeys = ['language', 'browserLanguage', 'systemLanguage', 'userLanguage'],
+    i,
+    language;
+
+  // support for HTML 5.1 "navigator.languages"
+  if (Array.isArray(nav.languages)) {
+    for (i = 0; i < nav.languages.length; i++) {
+      language = nav.languages[i];
+      if (language && language.length) {
+        return language;
+      }
+    }
+  }
+
+  // support for other well known properties in browsers
+  for (i = 0; i < browserLanguagePropertyKeys.length; i++) {
+    language = nav[browserLanguagePropertyKeys[i]];
+    if (language && language.length) {
+      return language;
+    }
+  }
+
+  return null;
+};
+
+const language = getFirstBrowserLanguage().includes("pl");
+let MenuText = language ? "Chomik" : "Hamster";
+
 scene("menu", () => {
   setCursor("default");
   setBackground(50, 50, 50);
@@ -139,12 +169,12 @@ scene("menu", () => {
     ]);
   }
   add([
-    text(MenuText, { size: Hamster_text_size - (MenuText == "Game Over" && 15) }),
+    text(MenuText, { size: Hamster_text_size - ((MenuText == "Game Over" || MenuText == "Koniec Gry") && 15) }),
     pos(width() / 2, height() / 2 - 230),
     anchor("center"),
   ]);
   // display score
-  add([text("You have:"), pos(10, 10)]);
+  add([text(language ? "Masz:" : "You have:"), pos(10, 10)]);
   add([sprite("seed"), scale(0.08), pos(10, 50)]);
   add([text(seeds || 0), pos(60, 53)]);
   add([sprite("apple"), scale(0.09), pos(8, 100)]);
@@ -154,7 +184,7 @@ scene("menu", () => {
   add([sprite("tomato"), scale(0.085), pos(10, 202.5)]);
   add([text(tomatoes || 0), pos(60, 210)]);
   online = add([
-    text("Users online:" + new_views, { size: 28 }),
+    text((language ? "Użytkownicy online:" : "Users online:") + new_views, { size: 28 }),
     pos(10, height() - 32),
   ]);
   // display credits
@@ -172,7 +202,7 @@ scene("menu", () => {
     anchor("center"),
     outline(5),
   ]);
-  play_button.add([text("Play"), anchor("center"), color(0, 0, 0)]);
+  play_button.add([text(language ? "Graj" : "Play"), anchor("center"), color(0, 0, 0)]);
   const hamsters_button = add([
     rect(180, 40, { radius: 8 }),
     color(70, 70, 70),
@@ -182,7 +212,7 @@ scene("menu", () => {
     outline(4.5),
   ]);
   hamsters_button.add([
-    text("Hamsters", { size: 30 }),
+    text(language ? "Chomiki" : "Hamsters", { size: 30 }),
     anchor("center"),
     color(0, 0, 0)]);
   const shop_button = add([
@@ -194,7 +224,7 @@ scene("menu", () => {
     outline(4.5),
   ]);
   shop_button.add([
-    text("Shop", { size: 30 }),
+    text(language ? "Sklep" : "Shop", { size: 30 }),
     anchor("center"),
     color(0, 0, 0)]);
   // animations
