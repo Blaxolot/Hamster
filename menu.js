@@ -154,7 +154,7 @@ scene("menu", () => {
       sprite("winter_hat", { width: hamster_width / 2 }),
       scale(vec2(0.9, 0.65)),
       anchor("center"),
-      pos(0, -147),
+      pos(0, phone ? -130 : -147),
     ]);
   }
   if (cap == true) {
@@ -163,7 +163,7 @@ scene("menu", () => {
       sprite("cap", { width: hamster_width / 2 }),
       scale(vec2(0.9, 0.7)),
       anchor("center"),
-      pos(0, -141),
+      pos(0, phone ? -124 : -141), ,
     ]);
   }
   add([
