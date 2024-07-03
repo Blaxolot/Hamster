@@ -123,7 +123,11 @@ scene("game", () => {
       color(0, 0, 0),
     ]);
 
-    box.add([text(polish ? "Czy Chcesz Zakończyć grę?" : "Do you want to quit?"), anchor("center"), pos(0, -100)]);
+    box.add([
+      text(polish ? "Czy Chcesz Zakończyć grę?" : "Do you want to quit?"),
+      anchor("center"),
+      pos(0, -100),
+    ]);
     box.add([
       text(polish ? "!!! Stracisz swoje jedzenie !!!" : "!!! You will lose your food !!!"),
       scale(0.8),
@@ -237,13 +241,12 @@ scene("game", () => {
         console.log("mniam");
 
         let scaleFactor = 1;
-        // Loop to decrease size at regular intervals
-        loop(0.1, () => {
-          scaleFactor -= 0.2;
+        item.onUpdate(() => {
+          scaleFactor -= 0.05;
           item.scale = vec2(scaleFactor);
 
           // Stop and destroy when scale factor is too small
-          if (scaleFactor <= 0.2) {
+          if (scaleFactor <= 0.1) {
             destroy(item);
           }
         });
@@ -274,13 +277,12 @@ scene("game", () => {
   function BAD(bad) {
     if (bad.scale == undefined) {
       let scaleFactor = 1;
-      // Loop to decrease size at regular intervals
-      loop(0.1, () => {
-        scaleFactor -= 0.2;
+      bad.onUpdate(() => {
+        scaleFactor -= 0.05;
         bad.scale = vec2(scaleFactor);
 
-        // Stop an destroy when scale factor is too small
-        if (scaleFactor <= 0.2) {
+        // Stop and destroy when scale factor is too small
+        if (scaleFactor <= 0.1) {
           destroy(bad);
         }
       });

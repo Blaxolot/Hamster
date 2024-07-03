@@ -14,7 +14,6 @@ loadSprite("apple", "images/apple.png");
 loadSprite("left_banana", "images/left_banana.png");
 loadSprite("tomato", "images/tomato.png");
 
-updateLocalStorage();
 function updateLocalStorage() {
   seeds = localStorage.getItem("seeds");
   apples = localStorage.getItem("apples");
@@ -54,6 +53,7 @@ function updateHamster() {
 
 loadSprite(updateHamster(), `images/${updateHamster()}.png`);
 setBackground(50, 50, 50);
+document.body.style.backgroundColor = rgb(50, 50, 50);
 
 if (winter_hat == true) {
   loadSprite("winter_hat", "images/winter_hat.png");
@@ -65,7 +65,7 @@ if (glasses == true) {
   loadSprite("glasses", "images/glasses.png");
 }
 
-let new_views = " ";
+let new_views = 1;
 let online;
 
 function Users_online(views) {
@@ -125,7 +125,6 @@ scene("menu", () => {
 
     let addCap;
     let addWinter_hat;
-    let addGlasses;
 
     if (winter_hat == true) {
       addCap && destroy(addCap);
@@ -146,7 +145,7 @@ scene("menu", () => {
       ]);
     }
     if (glasses == true) {
-      addGlasses = menuHamster.add([
+      menuHamster.add([
         sprite("glasses", { width: hamster_width / 2 }),
         scale(vec2(0.75, 0.7)),
         anchor("center"),
@@ -156,7 +155,11 @@ scene("menu", () => {
   }
 
   add([
-    text(MenuText, { size: Hamster_text_size - ((MenuText == "Game Over" || MenuText == "Koniec Gry") && 15) }),
+    text(MenuText, {
+      size:
+        Hamster_text_size -
+        ((MenuText == "Game Over" || MenuText == "Koniec Gry") && !phone && 15),
+    }),
     pos(width() / 2, height() / 2 - 230),
     anchor("center"),
   ]);

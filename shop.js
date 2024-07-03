@@ -63,7 +63,7 @@ scene("shop", () => {
   glasses_box.add([text("50"), scale(0.9), pos(55, 13)]);
   glasses_box.add([sprite("left_banana"), scale(0.085), pos(105, 5)]);
   glasses_box.add([text("50"), scale(0.9), pos(150, 13)]);
-  glasses_box.add([sprite("glasses"), scale(0.3), pos(100, 100), anchor("center")]);
+  glasses_box.add([sprite("glasses", { width: 170 }), pos(100, 100), anchor("center")]);
 
   const items = ["cap", "shoes", "winter_hat", "gloves", "glasses"];
   const itemConditions = {
@@ -92,7 +92,7 @@ scene("shop", () => {
       } else {
         const { food1, food2, price1, price2 } = itemPricing[item];
         const con = eval(food1) < price1 || eval(food2) < price2;
-        eval(`${item}_text = "Buy"`);
+        eval(`${item}_text = polish ? "Kup" : "Buy"`);
         eval(`buy_${item}_button_color = con ? rgb(250, 25, 25) : rgb(0, 200, 0)`);
         eval(`buy_${item}_text_scale = 0.7`);
       }
@@ -172,7 +172,8 @@ scene("shop", () => {
           !getSprite(updateHamster()) && loadSprite(updateHamster(), `images/${updateHamster()}.png`);
           createButtons();
         } else if (eval(food1) < price1 || eval(food2) < price2) {
-          alert(`You don't have enough ${food1} and ${food2}`);
+          alert(polish ? `Nie masz wystarczająco ${food1} i ${food2}` :
+            `You don't have enough ${food1} and ${food2}`);
         }
       }
     });
