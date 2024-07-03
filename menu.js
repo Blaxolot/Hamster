@@ -24,6 +24,7 @@ function updateLocalStorage() {
   Shoes = localStorage.getItem("Shoes");
   Winter_hat = localStorage.getItem("Winter_hat");
   Gloves = localStorage.getItem("Gloves");
+  Glasses = localStorage.getItem("Glasses");
 }
 
 function updateHamster() {
@@ -32,56 +33,22 @@ function updateHamster() {
   const hasShoes = Shoes === "True";
   const hasWinterHat = Winter_hat === "True";
   const hasGloves = Gloves === "True";
+  const hasGlasses = Glasses === "True";
 
-  if (isWearing && !hasShoes && !hasWinterHat && !hasGloves) {
-    hamster = "hamster";
-    cap = true;
-    winter_hat = false;
-  } else if (hasShoes && !isWearing && !hasWinterHat && !hasGloves) {
-    hamster = "hamster_shoes";
-    winter_hat = false;
-    cap = false;
-  } else if (hasShoes && isWearing && !hasGloves) {
-    hamster = "hamster_shoes";
-    cap = true;
-    winter_hat = false;
-  } else if (hasWinterHat && !hasShoes && !hasGloves) {
-    hamster = "hamster";
-    winter_hat = true;
-    cap = false;
-  } else if (hasWinterHat && hasShoes && !hasGloves) {
-    hamster = "hamster_shoes";
-    winter_hat = true;
-    cap = false;
-  } else if (!hasWinterHat && !isWearing && !hasShoes && hasGloves) {
-    hamster = "hamster_gloves";
-    winter_hat = false;
-    cap = false;
-  } else if (hasWinterHat && !hasShoes && hasGloves) {
-    hamster = "hamster_gloves";
-    winter_hat = true;
-    cap = false;
-  } else if (hasWinterHat && hasShoes && hasGloves) {
+  glasses = hasGlasses ? true : false;
+  cap = isWearing ? true : false;
+  winter_hat = hasWinterHat ? true : false;
+
+  if (hasShoes && hasGloves) {
     hamster = "hamster_shoes_gloves";
-    winter_hat = true;
-    cap = false;
-  } else if (!hasWinterHat && isWearing && hasShoes && hasGloves) {
-    hamster = "hamster_shoes_gloves";
-    winter_hat = false;
-    cap = true;
-  } else if (!hasWinterHat && !isWearing && hasShoes && hasGloves) {
-    hamster = "hamster_shoes_gloves";
-    winter_hat = false;
-    cap = false;
-  } else if (!hasWinterHat && isWearing && !hasShoes && hasGloves) {
+  } else if (hasShoes) {
+    hamster = "hamster_shoes";
+  } else if (hasGloves) {
     hamster = "hamster_gloves";
-    winter_hat = false;
-    cap = true;
   } else {
     hamster = "hamster";
-    winter_hat = false;
-    cap = false;
   }
+
   return hamster;
 }
 
@@ -91,8 +58,11 @@ setBackground(50, 50, 50);
 if (winter_hat == true) {
   loadSprite("winter_hat", "images/winter_hat.png");
 }
-else if (cap == true) {
+if (cap == true) {
   loadSprite("cap", "images/cap.png");
+}
+if (glasses == true) {
+  loadSprite("glasses", "images/glasses.png");
 }
 
 let new_views = " ";
@@ -155,6 +125,7 @@ scene("menu", () => {
 
     let addCap;
     let addWinter_hat;
+    let addGlasses;
 
     if (winter_hat == true) {
       addCap && destroy(addCap);
@@ -172,6 +143,14 @@ scene("menu", () => {
         scale(vec2(0.9, 0.7)),
         anchor("center"),
         pos(0, phone ? -124 : -141),
+      ]);
+    }
+    if (glasses == true) {
+      addGlasses = menuHamster.add([
+        sprite("glasses", { width: hamster_width / 2 }),
+        scale(vec2(0.75, 0.7)),
+        anchor("center"),
+        pos(0, phone ? -124 : -100),
       ]);
     }
   }

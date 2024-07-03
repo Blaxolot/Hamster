@@ -52,19 +52,32 @@ scene("shop", () => {
   gloves_box.add([sprite("apple"), scale(0.085), pos(107, 5)]);
   gloves_box.add([text("20"), scale(0.9), pos(150, 13)]);
   gloves_box.add([sprite("hamster_gloves"), scale(0.2), pos(49, 47)]);
+  // Glasses
+  const glasses_box = add([
+    rect(200, 200, { radius: 15 }),
+    pos(460, 20),
+    color(100, 100, 100),
+  ]);
+  glasses_box.add([sprite("tomato"), scale(0.08), pos(10, 5)]);
+  glasses_box.add([text("50"), scale(0.9), pos(55, 13)]);
+  glasses_box.add([sprite("left_banana"), scale(0.085), pos(105, 5)]);
+  glasses_box.add([text("50"), scale(0.9), pos(150, 13)]);
+  glasses_box.add([sprite("glasses"), scale(0.3), pos(100, 100), anchor("center")]);
 
-  const items = ["cap", "shoes", "winter_hat", "gloves"];
+  const items = ["cap", "shoes", "winter_hat", "gloves", "glasses"];
   const itemConditions = {
     cap: { key: "93rfDw", value: "#%1d8*f@4p", var: "Wearing" },
     shoes: { key: "Sk@3o&", value: "%01ns#9p", var: "Shoes" },
     winter_hat: { key: "G8*m&a", value: "W%*hjk", var: "Winter_hat" },
     gloves: { key: "O&m*aC", value: "Io&*!c", var: "Gloves" },
+    glasses: { key: "#9am3m", value: "Ghy&z@", var: "Glasses" },
   };
   const itemPricing = {
     cap: { food1: "seeds", food2: "apples", price1: 10, price2: 5 },
     shoes: { food1: "seeds", food2: "bananas", price1: 5, price2: 5 },
     winter_hat: { food1: "bananas", food2: "apples", price1: 10, price2: 10 },
     gloves: { food1: "tomatoes", food2: "apples", price1: 15, price2: 20 },
+    glasses: { food1: "tomatoes", food2: "bananas", price1: 50, price2: 50 },
   };
   // create buttons with corresponding text, color and size
   function createButtons() {
@@ -135,7 +148,7 @@ scene("shop", () => {
     (Ubierz = 0.7), (Ubrane = 0.6);
     eval(`buy_${item}_text.scale = ${Wearing_or_Wear}`);
     localStorage.setItem(
-      item == "cap" ? "Wearing" : item == "shoes" ? "Shoes" : item == "winter_hat" ? "Winter_hat" : "Gloves",
+      item == "cap" ? "Wearing" : item == "shoes" ? "Shoes" : item == "winter_hat" ? "Winter_hat" : item == "gloves" ? "Gloves" : "Glasses",
       Wearing_or_Wear == "Wearing" ? "True" : Wearing_or_Wear == "Ubrane" ? "True" : "False"
     );
   }
