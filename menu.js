@@ -150,7 +150,7 @@ scene("menu", () => {
         sprite("glasses", { width: hamster_width / 2 }),
         scale(vec2(0.75, 0.7)),
         anchor("center"),
-        pos(0, phone ? -124 : -100),
+        pos(0, phone ? -90 : -100),
       ]);
     }
   }

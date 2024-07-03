@@ -74,6 +74,14 @@ scene("game", () => {
       pos(0, phone ? - 42 : -52),
     ]);
   }
+  if (glasses == true) {
+    player.add([
+      sprite("glasses", { width: hamster_width / 2 }),
+      scale(vec2(0.75, 0.7)),
+      anchor("center"),
+      pos(0, phone ? -30 : -38),
+    ]);
+  }
 
   // floor
   for (let x = 0; x < width(); x += 60) {
