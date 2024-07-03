@@ -28,7 +28,8 @@ function display_info() {
       "Arrow Icons created by Freepik - Flaticon",
       "Banana Icon created by juicy_fish - Flaticon",
       "Cap Icon created by juicy_fish - Flaticon",
-      "Tomato Icon created by VectorPortal - Flaticon"
+      "Tomato Icon created by VectorPortal - Flaticon",
+      "Glasses Icon created by Job Moon - Flaticon"
     ];
 
     let posY = -230; // Initial vertical position
