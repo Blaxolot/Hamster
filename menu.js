@@ -175,7 +175,7 @@ scene("menu", () => {
   add([text(tomatoes || 0), pos(60, 210)]);
   // display users online
   online = add([
-    text((polish ? "Użytkownicy online:" : "Users online:") + new_views, { size: 28 }),
+    text((polish ? "Użytkownicy online:" : "Users online:") + new_views, { size: phone ? 22 : 28 }),
     pos(10, height() - 32),
   ]);
   // display credits

@@ -10,62 +10,8 @@ scene("shop", () => {
     anchor("center"),
     pos(width() / 2, 50),
   ]);
-  // Cap
-  const cap_box = add([
-    rect(200, 200, { radius: 15 }),
-    pos(20, 20),
-    color(100, 100, 100),
-  ]);
-  cap_box.add([sprite("seed"), scale(0.08), pos(15, 10)]);
-  cap_box.add([text("10"), scale(0.9), pos(60, 13)]);
-  cap_box.add([sprite("apple"), scale(0.085), pos(115, 5)]);
-  cap_box.add([text("5"), scale(0.9), pos(160, 13)]);
-  cap_box.add([sprite("cap"), scale(0.25), pos(36, 35)]);
-  // Shoes
-  const shoes_box = add([
-    rect(200, 200, { radius: 15 }),
-    pos(20, 240),
-    color(100, 100, 100),
-  ]);
-  shoes_box.add([sprite("seed"), scale(0.08), pos(15, 10)]);
-  shoes_box.add([text("5    5"), scale(0.9), pos(60, 13)]);
-  shoes_box.add([sprite("left_banana"), scale(0.085), pos(113, 5)]);
-  shoes_box.add([sprite("hamster_shoes"), scale(0.2), pos(49, 47)]);
-  // Winter hat
-  const winter_hat_box = add([
-    rect(200, 200, { radius: 15 }),
-    pos(240, 20),
-    color(100, 100, 100),
-  ]);
-  winter_hat_box.add([sprite("left_banana"), scale(0.085), pos(10, 5)]);
-  winter_hat_box.add([text("10"), scale(0.9), pos(55, 13)]);
-  winter_hat_box.add([sprite("apple"), scale(0.085), pos(105, 5)]);
-  winter_hat_box.add([text("10"), scale(0.9), pos(150, 13)]);
-  winter_hat_box.add([sprite("winter_hat"), scale(0.22), pos(43, 40)]);
-  // Gloves
-  const gloves_box = add([
-    rect(200, 200, { radius: 15 }),
-    pos(240, 240),
-    color(100, 100, 100),
-  ]);
-  gloves_box.add([sprite("tomato"), scale(0.08), pos(10, 5)]);
-  gloves_box.add([text("15"), scale(0.9), pos(55, 13)]);
-  gloves_box.add([sprite("apple"), scale(0.085), pos(107, 5)]);
-  gloves_box.add([text("20"), scale(0.9), pos(150, 13)]);
-  gloves_box.add([sprite("hamster_gloves"), scale(0.2), pos(49, 47)]);
-  // Glasses
-  const glasses_box = add([
-    rect(200, 200, { radius: 15 }),
-    pos(460, 20),
-    color(100, 100, 100),
-  ]);
-  glasses_box.add([sprite("tomato"), scale(0.08), pos(10, 5)]);
-  glasses_box.add([text("50"), scale(0.9), pos(55, 13)]);
-  glasses_box.add([sprite("left_banana"), scale(0.085), pos(105, 5)]);
-  glasses_box.add([text("50"), scale(0.9), pos(150, 13)]);
-  glasses_box.add([sprite("glasses", { width: 170 }), pos(100, 100), anchor("center")]);
 
-  const items = ["cap", "shoes", "winter_hat", "gloves", "glasses"];
+  const items = ["cap", "winter_hat", "glasses", "shoes", "gloves"];
   const itemConditions = {
     cap: { key: "93rfDw", value: "#%1d8*f@4p", var: "Wearing" },
     shoes: { key: "Sk@3o&", value: "%01ns#9p", var: "Shoes" },
@@ -74,12 +20,56 @@ scene("shop", () => {
     glasses: { key: "#9am3m", value: "Ghy&z@", var: "Glasses" },
   };
   const itemPricing = {
-    cap: { food1: "seeds", food2: "apples", price1: 10, price2: 5 },
-    shoes: { food1: "seeds", food2: "bananas", price1: 5, price2: 5 },
-    winter_hat: { food1: "bananas", food2: "apples", price1: 10, price2: 10 },
-    gloves: { food1: "tomatoes", food2: "apples", price1: 15, price2: 20 },
-    glasses: { food1: "tomatoes", food2: "bananas", price1: 50, price2: 50 },
+    cap: { food1: "seeds", food2: "apples", price1: 10, price2: 5, itemScale: 0.25 },
+    shoes: { food1: "seeds", food2: "bananas", price1: 5, price2: 5, itemScale: 0.2 },
+    winter_hat: { food1: "bananas", food2: "apples", price1: 10, price2: 10, itemScale: 0.215 },
+    gloves: { food1: "tomatoes", food2: "apples", price1: 15, price2: 20, itemScale: 0.2 },
+    glasses: { food1: "tomatoes", food2: "bananas", price1: 50, price2: 50, itemScale: 0.33 },
   };
+  // Create boxes
+  items.forEach(item => {
+    const shop_phone = width() < 450;
+    const { food1, food2, price1, price2, itemScale } = itemPricing[item];
+    const numberOfColumns = width() < 660 ? 2 : 3;;
+
+    let position = [0, 0];
+    const itemIndex = items.indexOf(item);
+    if (itemIndex !== -1) {
+      const row = Math.floor(itemIndex / numberOfColumns);
+      const col = itemIndex % numberOfColumns;
+      position = [
+        (shop_phone ? 5 : 20) + col * (shop_phone ? 175 : 220),
+        20 + row * (shop_phone ? 175 : 220),
+      ];
+    }
+
+    eval(`${item}_box = add([
+      rect(200, 200, { radius: 15 }),
+      pos(position),
+      color(100, 100, 100),
+      scale(shop_phone ? 0.8:1)
+    ])`);
+
+    let first_food = (food1 === "seeds" || food1 === "apples")
+      ? food1.slice(0, -1)
+      : (food1 === "bananas" ? "left_banana" : food1.slice(0, -2));
+
+    let second_food = (food2 === "seeds" || food2 === "apples")
+      ? food2.slice(0, -1)
+      : (food2 === "bananas" ? "left_banana" : food2.slice(0, -2));
+
+    let mainItem = (item == "shoes" || item == "gloves") ? "hamster_" + item : item;
+
+    apple = 0.085, left_banana = 0.085;
+    seed = 0.08, tomato = 0.08;
+
+    eval(`${item}_box.add([sprite("${first_food}"), scale(${first_food}), pos(10, 5)]);`);
+    eval(`${item}_box.add([text(price1), scale(0.9), pos(55, 13)]);`);
+    eval(`${item}_box.add([sprite("${second_food}"), scale(${second_food}), pos(105, 5)]);`);
+    eval(`${item}_box.add([text(price2), scale(0.9), pos(150, 13)]);`);
+    eval(`${item}_box.add([sprite("${mainItem}"), pos(100, 100), scale(${itemScale}), anchor("center")]);`);
+  });
+
   // create buttons with corresponding text, color and size
   function createButtons() {
     items.forEach(item => {
