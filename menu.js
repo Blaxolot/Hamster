@@ -55,14 +55,22 @@ loadSprite(updateHamster(), `images/${updateHamster()}.png`);
 setBackground(50, 50, 50);
 document.body.style.backgroundColor = rgb(50, 50, 50);
 
-if (winter_hat == true) {
-  loadSprite("winter_hat", "images/winter_hat.png");
-}
-if (cap == true) {
-  loadSprite("cap", "images/cap.png");
-}
-if (glasses == true) {
-  loadSprite("glasses", "images/glasses.png");
+cap && loadSprite("cap", "images/cap.png");
+winter_hat && loadSprite("winter_hat", "images/winter_hat.png");
+glasses && loadSprite("glasses", "images/glasses.png");
+
+function MyHover(obj, scale, scale2, color, color2) {
+  obj.onHoverUpdate(() => {
+    setCursor("pointer");
+    obj.scale = vec2(scale);
+    obj.color = color || obj.color;
+  });
+
+  obj.onHoverEnd(() => {
+    setCursor("default");
+    obj.scale = vec2(scale2);
+    obj.color = color2 || obj.color;
+  });
 }
 
 let new_views = 1;
@@ -219,39 +227,11 @@ scene("menu", () => {
     anchor("center"),
     color(0, 0, 0)]);
   // animations
-  play_button.onHoverUpdate(() => {
-    play_button.scale = vec2(1.025);
-    play_button.color = rgb(0, 125, 0);
-    setCursor("pointer");
-  });
-  play_button.onHoverEnd(() => {
-    play_button.scale = vec2(1);
-    play_button.color = rgb(0, 100, 0);
-    setCursor("default");
-  });
-  function handleButtonHover(...buttons) {
-    buttons.forEach(button => {
-      button.onHoverUpdate(() => {
-        button.color = rgb(90, 90, 90);
-        button.scale = vec2(1.02);
-        setCursor("pointer");
-      });
-      button.onHoverEnd(() => {
-        button.scale = vec2(1);
-        button.color = rgb(70, 70, 70);
-        setCursor("default");
-      });
-    });
-  }
-  handleButtonHover(hamsters_button, shop_button);
-  info.onHoverUpdate(() => {
-    info.color = rgb(240, 240, 240);
-    setCursor("pointer");
-  });
-  info.onHoverEnd(() => {
-    info.color = rgb(140, 140, 140);
-    setCursor("default");
-  });
+  MyHover(play_button, 1.025, 1, rgb(0, 125, 0), rgb(0, 100, 0));
+  MyHover(hamsters_button, 1.02, 1, rgb(90, 90, 90), rgb(70, 70, 70));
+  MyHover(shop_button, 1.02, 1, rgb(90, 90, 90), rgb(70, 70, 70));
+  MyHover(info, 1, 1, rgb(240, 240, 240), rgb(140, 140, 140));
+
   let left_arrow, right_arrow;
   function hamsters() {
     !getSprite("left_arrow") && loadSprite("left_arrow", "images/left_arrow.png");
@@ -275,14 +255,8 @@ scene("menu", () => {
         "right_arrow",
       ]);
     }
-    left_arrow.onHoverUpdate(() => {
-      setCursor("pointer");
-      left_arrow.scale = vec2(0.21);
-    });
-    left_arrow.onHoverEnd(() => {
-      setCursor("default");
-      left_arrow.scale = vec2(0.2);
-    });
+
+    MyHover(left_arrow, 0.21, 0.2);
     right_arrow.onHoverEnd(() => {
       setCursor("default");
       right_arrow.scale = vec2(0.2);
@@ -294,10 +268,8 @@ scene("menu", () => {
     const secondary = white !== "" ? left_arrow : right_arrow;
     primary.opacity = 1;
     secondary.opacity = 0.25;
-    primary.onHoverUpdate(() => {
-      setCursor("pointer");
-      primary.scale = vec2(0.21);
-    });
+
+    MyHover(primary, 0.21, 0.2);
     secondary.onHoverUpdate(() => {
       setCursor("default");
       secondary.scale = vec2(0.2);
@@ -314,7 +286,9 @@ scene("menu", () => {
   hamsters_button.onClick(() => hamsters());
   // Load script only if it isn`t loaded
   function isScriptLoaded(src) {
-    return Array.from(document.getElementsByTagName('script')).some(script => script.src.includes(src));
+    return Array.from(document.getElementsByTagName("script")).some(script =>
+      script.src.includes(src)
+    );
   }
   shop_button.onClick(() => {
     if (!isScriptLoaded("shop.js")) {

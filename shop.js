@@ -102,14 +102,7 @@ scene("shop", () => {
         color(0, 0, 0),
       ]);
       // hovers
-      window[`buy_${item}`].onHoverUpdate(() => {
-        window[`buy_${item}`].scale = vec2(1.025);
-        setCursor("pointer");
-      });
-      window[`buy_${item}`].onHoverEnd(() => {
-        window[`buy_${item}`].scale = vec2(1);
-        setCursor("default");
-      });
+      MyHover(window[`buy_${item}`], 1.025, 1);
     });
   }
   createButtons();
@@ -119,20 +112,12 @@ scene("shop", () => {
     pos(width() - 50, 15),
     color(150, 150, 150),
   ]);
-  x.onHoverUpdate(() => {
-    x.color = rgb(240, 240, 240);
-    setCursor("pointer");
-  });
-  x.onHoverEnd(() => {
-    x.color = rgb(150, 150, 150);
-    setCursor("default");
-  });
+  MyHover(x, 1, 1, rgb(240, 240, 240), rgb(150, 150, 150));
+
   function set(item, Wearing_or_Wear) {
     eval(`${item}_text = "${Wearing_or_Wear}"`);
-    Wear = rgb(200, 0, 0);
-    Ubierz = rgb(200, 0, 0);
-    Wearing = rgb(0, 160, 0);
-    Ubrane = rgb(0, 160, 0);
+    Wear = rgb(200, 0, 0), Ubierz = rgb(200, 0, 0);
+    Wearing = rgb(0, 160, 0), Ubrane = rgb(0, 160, 0);
     eval(`buy_${item}.color = ${Wearing_or_Wear}`);
     eval(`buy_${item}_text.text = ${item}_text`);
     (Wear = 0.7), (Wearing = 0.6);

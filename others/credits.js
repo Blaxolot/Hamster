@@ -49,14 +49,7 @@ function display_info() {
       scale(0.8),
     ]);
   }
-  x.onHoverUpdate(() => {
-    x.color = rgb(240, 240, 240);
-    setCursor("pointer");
-  });
-  x.onHoverEnd(() => {
-    x.color = rgb(150, 150, 150);
-    setCursor("default");
-  });
+  MyHover(x, 0.8, 0.8, rgb(240, 240, 240), rgb(150, 150, 150));
 
   x.onClick(() => {
     go("menu");
