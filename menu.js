@@ -256,23 +256,25 @@ scene("menu", () => {
   function hamsters() {
     !getSprite("left_arrow") && loadSprite("left_arrow", "images/left_arrow.png");
     !getSprite("right_arrow") && loadSprite("right_arrow", "images/right_arrow.png");
-    left_arrow = add([
-      sprite("left_arrow"),
-      scale(arrows_scale),
-      pos(width() / 2 - arrows, height() / 2),
-      area(),
-      anchor("center"),
-      "left_arrow",
-    ]);
-    right_arrow = add([
-      sprite("right_arrow"),
-      scale(arrows_scale),
-      pos(width() / 2 + arrows, height() / 2),
-      area(),
-      anchor("center"),
-      opacity(0.25),
-      "right_arrow",
-    ]);
+    if (!left_arrow && !right_arrow) {
+      left_arrow = add([
+        sprite("left_arrow"),
+        scale(arrows_scale),
+        pos(width() / 2 - arrows, height() / 2),
+        area(),
+        anchor("center"),
+        "left_arrow",
+      ]);
+      right_arrow = add([
+        sprite("right_arrow"),
+        scale(arrows_scale),
+        pos(width() / 2 + arrows, height() / 2),
+        area(),
+        anchor("center"),
+        opacity(0.25),
+        "right_arrow",
+      ]);
+    }
     left_arrow.onHoverUpdate(() => {
       setCursor("pointer");
       left_arrow.scale = vec2(0.21);
@@ -280,6 +282,10 @@ scene("menu", () => {
     left_arrow.onHoverEnd(() => {
       setCursor("default");
       left_arrow.scale = vec2(0.2);
+    });
+    right_arrow.onHoverEnd(() => {
+      setCursor("default");
+      right_arrow.scale = vec2(0.2);
     });
   }
   function handleArrowClick(white) {
