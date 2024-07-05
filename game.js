@@ -258,6 +258,11 @@ scene("game", () => {
     if (appleScore >= 10 && appleScore % 10 == 0) {
       lives += 1;
       play("bonus", { volume: 0.7 });
+      appleText10.text = "/" + (appleScore + 10);
+      appleScore == 10 && (appleText10.pos = [225, 24]);
+      appleScore == 100 && (appleText10.pos = [250, 24]);
+      appleScore == 1000 && (appleText10.pos = [275, 24]);
+      appleScore == 10000 && (appleText10.pos = [300, 24]);
 
       for (let i = 1; i <= 1000; i++) {
         if (lives == i) {
@@ -312,9 +317,10 @@ scene("game", () => {
   const seedText = add([text(seedScore), pos(65, 24)]);
   add([sprite("seed"), scale(0.08), pos(16, 20)]);
   const appleText = add([text(appleScore), pos(175, 24)]);
+  const appleText10 = add([text("/10"), pos(200, 24), color(180, 180, 180)]);
   add([sprite("apple"), scale(0.1), pos(120, 10)]);
   const bananaText = add([text(bananaScore), pos(65, 80)]);
-  add([sprite("banana"), scale(-0.1,0.1), pos(65, 75)]);
+  add([sprite("banana"), scale(-0.1, 0.1), pos(65, 75)]);
   const tomatoText = add([text(tomatoScore), pos(65, 136)]);
   add([sprite("tomato"), scale(0.085), pos(14, 130)]);
   let Live1 = add([sprite("heart"), pos(width() - 55, 15), scale(0.08)]);
