@@ -1,4 +1,3 @@
-let Credits;
 function display_info() {
   if (!Credits) {
     Credits = add([

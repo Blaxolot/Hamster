@@ -3,6 +3,7 @@ const JUMP_FORCE = 700;
 let SPEED = 350;
 let GRAVITY = 1250;
 let isWhite = "";
+let Credits;
 // initialize context
 kaplay({
   width: window.innerWidth,
@@ -11,7 +12,7 @@ kaplay({
 // load assets
 loadSprite("seed", "images/seed.png");
 loadSprite("apple", "images/apple.png");
-loadSprite("left_banana", "images/left_banana.png");
+loadSprite("banana", "images/banana.png");
 loadSprite("tomato", "images/tomato.png");
 
 function updateLocalStorage() {
@@ -28,14 +29,14 @@ function updateLocalStorage() {
 
 function updateHamster() {
   updateLocalStorage();
-  const isWearing = Wearing === "True";
+  const hasCap = Wearing === "True";
   const hasShoes = Shoes === "True";
   const hasWinterHat = Winter_hat === "True";
   const hasGloves = Gloves === "True";
   const hasGlasses = Glasses === "True";
 
   glasses = hasGlasses ? true : false;
-  cap = isWearing ? true : false;
+  cap = hasCap ? true : false;
   winter_hat = hasWinterHat ? true : false;
 
   if (hasShoes && hasGloves) {
@@ -121,9 +122,9 @@ scene("menu", () => {
 
   AddHamster("");
   function AddHamster(white) {
+    white !== "" ? isWhite = "white_" : isWhite = "";
     if (white !== "" && !getSprite(white + updateHamster())) {
       loadSprite(white + updateHamster(), `images/${white + updateHamster()}.png`);
-      isWhite = "white_";
     }
     menuHamster = add([
       sprite(white + updateHamster(), { width: hamster_width }),
@@ -177,7 +178,7 @@ scene("menu", () => {
   add([text(seeds || 0), pos(60, 53)]);
   add([sprite("apple"), scale(0.09), pos(8, 100)]);
   add([text(apples || 0), pos(60, 110)]);
-  add([sprite("left_banana"), scale(0.09), pos(10, 150)]);
+  add([sprite("banana"), scale(-0.09, 0.09), pos(56, 150)]);
   add([text(bananas || 0), pos(60, 160)]);
   add([sprite("tomato"), scale(0.085), pos(10, 202.5)]);
   add([text(tomatoes || 0), pos(60, 210)]);
@@ -235,7 +236,6 @@ scene("menu", () => {
   let left_arrow, right_arrow;
   function hamsters() {
     !getSprite("left_arrow") && loadSprite("left_arrow", "images/left_arrow.png");
-    !getSprite("right_arrow") && loadSprite("right_arrow", "images/right_arrow.png");
     if (!left_arrow && !right_arrow) {
       left_arrow = add([
         sprite("left_arrow"),
@@ -246,8 +246,8 @@ scene("menu", () => {
         "left_arrow",
       ]);
       right_arrow = add([
-        sprite("right_arrow"),
-        scale(arrows_scale),
+        sprite("left_arrow"),
+        scale(-arrows_scale),
         pos(width() / 2 + arrows, height() / 2),
         area(),
         anchor("center"),
@@ -259,7 +259,7 @@ scene("menu", () => {
     MyHover(left_arrow, 0.21, 0.2);
     right_arrow.onHoverEnd(() => {
       setCursor("default");
-      right_arrow.scale = vec2(0.2);
+      right_arrow.scale = vec2(-0.2);
     });
   }
   function handleArrowClick(white) {
@@ -268,18 +268,22 @@ scene("menu", () => {
     const secondary = white !== "" ? left_arrow : right_arrow;
     primary.opacity = 1;
     secondary.opacity = 0.25;
-
     MyHover(primary, 0.21, 0.2);
     secondary.onHoverUpdate(() => {
       setCursor("default");
       secondary.scale = vec2(0.2);
     });
+    primary == right_arrow && MyHover(right_arrow, -0.21, -0.2);
+    secondary == right_arrow && secondary.onHoverUpdate(() => {
+      setCursor("default");
+      secondary.scale = vec2(-0.2);
+    });
   }
   // Bind the onClickArrow function to the arrow keys
-  onKeyPress("left", () => { getSprite("left_arrow") && handleArrowClick("white_"); });
-  onKeyPress("right", () => { getSprite("right_arrow") && handleArrowClick(""); });
-  onClick("left_arrow", () => { handleArrowClick("white_"); });
-  onClick("right_arrow", () => { handleArrowClick(""); });
+  onKeyPress("left", () => !Credits && handleArrowClick("white_"));
+  onKeyPress("right", () => !Credits && handleArrowClick(""));
+  onClick("left_arrow", () => handleArrowClick("white_"));
+  onClick("right_arrow", () => handleArrowClick(""));
   // Bind onClick and onKeyPress
   play_button.onClick(() => go("game"));
   onKeyPress("space", () => go("game"));

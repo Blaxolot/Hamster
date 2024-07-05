@@ -5,11 +5,6 @@ scene("shop", () => {
   !getSprite("winter_hat") && loadSprite("winter_hat", "images/winter_hat.png");
   !getSprite("hamster_gloves") && loadSprite("hamster_gloves", "images/hamster_gloves.png");
   !getSprite("glasses") && loadSprite("glasses", "images/glasses.png");
-  add([
-    text(polish ? "Sklep" : "Shop", { size: phone ? 0.01 : 70 }),
-    anchor("center"),
-    pos(width() / 2, 50),
-  ]);
 
   const items = ["cap", "winter_hat", "glasses", "shoes", "gloves"];
   const itemConditions = {
@@ -50,22 +45,20 @@ scene("shop", () => {
       scale(shop_phone ? 0.8:1)
     ])`);
 
-    let first_food = (food1 === "seeds" || food1 === "apples")
-      ? food1.slice(0, -1)
-      : (food1 === "bananas" ? "left_banana" : food1.slice(0, -2));
+    let first_food = (food1 === "seeds" || food1 === "apples" || food1 == "bananas")
+      ? food1.slice(0, -1) : food1.slice(0, -2);
 
-    let second_food = (food2 === "seeds" || food2 === "apples")
-      ? food2.slice(0, -1)
-      : (food2 === "bananas" ? "left_banana" : food2.slice(0, -2));
+    let second_food = (food2 === "seeds" || food2 === "apples" || food2 == "bananas")
+      ? food2.slice(0, -1) : food2.slice(0, -2);
 
     let mainItem = (item == "shoes" || item == "gloves") ? "hamster_" + item : item;
 
-    apple = 0.085, left_banana = 0.085;
+    apple = 0.085, banana = [-0.085, 0.085];
     seed = 0.08, tomato = 0.08;
 
-    eval(`${item}_box.add([sprite("${first_food}"), scale(${first_food}), pos(10, 5)]);`);
+    eval(`${item}_box.add([sprite("${first_food}"), scale(${first_food}), pos(first_food == "banana" ? 54:10, 5)]);`);
     eval(`${item}_box.add([text(price1), scale(0.9), pos(55, 13)]);`);
-    eval(`${item}_box.add([sprite("${second_food}"), scale(${second_food}), pos(105, 5)]);`);
+    eval(`${item}_box.add([sprite("${second_food}"), scale(${second_food}), pos(second_food == "banana" ? 149: 105, 5)]);`);
     eval(`${item}_box.add([text(price2), scale(0.9), pos(150, 13)]);`);
     eval(`${item}_box.add([sprite("${mainItem}"), pos(100, 100), scale(${itemScale}), anchor("center")]);`);
   });
@@ -124,7 +117,8 @@ scene("shop", () => {
     (Ubierz = 0.7), (Ubrane = 0.6);
     eval(`buy_${item}_text.scale = ${Wearing_or_Wear}`);
     localStorage.setItem(
-      item == "cap" ? "Wearing" : item == "shoes" ? "Shoes" : item == "winter_hat" ? "Winter_hat" : item == "gloves" ? "Gloves" : "Glasses",
+      item == "cap" ? "Wearing" : item == "shoes" ? "Shoes" : item == "winter_hat" ? "Winter_hat" :
+        item == "gloves" ? "Gloves" : "Glasses",
       Wearing_or_Wear == "Wearing" ? "True" : Wearing_or_Wear == "Ubrane" ? "True" : "False"
     );
   }

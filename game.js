@@ -314,7 +314,7 @@ scene("game", () => {
   const appleText = add([text(appleScore), pos(175, 24)]);
   add([sprite("apple"), scale(0.1), pos(120, 10)]);
   const bananaText = add([text(bananaScore), pos(65, 80)]);
-  add([sprite("left_banana"), scale(0.1), pos(14, 75)]);
+  add([sprite("banana"), scale(-0.1,0.1), pos(65, 75)]);
   const tomatoText = add([text(tomatoScore), pos(65, 136)]);
   add([sprite("tomato"), scale(0.085), pos(14, 130)]);
   let Live1 = add([sprite("heart"), pos(width() - 55, 15), scale(0.08)]);
