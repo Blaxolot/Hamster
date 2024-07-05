@@ -3,7 +3,6 @@ const JUMP_FORCE = 700;
 let SPEED = 350;
 let GRAVITY = 1250;
 let isWhite = "";
-let Credits;
 // initialize context
 kaplay({
   width: window.innerWidth,
@@ -39,6 +38,9 @@ function updateHamster() {
   cap = hasCap ? true : false;
   winter_hat = hasWinterHat ? true : false;
 
+  if (hasCap && hasWinterHat) {
+    localStorage.setItem("Winter_hat", "False");
+  }
   if (hasShoes && hasGloves) {
     hamster = "hamster_shoes_gloves";
   } else if (hasShoes) {
@@ -132,12 +134,8 @@ scene("menu", () => {
       anchor("center"),
     ]);
 
-    let addCap;
-    let addWinter_hat;
-
     if (winter_hat == true) {
-      addCap && destroy(addCap);
-      addWinter_hat = menuHamster.add([
+      menuHamster.add([
         sprite("winter_hat", { width: hamster_width / 2 }),
         scale(vec2(0.9, 0.65)),
         anchor("center"),
@@ -145,8 +143,7 @@ scene("menu", () => {
       ]);
     }
     if (cap == true) {
-      addWinter_hat && destroy(addWinter_hat);
-      addCap = menuHamster.add([
+      menuHamster.add([
         sprite("cap", { width: hamster_width / 2 }),
         scale(vec2(0.9, 0.7)),
         anchor("center"),
@@ -257,10 +254,6 @@ scene("menu", () => {
     }
 
     MyHover(left_arrow, 0.21, 0.2);
-    right_arrow.onHoverEnd(() => {
-      setCursor("default");
-      right_arrow.scale = vec2(-0.2);
-    });
   }
   function handleArrowClick(white) {
     AddHamster(white);
@@ -280,8 +273,8 @@ scene("menu", () => {
     });
   }
   // Bind the onClickArrow function to the arrow keys
-  onKeyPress("left", () => !Credits && handleArrowClick("white_"));
-  onKeyPress("right", () => !Credits && handleArrowClick(""));
+  onKeyPress("left", () => left_arrow && handleArrowClick("white_"));
+  onKeyPress("right", () => right_arrow && handleArrowClick(""));
   onClick("left_arrow", () => handleArrowClick("white_"));
   onClick("right_arrow", () => handleArrowClick(""));
   // Bind onClick and onKeyPress

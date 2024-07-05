@@ -23,8 +23,11 @@ firebase.analytics(app);
 // Get a reference to the Firebase Realtime Database
 const database = firebase.database();
 
-// Set the page views in the database
-database.ref(id).set("");
+database.ref(id).onDisconnect().remove();
+window.onbeforeunload = function () {
+  database.ref(id).remove();
+  console.log("Out...");
+};
 
 // Retrieve the number of views from the database
 database.ref().on("value", snapshot => {
@@ -33,7 +36,6 @@ database.ref().on("value", snapshot => {
   console.log("views", views);
 });
 
-database.ref(id).onDisconnect().remove()
 
 var eventName;
 var visible = true;
@@ -55,11 +57,14 @@ function handleChange(evt) {
   if (visible && (["focusout", "pagehide"].includes(evt.type) || (this && this[propName]))) {
     visible = false;
     database.ref(id).remove();
-    console.log("Out...")
+    console.log("Out...");
   }
   else if (!visible && (["focusin", "pageshow"].includes(evt.type) || (this && !this[propName]))) {
     visible = true;
     database.ref(id).set("");
-    console.log("In...")
+    console.log("In...");
   }
 }
+
+// Set the page views in the database
+database.ref(id).set("");

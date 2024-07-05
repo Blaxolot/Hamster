@@ -56,11 +56,11 @@ scene("shop", () => {
     apple = 0.085, banana = [-0.085, 0.085];
     seed = 0.08, tomato = 0.08;
 
-    eval(`${item}_box.add([sprite("${first_food}"), scale(${first_food}), pos(first_food == "banana" ? 54:10, 5)]);`);
-    eval(`${item}_box.add([text(price1), scale(0.9), pos(55, 13)]);`);
-    eval(`${item}_box.add([sprite("${second_food}"), scale(${second_food}), pos(second_food == "banana" ? 149: 105, 5)]);`);
-    eval(`${item}_box.add([text(price2), scale(0.9), pos(150, 13)]);`);
-    eval(`${item}_box.add([sprite("${mainItem}"), pos(100, 100), scale(${itemScale}), anchor("center")]);`);
+    eval(`${item}_box.add([sprite("${first_food}"), scale(${first_food}), pos(first_food == "banana" ? 54:10,5)])`);
+    eval(`${item}_box.add([text(price1), scale(0.9), pos(55, 13)])`);
+    eval(`${item}_box.add([sprite("${second_food}"), scale(${second_food}), pos(second_food == "banana" ? 149:105,5)])`);
+    eval(`${item}_box.add([text(price2), scale(0.9), pos(150, 13)])`);
+    eval(`${item}_box.add([sprite("${mainItem}"), pos(100, 100), scale(${itemScale}), anchor("center")])`);
   });
 
   // create buttons with corresponding text, color and size
@@ -108,19 +108,37 @@ scene("shop", () => {
   MyHover(x, 1, 1, rgb(240, 240, 240), rgb(150, 150, 150));
 
   function set(item, Wearing_or_Wear) {
-    eval(`${item}_text = "${Wearing_or_Wear}"`);
-    Wear = rgb(200, 0, 0), Ubierz = rgb(200, 0, 0);
-    Wearing = rgb(0, 160, 0), Ubrane = rgb(0, 160, 0);
-    eval(`buy_${item}.color = ${Wearing_or_Wear}`);
-    eval(`buy_${item}_text.text = ${item}_text`);
-    (Wear = 0.7), (Wearing = 0.6);
-    (Ubierz = 0.7), (Ubrane = 0.6);
-    eval(`buy_${item}_text.scale = ${Wearing_or_Wear}`);
-    localStorage.setItem(
-      item == "cap" ? "Wearing" : item == "shoes" ? "Shoes" : item == "winter_hat" ? "Winter_hat" :
-        item == "gloves" ? "Gloves" : "Glasses",
-      Wearing_or_Wear == "Wearing" ? "True" : Wearing_or_Wear == "Ubrane" ? "True" : "False"
-    );
+    if ((item == "cap" || item == "winter_hat") &&
+      eval(`${item == "cap" ? "winter_hat_text" : "cap_text"}`) !== (polish ? "Ubierz" : "Wear")) {
+      const otherItem = item == "cap" ? "winter_hat" : "cap";
+
+      eval(`${otherItem}_text = polish ? "Ubierz" : "Wear"`);
+      eval(`buy_${otherItem}.color = rgb(200, 0, 0)`);
+      eval(`buy_${otherItem}_text.text = ${otherItem}_text`);
+      eval(`buy_${otherItem}_text.scale = 0.7`);
+      localStorage.setItem(otherItem == "cap" ? "Wearing" : "Winter_hat", "False");
+
+      eval(`${item}_text = polish ? "Ubrane" : "Wearing"`);
+      eval(`buy_${item}.color = rgb(0, 160, 0)`);
+      eval(`buy_${item}_text.text = ${item}_text`);
+      eval(`buy_${item}_text.scale = 0.6`);
+      localStorage.setItem(item == "cap" ? "Wearing" : "Winter_hat", "True");
+    }
+    else {
+      eval(`${item}_text = "${Wearing_or_Wear}"`);
+      Wear = rgb(200, 0, 0), Ubierz = rgb(200, 0, 0);
+      Wearing = rgb(0, 160, 0), Ubrane = rgb(0, 160, 0);
+      eval(`buy_${item}.color = ${Wearing_or_Wear}`);
+      eval(`buy_${item}_text.text = ${item}_text`);
+      (Wear = 0.7), (Wearing = 0.6);
+      (Ubierz = 0.7), (Ubrane = 0.6);
+      eval(`buy_${item}_text.scale = ${Wearing_or_Wear}`);
+      localStorage.setItem(
+        item == "cap" ? "Wearing" : item == "shoes" ? "Shoes" : item == "winter_hat" ? "Winter_hat" :
+          item == "gloves" ? "Gloves" : "Glasses",
+        Wearing_or_Wear == "Wearing" ? "True" : Wearing_or_Wear == "Ubrane" ? "True" : "False"
+      );
+    }
   }
 
   items.forEach(item => {
