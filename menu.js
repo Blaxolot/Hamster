@@ -180,26 +180,26 @@ scene("menu", () => {
 
   pl = add([
     rect(40, 40, { radius: 5 }),
-    pos(width() - 95, 10),
+    pos(width() - 75, 30),
     color(25, 25, 25),
-    area()
+    anchor("center"),
+    area(),
   ]);
   pl_icon = pl.add([
     sprite("poland", { width: 30 }),
     anchor("center"),
-    pos(20, 20),
     opacity(polish ? 1 : 0.3),
   ]);
   usa = add([
     rect(40, 40, { radius: 5 }),
-    pos(width() - 50, 10),
+    pos(width() - 30, 30),
     color(25, 25, 25),
-    area()
+    anchor("center"),
+    area(),
   ]);
   usa_icon = usa.add([
     sprite("usa", { width: 30 }),
     anchor("center"),
-    pos(20, 20),
     opacity(polish ? 0.3 : 1)
   ]);
   pl.onClick(() => {
@@ -212,6 +212,8 @@ scene("menu", () => {
     SetLanguage();
     go("menu");
   });
+  MyHover(pl, 1.05, 1);
+  MyHover(usa, 1.05, 1);
   // display score
   add([text(polish ? "Masz:" : "You have:"), pos(10, 10)]);
   add([sprite("seed"), scale(0.08), pos(10, 50)]);
