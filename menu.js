@@ -13,6 +13,8 @@ loadSprite("seed", "images/seed.png");
 loadSprite("apple", "images/apple.png");
 loadSprite("banana", "images/banana.png");
 loadSprite("tomato", "images/tomato.png");
+loadSprite("poland", "images/poland.png");
+loadSprite("usa", "images/united-states.png");
 
 function updateLocalStorage() {
   seeds = localStorage.getItem("seeds");
@@ -108,11 +110,17 @@ function getFirstBrowserLanguage() {
   }
   return null;
 };
+let polish;
+function SetLanguage() {
+  let language = localStorage.getItem("Language");
+  polish = !language && getFirstBrowserLanguage().includes("pl") || language === "polish";
+}
+SetLanguage();
 
-const polish = getFirstBrowserLanguage().includes("pl");
 let MenuText = polish ? "Chomik" : "Hamster";
 
 scene("menu", () => {
+  Credits = null;
   setCursor("default");
   setBackground(50, 50, 50);
   updateLocalStorage();
@@ -169,6 +177,41 @@ scene("menu", () => {
     pos(width() / 2, height() / 2 - 230),
     anchor("center"),
   ]);
+
+  pl = add([
+    rect(40, 40, { radius: 5 }),
+    pos(width() - 95, 10),
+    color(25, 25, 25),
+    area()
+  ]);
+  pl_icon = pl.add([
+    sprite("poland", { width: 30 }),
+    anchor("center"),
+    pos(20, 20),
+    opacity(polish ? 1 : 0.3),
+  ]);
+  usa = add([
+    rect(40, 40, { radius: 5 }),
+    pos(width() - 50, 10),
+    color(25, 25, 25),
+    area()
+  ]);
+  usa_icon = usa.add([
+    sprite("usa", { width: 30 }),
+    anchor("center"),
+    pos(20, 20),
+    opacity(polish ? 0.3 : 1)
+  ]);
+  pl.onClick(() => {
+    localStorage.setItem("Language", "polish");
+    SetLanguage();
+    go("menu");
+  });
+  usa.onClick(() => {
+    localStorage.setItem("Language", "english");
+    SetLanguage();
+    go("menu");
+  });
   // display score
   add([text(polish ? "Masz:" : "You have:"), pos(10, 10)]);
   add([sprite("seed"), scale(0.08), pos(10, 50)]);

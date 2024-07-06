@@ -31,7 +31,9 @@ function display_info() {
       ["Cap", "Czapki", "juicy_fish"],
       ["Winter Hat", "Czapki Zimowej", "Freepik"],
       ["Tomato", "Pomidora", "VectorPortal"],
-      ["Glasses", "Okularów", "Job Moon"]
+      ["Glasses", "Okularów", "Job Moon"],
+      ["Poland", "Polski", "Freepik"],
+      ["USA", "USA", "Freepik"]
     ];
 
     // Process the list to create icons_Credits array
