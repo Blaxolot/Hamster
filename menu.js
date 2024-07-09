@@ -1,7 +1,4 @@
 const phone = window.innerWidth <= 500;
-const JUMP_FORCE = 700;
-let SPEED = 350;
-let GRAVITY = 1250;
 let isWhite = "";
 // initialize context
 kaplay({
@@ -42,8 +39,7 @@ function updateHamster() {
 
   if (hasCap && hasWinterHat) {
     localStorage.setItem("Winter_hat", "False");
-  }
-  if (hasShoes && hasGloves) {
+  } else if (hasShoes && hasGloves) {
     hamster = "hamster_shoes_gloves";
   } else if (hasShoes) {
     hamster = "hamster_shoes";
@@ -57,7 +53,6 @@ function updateHamster() {
 }
 
 loadSprite(updateHamster(), `images/${updateHamster()}.png`);
-setBackground(50, 50, 50);
 document.body.style.backgroundColor = rgb(50, 50, 50);
 
 cap && loadSprite("cap", "images/cap.png");
@@ -111,13 +106,13 @@ function getFirstBrowserLanguage() {
   return null;
 };
 let polish;
+let MenuText;
+SetLanguage();
 function SetLanguage() {
   let language = localStorage.getItem("Language");
   polish = !language && getFirstBrowserLanguage().includes("pl") || language === "polish";
+  MenuText = polish ? "Chomik" : "Hamster";
 }
-SetLanguage();
-
-let MenuText = polish ? "Chomik" : "Hamster";
 
 scene("menu", () => {
   Credits = null;

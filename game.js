@@ -1,3 +1,6 @@
+let SPEED = 350;
+let GRAVITY = 1250;
+const JUMP_FORCE = 700;
 scene("game", () => {
   setBackground(0, 120, 180);
   !getSprite("banana") && loadSprite("banana", "images/banana.png");
@@ -119,8 +122,7 @@ scene("game", () => {
   }
 
   // handle jumping
-  onKeyPress(["space", "up", "w"], jump);
-  onKeyDown(["space", "up", "w"], jump);
+  onKeyPressRepeat(["space", "up", "w"], jump);
   onClick(jump);
   onMouseDown(jump);
   onMouseRelease(jump);
@@ -267,7 +269,7 @@ scene("game", () => {
   player.onCollide("apple", () => {
     if (appleScore >= 10 && appleScore % 10 == 0) {
       lives += 1;
-      play("bonus", { volume: 0.7 });
+      play("bonus", { volume: 0.5 });
       appleText10.text = "/" + (appleScore + 10);
       appleScore == 10 && (appleText10.pos = [225, 24]);
       appleScore == 100 && (appleText10.pos = [250, 24]);
@@ -290,6 +292,7 @@ scene("game", () => {
   });
 
   function BAD(bad) {
+    shake(15);
     if (bad.scale == undefined) {
       let scaleFactor = 1;
       bad.onUpdate(() => {
