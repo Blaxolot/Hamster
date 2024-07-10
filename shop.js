@@ -1,10 +1,11 @@
 scene("shop", () => {
+  isMenu = false;
   setCursor("default");
-  !getSprite("cap") && loadSprite("cap", "images/cap.png");
+  !getSprite("cap") && loadSprite("cap", "images/other/cap.png");
   !getSprite("hamster_shoes") && loadSprite("hamster_shoes", "images/hamster_shoes.png");
-  !getSprite("winter_hat") && loadSprite("winter_hat", "images/winter_hat.png");
+  !getSprite("winter_hat") && loadSprite("winter_hat", "images/other/winter_hat.png");
   !getSprite("hamster_gloves") && loadSprite("hamster_gloves", "images/hamster_gloves.png");
-  !getSprite("glasses") && loadSprite("glasses", "images/glasses.png");
+  !getSprite("glasses") && loadSprite("glasses", "images/other/glasses.png");
 
   const items = ["cap", "winter_hat", "glasses", "shoes", "gloves"];
   const itemConditions = {

@@ -2,15 +2,16 @@ let SPEED = 350;
 let GRAVITY = 1250;
 const JUMP_FORCE = 700;
 scene("game", () => {
+  isMenu = false;
   setBackground(0, 120, 180);
-  !getSprite("banana") && loadSprite("banana", "images/banana.png");
-  !getSprite("chocolate") && loadSprite("chocolate", "images/chocolate_bar.png");
-  !getSprite("rotten_tomato") && loadSprite("rotten_tomato", "images/rotten_tomato.png");
-  !getSprite("heart") && loadSprite("heart", "images/heart.png");
-  !getSprite("drzewo1") && loadSprite("drzewo1", "images/drzewo_1.png");
-  !getSprite("drzewo2") && loadSprite("drzewo2", "images/drzewo2.png");
-  !getSprite("drzewo3") && loadSprite("drzewo3", "images/drzewo3.png");
-  !getSprite("chmura") && loadSprite("chmura", "images/chmura.png");
+  !getSprite("banana") && loadSprite("banana", "images/game/banana.png");
+  !getSprite("chocolate") && loadSprite("chocolate", "images/game/chocolate_bar.png");
+  !getSprite("rotten_tomato") && loadSprite("rotten_tomato", "images/game/rotten_tomato.png");
+  !getSprite("heart") && loadSprite("heart", "images/game/heart.png");
+  !getSprite("drzewo1") && loadSprite("drzewo1", "images/game/drzewo_1.png");
+  !getSprite("drzewo2") && loadSprite("drzewo2", "images/game/drzewo2.png");
+  !getSprite("drzewo3") && loadSprite("drzewo3", "images/game/drzewo3.png");
+  !getSprite("chmura") && loadSprite("chmura", "images/game/chmura.png");
 
   !getSound("pickup") && loadSound("pickup", "sounds/pickup.wav");
   !getSound("jump") && loadSound("jump", "sounds/jump.wav");
@@ -122,7 +123,8 @@ scene("game", () => {
   }
 
   // handle jumping
-  onKeyPressRepeat(["space", "up", "w"], jump);
+  onKeyPress(["space", "up", "w"], jump);
+  onKeyDown(["space", "up", "w"], jump);
   onClick(jump);
   onMouseDown(jump);
   onMouseRelease(jump);
@@ -232,19 +234,14 @@ scene("game", () => {
     ]);
 
     // wait a random amount of time to spawn next Food
-    wait(distance == null ? rand(1, 2) : distance, spawnFood);
+    wait(distance == null ? rand(0.75, 1.25) : distance, spawnFood);
   }
   spawnFood();
 
-  // keep track of score
-  let seedScore = 0;
-  let appleScore = 0;
-  let bananaScore = 0;
-  let tomatoScore = 0;
   let lives = 3;
-
   let foods = ["seed", "apple", "banana", "tomato"];
   foods.forEach(food => {
+    eval(`${food}Score = 0`);
     player.onCollide(food, item => {
       if (item.scale == undefined) {
         play("pickup");

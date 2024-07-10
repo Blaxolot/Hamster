@@ -33,9 +33,7 @@ window.onbeforeunload = function () {
 database.ref().on("value", snapshot => {
   var views = snapshot.numChildren();
   Users_online(views);
-  console.log("views", views);
 });
-
 
 var eventName;
 var visible = true;
@@ -57,12 +55,10 @@ function handleChange(evt) {
   if (visible && (["focusout", "pagehide"].includes(evt.type) || (this && this[propName]))) {
     visible = false;
     database.ref(id).remove();
-    console.log("Out...");
   }
   else if (!visible && (["focusin", "pageshow"].includes(evt.type) || (this && !this[propName]))) {
     visible = true;
     database.ref(id).set("");
-    console.log("In...");
   }
 }
 

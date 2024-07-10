@@ -5,13 +5,18 @@ kaplay({
   width: window.innerWidth,
   height: window.innerHeight,
 });
+
+window.addEventListener('resize', function (event) {
+  isMenu == true && location.reload();
+}, true);
+
 // load assets
-loadSprite("seed", "images/seed.png");
-loadSprite("apple", "images/apple.png");
-loadSprite("banana", "images/banana.png");
-loadSprite("tomato", "images/tomato.png");
-loadSprite("poland", "images/poland.png");
-loadSprite("usa", "images/united-states.png");
+loadSprite("seed", "images/game/seed.png");
+loadSprite("apple", "images/game/apple.png");
+loadSprite("banana", "images/game/banana.png");
+loadSprite("tomato", "images/game/tomato.png");
+loadSprite("poland", "images/other/poland.png");
+loadSprite("usa", "images/other/united-states.png");
 
 function updateLocalStorage() {
   seeds = localStorage.getItem("seeds");
@@ -55,9 +60,9 @@ function updateHamster() {
 loadSprite(updateHamster(), `images/${updateHamster()}.png`);
 document.body.style.backgroundColor = rgb(50, 50, 50);
 
-cap && loadSprite("cap", "images/cap.png");
-winter_hat && loadSprite("winter_hat", "images/winter_hat.png");
-glasses && loadSprite("glasses", "images/glasses.png");
+cap && loadSprite("cap", "images/other/cap.png");
+winter_hat && loadSprite("winter_hat", "images/other/winter_hat.png");
+glasses && loadSprite("glasses", "images/other/glasses.png");
 
 function MyHover(obj, scale, scale2, color, color2) {
   obj.onHoverUpdate(() => {
@@ -115,6 +120,7 @@ function SetLanguage() {
 }
 
 scene("menu", () => {
+  isMenu = true;
   Credits = null;
   setCursor("default");
   setBackground(50, 50, 50);
@@ -272,7 +278,7 @@ scene("menu", () => {
 
   let left_arrow, right_arrow;
   function hamsters() {
-    !getSprite("left_arrow") && loadSprite("left_arrow", "images/left_arrow.png");
+    !getSprite("left_arrow") && loadSprite("left_arrow", "images/other/left_arrow.png");
     if (!left_arrow && !right_arrow) {
       left_arrow = add([
         sprite("left_arrow"),

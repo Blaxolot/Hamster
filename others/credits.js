@@ -2,21 +2,28 @@ let Credits;
 function display_info() {
   if (!Credits) {
     Credits = add([
-      rect(polish ? 700 : 650, 650, { radius: 8 }),
+      rect(650, 650, { radius: 8 }),
       color(0, 0, 0),
-      opacity(0.85),
+      opacity(0.9),
       pos(center()),
       area(),
       anchor("center"),
       outline(5),
-      "credits",
+      scale(phone ? 0.55 : 1)
     ]);
-    parameters = [anchor("center"), color(255, 255, 255), scale(polish ? 0.55 : 0.6)];
+    parameters = [anchor("center"), color(255, 255, 255), scale(0.6)];
     Credits.add([
-      text(polish ? "Autorzy ikon" : "Icon Credits"),
+      text(polish ? "Autorzy ikon - " : "Icon Credits - "),
       anchor("center"),
-      pos(0, -280),
+      pos(polish ? -100 : -110, -290),
       color(255, 255, 255),
+    ]);
+    flaticon = Credits.add([
+      text("Flaticon"),
+      anchor("center"),
+      area(),
+      color(rgb(21, 209, 198)),
+      pos(150, -290)
     ]);
 
     const list = [
@@ -24,8 +31,8 @@ function display_info() {
       ["Seed", "Nasionka", "Smashicons"],
       ["Apple", "Jabłka", "Smashicons"],
       ["Heart", "Serca", "Pixel perfect"],
-      ["Chocolate Bar", "Tabliczki czekolady", "Iconic Panda"],
-      ["- Flaticon"],
+      ["Chocolate Bar", "Tabliczki czekolady", ""],
+      ["Iconic Panda"],
       ["Arrow", "Strzałki", "Freepik"],
       ["Banana", "Banana", "juicy_fish"],
       ["Cap", "Czapki", "juicy_fish"],
@@ -39,7 +46,7 @@ function display_info() {
     // Process the list to create icons_Credits array
     const icons_Credits = list.map(item => {
       if (item.length === 1 && typeof item[0] === 'string') {
-        return item[0]; // Return "- Flaticon" as is
+        return item[0]; // Return "Iconic Panda" as is
       } else {
         if (polish) {
           Test = "Ikona " + item[1] + " stworzona przez " + item[2];
@@ -47,35 +54,28 @@ function display_info() {
         else {
           Test = item[0] + " Icon created by " + item[2];
         }
-        return Test + (item[0] !== "Chocolate Bar" ? " - Flaticon" : "");
+        return Test;
       }
     });
-    let posY = -230; // Initial vertical position
+    let posY = -240; // Initial vertical position
 
     icons_Credits.forEach(Text => {
-      const gap = Text == "- Flaticon" || (Text.includes(polish ? "czekolady" : "Chocolate")) ? 30 : 40;
+      const gap = Text == "Iconic Panda" || (Text.includes(polish ? "czekolady" : "Chocolate")) ? 30 : 40;
       Credits.add([text(Text), pos(0, posY), ...parameters]); // Add text
       posY += gap; // Increment posY by 30 or 40 based on the text
     });
 
-    open_flaticon = Credits.add([
-      text("Open Flaticon", { size: 30 }),
-      anchor("center"),
-      area(),
-      color(rgb(21, 209, 198)),
-      pos(polish ? 220 : 190, 300)
-    ]);
     x = Credits.add([
       text("x", { size: 30 }),
       anchor("center"),
       area(),
-      pos(polish ? -330 : -305, -305),
+      pos(-305, -305),
       color(150, 150, 150),
     ]);
   }
   MyHover(x, 1, 1, rgb(240, 240, 240), rgb(150, 150, 150));
-  MyHover(open_flaticon, 1, 1, rgb(16, 156, 147), rgb(21, 209, 198));
-  open_flaticon.onClick(() => window.open("https://www.flaticon.com/"));
+  MyHover(flaticon, 1, 1, rgb(16, 156, 147), rgb(21, 209, 198));
+  flaticon.onClick(() => window.open("https://www.flaticon.com/"));
 
   x.onClick(() => {
     go("menu");
