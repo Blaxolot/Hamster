@@ -289,8 +289,8 @@ scene("game", () => {
   });
 
   function BAD(bad) {
-    shake(15);
     if (bad.scale == undefined) {
+      shake(15);
       let scaleFactor = 1;
       bad.onUpdate(() => {
         scaleFactor -= 0.05;
@@ -316,7 +316,6 @@ scene("game", () => {
         SPEED = 350;
         play("gameover");
         MenuText = polish ? "Koniec Gry" : "Game Over";
-        hamster;
       }
       console.log("fu");
     }

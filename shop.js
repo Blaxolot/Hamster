@@ -1,5 +1,9 @@
 scene("shop", () => {
   isMenu = false;
+  window.addEventListener('resize', function (event) {
+    isMenu == false && wait(0.5, () => go("shop"));
+  }, true);
+
   setCursor("default");
   !getSprite("cap") && loadSprite("cap", "images/other/cap.png");
   !getSprite("hamster_shoes") && loadSprite("hamster_shoes", "images/hamster_shoes.png");

@@ -1,13 +1,9 @@
 const phone = window.innerWidth <= 500;
 let isWhite = "";
 // initialize context
-kaplay({
-  width: window.innerWidth,
-  height: window.innerHeight,
-});
-
+kaplay();
 window.addEventListener('resize', function (event) {
-  isMenu == true && location.reload();
+  isMenu == true && wait(0.5, () =>go("menu"));
 }, true);
 
 // load assets
@@ -219,9 +215,9 @@ scene("menu", () => {
   add([text(polish ? "Masz:" : "You have:"), pos(10, 10)]);
   add([sprite("seed"), scale(0.08), pos(10, 50)]);
   add([text(seeds || 0), pos(60, 53)]);
-  add([sprite("apple"), scale(0.09), pos(8, 100)]);
+  add([sprite("apple"), scale(0.1), pos(8, 100)]);
   add([text(apples || 0), pos(60, 110)]);
-  add([sprite("banana"), scale(-0.09, 0.09), pos(56, 150)]);
+  add([sprite("banana"), scale(-0.09, 0.09), pos(56, 152)]);
   add([text(bananas || 0), pos(60, 160)]);
   add([sprite("tomato"), scale(0.085), pos(10, 202.5)]);
   add([text(tomatoes || 0), pos(60, 210)]);
