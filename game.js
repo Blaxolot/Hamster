@@ -2,6 +2,21 @@ let SPEED = 350;
 let GRAVITY = 1250;
 const JUMP_FORCE = 700;
 scene("game", () => {
+  let skibidibi = 1;
+  window.addEventListener('resize', function (event) {
+    isMenu == false && wait(0.5, () => {
+      debug.paused = true;
+      skibidibi += 1;
+      addFloor();
+      destroyAll("floor" + (skibidibi - 1)); destroyAll("floor" + (skibidibi - 2));
+      debug.paused = false;
+      destroyAll("player");
+      addTrees();
+      addHamster();
+
+    });
+  }, true);
+
   isMenu = false;
   setBackground(0, 120, 180);
   !getSprite("banana") && loadSprite("banana", "images/game/banana.png");
@@ -18,21 +33,26 @@ scene("game", () => {
   !getSound("negative") && loadSound("negative", "sounds/negative_beeps.mp3");
   !getSound("gameover") && loadSound("gameover", "sounds/gameover.mp3");
   !getSound("bonus") && loadSound("bonus", "sounds/bonus_heart.mp3");
-
-  let parameters = [fixed(), anchor("botleft")];
-
-  add([
-    sprite("drzewo1", { width: (width() + height()) / 10 }),
-    pos(width() / 10, height() - 60), ...parameters,
-  ]);
-  add([
-    sprite("drzewo2", { width: (width() + height()) / 20 }),
-    pos(width() / 2.8, height() - 60), ...parameters,
-  ]);
-  add([
-    sprite("drzewo3", { width: (width() + height()) / 11 }),
-    pos(width() / 1.5, height() - 60), ...parameters,
-  ]);
+  addTrees();
+  function addTrees() {
+    let parameters = [fixed(), anchor("botleft"), z(-999)];
+    destroyAll("tree");
+    add([
+      sprite("drzewo1", { width: (width() + height()) / 10 }),
+      pos(width() / 10, height() - 60), ...parameters,
+      "tree"
+    ]);
+    add([
+      sprite("drzewo2", { width: (width() + height()) / 20 }),
+      pos(width() / 2.8, height() - 60), ...parameters,
+      "tree"
+    ]);
+    add([
+      sprite("drzewo3", { width: (width() + height()) / 11 }),
+      pos(width() / 1.5, height() - 60), ...parameters,
+      "tree"
+    ]);
+  }
 
   addCloud();
   function addCloud() {
@@ -64,55 +84,67 @@ scene("game", () => {
   rotten_tomato_scale = 70 / (phone ? 1.25 : 1);
 
   // add hamster
-  const player = add([
-    sprite(isWhite + updateHamster(), { width: hamster_width }),
-    pos(hamster_pos, -65),
-    anchor("center"),
-    area({ scale: vec2(0.7, 1) }),
-    body(),
-  ]);
+  let player;
+  addHamster();
+  function addHamster() {
+    player = null;
+    player = add([
+      sprite(isWhite + updateHamster(), { width: hamster_width }),
+      pos(hamster_pos, -65),
+      anchor("center"),
+      area({ scale: vec2(0.7, 1) }),
+      body(),
+      "player",
+    ]);
 
-  if (winter_hat == true) {
-    player.add([
-      sprite("winter_hat", { width: hamster_width / 2 }),
-      scale(vec2(0.9, 0.65)),
-      anchor("center"),
-      pos(0, phone ? - 43.5 : -54),
-    ]);
+    if (winter_hat == true) {
+      player.add([
+        sprite("winter_hat", { width: hamster_width / 2 }),
+        scale(vec2(0.9, 0.65)),
+        anchor("center"),
+        pos(0, phone ? - 43.5 : -54),
+      ]);
+    }
+    if (cap == true) {
+      player.add([
+        sprite("cap", { width: hamster_width / 2 }),
+        scale(vec2(0.9, 0.7)),
+        anchor("center"),
+        pos(0, phone ? - 42 : -52),
+      ]);
+    }
+    if (glasses == true) {
+      player.add([
+        sprite("glasses", { width: hamster_width / 2 }),
+        scale(vec2(0.75, 0.7)),
+        anchor("center"),
+        pos(0, phone ? -30 : -38),
+      ]);
+    }
   }
-  if (cap == true) {
-    player.add([
-      sprite("cap", { width: hamster_width / 2 }),
-      scale(vec2(0.9, 0.7)),
-      anchor("center"),
-      pos(0, phone ? - 42 : -52),
-    ]);
-  }
-  if (glasses == true) {
-    player.add([
-      sprite("glasses", { width: hamster_width / 2 }),
-      scale(vec2(0.75, 0.7)),
-      anchor("center"),
-      pos(0, phone ? -30 : -38),
-    ]);
-  }
+
 
   // floor
-  for (let x = 0; x < width(); x += 60) {
-    add([
-      pos(x, height()),
-      rect(60, 60),
-      color(rgb(20, 170, 0)),
-      anchor("botleft"),
-      area(),
-      body({ isStatic: true }),
-    ]);
-    add([
-      pos(x, height()),
-      rect(60, 43),
-      color(rgb(90, 60, 0)),
-      anchor("botleft"),
-    ]);
+  addFloor();
+  function addFloor() {
+    for (let x = 0; x < width(); x += 60) {
+      add([
+        pos(x, height()),
+        rect(60, 60),
+        color(rgb(20, 170, 0)),
+        anchor("botleft"),
+        area(),
+        body({ isStatic: true }),
+        "floor" + skibidibi,
+      ]);
+      add([
+        pos(x, height()),
+        rect(60, 43),
+        color(rgb(90, 60, 0)),
+        anchor("botleft"),
+        "floor" + (skibidibi + 1),
+      ]);
+    }
   }
 
   function jump() {
@@ -242,7 +274,7 @@ scene("game", () => {
   let foods = ["seed", "apple", "banana", "tomato"];
   foods.forEach(food => {
     eval(`${food}Score = 0`);
-    player.onCollide(food, item => {
+    onCollide(food, "player", item => {
       if (item.scale == undefined) {
         play("pickup");
         eval(`${food}Score++`);
@@ -263,7 +295,7 @@ scene("game", () => {
     });
   });
 
-  player.onCollide("apple", () => {
+  onCollide("apple", "player", () => {
     if (appleScore >= 10 && appleScore % 10 == 0) {
       lives += 1;
       play("bonus", { volume: 0.5 });
@@ -320,8 +352,8 @@ scene("game", () => {
       console.log("fu");
     }
   }
-  player.onCollide("chocolate", bad => BAD(bad));
-  player.onCollide("rotten_tomato", bad => BAD(bad));
+  onCollide("chocolate", "player", bad => BAD(bad));
+  onCollide("rotten_tomato", "player", bad => BAD(bad));
 
   const seedText = add([text(seedScore), pos(65, 24)]);
   add([sprite("seed"), scale(0.08), pos(16, 20)]);
