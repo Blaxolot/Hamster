@@ -2,22 +2,25 @@ let SPEED = 350;
 let GRAVITY = 1250;
 const JUMP_FORCE = 700;
 scene("game", () => {
+  isMenu = false;
+  isShop = false;
   let skibidibi = 1;
-  window.addEventListener('resize', function (event) {
-    isMenu == false && wait(0.5, () => {
+  let phone = window.innerWidth <= 500;
+  window.addEventListener('resize', () => {
+    isShop == false && isMenu == false && wait(0.5, () => {
+      phone = window.innerWidth <= 500;
       debug.paused = true;
       skibidibi += 1;
       addFloor();
-      destroyAll("floor" + (skibidibi - 1)); destroyAll("floor" + (skibidibi - 2));
+      destroyAll("floor" + (skibidibi - 1));
+      destroyAll("floor" + (skibidibi - 2));
       debug.paused = false;
       destroyAll("player");
       addTrees();
       addHamster();
-
     });
   }, true);
 
-  isMenu = false;
   setBackground(0, 120, 180);
   !getSprite("banana") && loadSprite("banana", "images/game/banana.png");
   !getSprite("chocolate") && loadSprite("chocolate", "images/game/chocolate_bar.png");
@@ -35,22 +38,19 @@ scene("game", () => {
   !getSound("bonus") && loadSound("bonus", "sounds/bonus_heart.mp3");
   addTrees();
   function addTrees() {
-    let parameters = [fixed(), anchor("botleft"), z(-999)];
+    let parameters = [fixed(), anchor("botleft"), z(-9),"tree"];
     destroyAll("tree");
     add([
       sprite("drzewo1", { width: (width() + height()) / 10 }),
       pos(width() / 10, height() - 60), ...parameters,
-      "tree"
     ]);
     add([
       sprite("drzewo2", { width: (width() + height()) / 20 }),
       pos(width() / 2.8, height() - 60), ...parameters,
-      "tree"
     ]);
     add([
       sprite("drzewo3", { width: (width() + height()) / 11 }),
       pos(width() / 1.5, height() - 60), ...parameters,
-      "tree"
     ]);
   }
 
@@ -73,56 +73,44 @@ scene("game", () => {
   // set Cursor and define gravity
   setCursor("default");
   setGravity(GRAVITY);
-
-  hamster_pos = phone ? 40 : 100;
-  hamster_width = 105 / (phone ? 1.25 : 1);
-  chocolate_scale = 75 / (phone ? 1.25 : 1);
-  apple_scale = 80 / (phone ? 1.25 : 1);
-  banana_scale = 70 / (phone ? 1.25 : 1);
-  seed_scale = 50 / (phone ? 1.25 : 1);
-  tomato_scale = 70 / (phone ? 1.25 : 1);
-  rotten_tomato_scale = 70 / (phone ? 1.25 : 1);
+  updateVariables();
+  function updateVariables() {
+    hamster_pos = phone ? 40 : 100;
+    hamster_width = 105 / (phone ? 1.25 : 1);
+    chocolate_scale = 75 / (phone ? 1.25 : 1);
+    apple_scale = 80 / (phone ? 1.25 : 1);
+    banana_scale = 70 / (phone ? 1.25 : 1);
+    seed_scale = 50 / (phone ? 1.25 : 1);
+    tomato_scale = 70 / (phone ? 1.25 : 1);
+    rotten_tomato_scale = 70 / (phone ? 1.25 : 1);
+  }
 
   // add hamster
-  let player;
   addHamster();
   function addHamster() {
-    player = null;
+    updateVariables();
+    debug.log(height())
     player = add([
       sprite(isWhite + updateHamster(), { width: hamster_width }),
-      pos(hamster_pos, -65),
+      pos(hamster_pos, height()/2),
       anchor("center"),
       area({ scale: vec2(0.7, 1) }),
       body(),
       "player",
-    ]);
+    ])
 
-    if (winter_hat == true) {
-      player.add([
-        sprite("winter_hat", { width: hamster_width / 2 }),
-        scale(vec2(0.9, 0.65)),
-        anchor("center"),
-        pos(0, phone ? - 43.5 : -54),
-      ]);
-    }
-    if (cap == true) {
-      player.add([
-        sprite("cap", { width: hamster_width / 2 }),
-        scale(vec2(0.9, 0.7)),
-        anchor("center"),
-        pos(0, phone ? - 42 : -52),
-      ]);
-    }
-    if (glasses == true) {
-      player.add([
-        sprite("glasses", { width: hamster_width / 2 }),
-        scale(vec2(0.75, 0.7)),
-        anchor("center"),
-        pos(0, phone ? -30 : -38),
-      ]);
-    }
+    items.forEach(item => {
+      const { Scale, scale2 } = coolList[item];
+      if (eval(item) == true) {
+        player.add([
+          sprite(item, { width: hamster_width / 2 }),
+          scale(vec2(Scale)),
+          anchor("center"),
+          pos(0, -hamster_width / scale2),
+        ]);
+      }
+    });
   }
-
 
   // floor
   addFloor();
@@ -198,8 +186,8 @@ scene("game", () => {
     yes.add([text(polish ? "TAK" : "YES", { size: 35 }), anchor("center"), color(0, 0, 0), pos(0, 2)]);
     no.add([text(polish ? "NIE" : "NO", { size: 35 }), anchor("center"), color(0, 0, 0), pos(0, 2)]);
 
-    yes.onClick(() => { go("menu"), debug.paused = false; });
-    no.onClick(() => { debug.paused = false, destroy(box); });
+    yes.onClick(() => { go("menu"); debug.paused = false; });
+    no.onClick(() => { debug.paused = false; destroy(box); });
     onKeyPress("enter", () => {
       if (selected == "yes") {
         go("menu"), (debug.paused = false);

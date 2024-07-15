@@ -1,7 +1,8 @@
 scene("shop", () => {
   isMenu = false;
-  window.addEventListener('resize', function (event) {
-    isMenu == false && wait(0.5, () => go("shop"));
+  isShop = true;
+  window.addEventListener('resize', () => {
+    isMenu == false && isShop == true && wait(0.5, () => go("shop"));
   }, true);
 
   setCursor("default");
@@ -20,16 +21,16 @@ scene("shop", () => {
     glasses: { key: "#9am3m", value: "Ghy&z@", var: "Glasses" },
   };
   const itemPricing = {
-    cap: { food1: "seeds", food2: "apples", price1: 10, price2: 5, itemScale: 0.25 },
-    shoes: { food1: "seeds", food2: "bananas", price1: 5, price2: 5, itemScale: 0.2 },
-    winter_hat: { food1: "bananas", food2: "apples", price1: 10, price2: 10, itemScale: 0.215 },
-    gloves: { food1: "tomatoes", food2: "apples", price1: 15, price2: 20, itemScale: 0.2 },
-    glasses: { food1: "tomatoes", food2: "bananas", price1: 50, price2: 50, itemScale: 0.33 },
+    cap: { food1: "seeds", food2: "apples", price1: 10, price2: 5, Scale: 0.25 },
+    shoes: { food1: "seeds", food2: "bananas", price1: 5, price2: 5, Scale: 0.2 },
+    winter_hat: { food1: "bananas", food2: "apples", price1: 10, price2: 10, Scale: 0.215 },
+    gloves: { food1: "tomatoes", food2: "apples", price1: 15, price2: 20, Scale: 0.2 },
+    glasses: { food1: "tomatoes", food2: "bananas", price1: 50, price2: 50, Scale: 0.33 },
   };
   // Create boxes
   items.forEach(item => {
     const shop_phone = width() < 450;
-    const { food1, food2, price1, price2, itemScale } = itemPricing[item];
+    const { food1, food2, price1, price2,Scale } = itemPricing[item];
     const numberOfColumns = width() < 660 ? 2 : 3;;
 
     let position = [0, 0];
@@ -65,7 +66,7 @@ scene("shop", () => {
     eval(`${item}_box.add([text(price1), scale(0.9), pos(55, 13)])`);
     eval(`${item}_box.add([sprite("${second_food}"), scale(${second_food}), pos(second_food == "banana" ? 149:105,5)])`);
     eval(`${item}_box.add([text(price2), scale(0.9), pos(150, 13)])`);
-    eval(`${item}_box.add([sprite("${mainItem}"), pos(100, 100), scale(${itemScale}), anchor("center")])`);
+    eval(`${item}_box.add([sprite("${mainItem}"), pos(100, 100), scale(${Scale}), anchor("center")])`);
   });
 
   // create buttons with corresponding text, color and size

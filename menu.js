@@ -1,9 +1,11 @@
-const phone = window.innerWidth <= 500;
+let phone = window.innerWidth <= 500;
 let isWhite = "";
+let isShop = false;
+
 // initialize context
 kaplay();
-window.addEventListener('resize', function (event) {
-  isMenu == true && wait(0.5, () =>go("menu"));
+window.addEventListener('resize', () => {
+  isMenu == true && wait(0.5, () => go("menu"));
 }, true);
 
 // load assets
@@ -115,7 +117,15 @@ function SetLanguage() {
   MenuText = polish ? "Chomik" : "Hamster";
 }
 
+let items = ["winter_hat", "cap", "glasses"];
+const coolList = {
+  winter_hat: { Scale: [0.9, 0.65], scale2: 1.925 },
+  cap: { Scale: [0.9, 0.7], scale2: 2 },
+  glasses: { Scale: [0.75, 0.7], scale2: 2.85 },
+};
+
 scene("menu", () => {
+  let phone = window.innerWidth <= 500;
   isMenu = true;
   Credits = null;
   setCursor("default");
@@ -127,8 +137,8 @@ scene("menu", () => {
   arrows_scale = phone ? 0.16 : 0.2;
   info_x = phone ? 35 : 40;
 
-  AddHamster("");
-  function AddHamster(white) {
+  AddHamster();
+  function AddHamster(white = "") {
     white !== "" ? isWhite = "white_" : isWhite = "";
     if (white !== "" && !getSprite(white + updateHamster())) {
       loadSprite(white + updateHamster(), `images/${white + updateHamster()}.png`);
@@ -139,30 +149,17 @@ scene("menu", () => {
       anchor("center"),
     ]);
 
-    if (winter_hat == true) {
-      menuHamster.add([
-        sprite("winter_hat", { width: hamster_width / 2 }),
-        scale(vec2(0.9, 0.65)),
-        anchor("center"),
-        pos(0, phone ? -130 : -147),
-      ]);
-    }
-    if (cap == true) {
-      menuHamster.add([
-        sprite("cap", { width: hamster_width / 2 }),
-        scale(vec2(0.9, 0.7)),
-        anchor("center"),
-        pos(0, phone ? -124 : -141),
-      ]);
-    }
-    if (glasses == true) {
-      menuHamster.add([
-        sprite("glasses", { width: hamster_width / 2 }),
-        scale(vec2(0.75, 0.7)),
-        anchor("center"),
-        pos(0, phone ? -90 : -100),
-      ]);
-    }
+    items.forEach(item => {
+      const { Scale, scale2 } = coolList[item];
+      if (eval(item) == true) {
+        menuHamster.add([
+          sprite(item, { width: hamster_width / 2 }),
+          scale(vec2(Scale)),
+          anchor("center"),
+          pos(0, -hamster_width / scale2),
+        ]);
+      }
+    });
   }
 
   add([
@@ -175,7 +172,7 @@ scene("menu", () => {
     anchor("center"),
   ]);
 
-  pl = add([
+  const pl = add([
     rect(40, 40, { radius: 5 }),
     pos(width() - 75, 30),
     color(25, 25, 25),
@@ -187,7 +184,7 @@ scene("menu", () => {
     anchor("center"),
     opacity(polish ? 1 : 0.3),
   ]);
-  usa = add([
+  const usa = add([
     rect(40, 40, { radius: 5 }),
     pos(width() - 30, 30),
     color(25, 25, 25),
@@ -241,7 +238,11 @@ scene("menu", () => {
     anchor("center"),
     outline(5),
   ]);
-  play_button.add([text(polish ? "Graj" : "Play"), anchor("center"), color(0, 0, 0)]);
+  play_button.add([
+    text(polish ? "Graj" : "Play"),
+    anchor("center"),
+    color(0, 0, 0),
+  ]);
   const hamsters_button = add([
     rect(180, 40, { radius: 8 }),
     color(70, 70, 70),
@@ -253,7 +254,8 @@ scene("menu", () => {
   hamsters_button.add([
     text(polish ? "Chomiki" : "Hamsters", { size: 30 }),
     anchor("center"),
-    color(0, 0, 0)]);
+    color(0, 0, 0)
+  ]);
   const shop_button = add([
     rect(120, 40, { radius: 8 }),
     color(70, 70, 70),
@@ -294,39 +296,38 @@ scene("menu", () => {
         "right_arrow",
       ]);
     }
-
-    MyHover(left_arrow, 0.21, 0.2);
+    MyHover(left_arrow, arrows_scale + 0.01, arrows_scale);
   }
   function handleArrowClick(white) {
     AddHamster(white);
-    const primary = white !== "" ? right_arrow : left_arrow;
-    const secondary = white !== "" ? left_arrow : right_arrow;
+    const primary = white !== undefined ? right_arrow : left_arrow;
+    const secondary = white !== undefined ? left_arrow : right_arrow;
     primary.opacity = 1;
     secondary.opacity = 0.25;
-    MyHover(primary, 0.21, 0.2);
+    MyHover(primary, arrows_scale + 0.01, arrows_scale);
     secondary.onHoverUpdate(() => {
       setCursor("default");
-      secondary.scale = vec2(0.2);
+      secondary.scale = vec2(arrows_scale);
     });
-    primary == right_arrow && MyHover(right_arrow, -0.21, -0.2);
+    primary == right_arrow && MyHover(right_arrow, -arrows_scale - 0.01, -arrows_scale);
     secondary == right_arrow && secondary.onHoverUpdate(() => {
       setCursor("default");
-      secondary.scale = vec2(-0.2);
+      secondary.scale = vec2(-arrows_scale);
     });
   }
   // Bind the onClickArrow function to the arrow keys
   onKeyPress("left", () => left_arrow && handleArrowClick("white_"));
-  onKeyPress("right", () => right_arrow && handleArrowClick(""));
+  onKeyPress("right", () => right_arrow && handleArrowClick());
   onClick("left_arrow", () => handleArrowClick("white_"));
-  onClick("right_arrow", () => handleArrowClick(""));
+  onClick("right_arrow", () => handleArrowClick());
   // Bind onClick and onKeyPress
   play_button.onClick(() => go("game"));
   onKeyPress("space", () => go("game"));
   hamsters_button.onClick(() => hamsters());
   // Load script only if it isn`t loaded
   function isScriptLoaded(src) {
-    return Array.from(document.getElementsByTagName("script")).some(script =>
-      script.src.includes(src)
+    return Array.from(document.getElementsByTagName("script")).some(
+      script => script.src.includes(src)
     );
   }
   shop_button.onClick(() => {

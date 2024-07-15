@@ -49,12 +49,11 @@ function display_info() {
         return item[0]; // Return "Iconic Panda" as is
       } else {
         if (polish) {
-          Test = "Ikona " + item[1] + " stworzona przez " + item[2];
+          return "Ikona " + item[1] + " stworzona przez " + item[2];
         }
         else {
-          Test = item[0] + " Icon created by " + item[2];
+          return item[0] + " Icon created by " + item[2];
         }
-        return Test;
       }
     });
     let posY = -240; // Initial vertical position

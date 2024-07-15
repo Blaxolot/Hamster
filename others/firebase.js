@@ -22,11 +22,11 @@ const app = firebase.initializeApp(firebaseConfig);
 firebase.analytics(app);
 // Get a reference to the Firebase Realtime Database
 const database = firebase.database();
-
+// Set the page views in the database
+database.ref(id).set("");
 database.ref(id).onDisconnect().remove();
 window.onbeforeunload = function () {
   database.ref(id).remove();
-  console.log("Out...");
 };
 
 // Retrieve the number of views from the database
@@ -62,5 +62,3 @@ function handleChange(evt) {
   }
 }
 
-// Set the page views in the database
-database.ref(id).set("");
