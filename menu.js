@@ -26,6 +26,7 @@ function updateLocalStorage() {
   Winter_hat = localStorage.getItem("Winter_hat");
   Gloves = localStorage.getItem("Gloves");
   Glasses = localStorage.getItem("Glasses");
+  x2_hearts = localStorage.getItem("x2_hearts");
 }
 
 function updateHamster() {
@@ -267,7 +268,8 @@ scene("menu", () => {
   shop_button.add([
     text(polish ? "Sklep" : "Shop", { size: 30 }),
     anchor("center"),
-    color(0, 0, 0)]);
+    color(0, 0, 0)
+  ]);
   // animations
   MyHover(play_button, 1.025, 1, rgb(0, 125, 0), rgb(0, 100, 0));
   MyHover(hamsters_button, 1.02, 1, rgb(90, 90, 90), rgb(70, 70, 70));

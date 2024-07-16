@@ -1,6 +1,5 @@
 scene("shop", () => {
-  isMenu = false;
-  isShop = true;
+  isMenu = false; isShop = true;
   window.addEventListener('resize', () => {
     isMenu == false && isShop == true && wait(0.5, () => go("shop"));
   }, true);
@@ -11,14 +10,16 @@ scene("shop", () => {
   !getSprite("winter_hat") && loadSprite("winter_hat", "images/other/winter_hat.png");
   !getSprite("hamster_gloves") && loadSprite("hamster_gloves", "images/hamster_gloves.png");
   !getSprite("glasses") && loadSprite("glasses", "images/other/glasses.png");
+  !getSprite("x2_hearts") && loadSprite("x2_hearts", "images/game/heart.png");
 
-  const items = ["cap", "winter_hat", "glasses", "shoes", "gloves"];
+  const items = ["cap", "winter_hat", "glasses", "shoes", "gloves", "x2_hearts"];
   const itemConditions = {
     cap: { key: "93rfDw", value: "#%1d8*f@4p", var: "Wearing" },
     shoes: { key: "Sk@3o&", value: "%01ns#9p", var: "Shoes" },
     winter_hat: { key: "G8*m&a", value: "W%*hjk", var: "Winter_hat" },
     gloves: { key: "O&m*aC", value: "Io&*!c", var: "Gloves" },
     glasses: { key: "#9am3m", value: "Ghy&z@", var: "Glasses" },
+    x2_hearts: { key: "X%2&*x", value: "^2@x&2", var: "x2_hearts" },
   };
   const itemPricing = {
     cap: { food1: "seeds", food2: "apples", price1: 10, price2: 5, Scale: 0.25 },
@@ -26,11 +27,12 @@ scene("shop", () => {
     winter_hat: { food1: "bananas", food2: "apples", price1: 10, price2: 10, Scale: 0.215 },
     gloves: { food1: "tomatoes", food2: "apples", price1: 15, price2: 20, Scale: 0.2 },
     glasses: { food1: "tomatoes", food2: "bananas", price1: 50, price2: 50, Scale: 0.33 },
+    x2_hearts: { food1: "apples", price1: 100, food2: "apples", price2: 0, Scale: 0.18 },
   };
   // Create boxes
   items.forEach(item => {
     const shop_phone = width() < 450;
-    const { food1, food2, price1, price2,Scale } = itemPricing[item];
+    const { food1, food2, price1, price2, Scale } = itemPricing[item];
     const numberOfColumns = width() < 660 ? 2 : 3;;
 
     let position = [0, 0];
@@ -51,22 +53,28 @@ scene("shop", () => {
       scale(shop_phone ? 0.8:1)
     ])`);
 
-    let first_food = (food1 === "seeds" || food1 === "apples" || food1 == "bananas")
-      ? food1.slice(0, -1) : food1.slice(0, -2);
+    let first_food = getSingularFood(food1);
+    let second_food = getSingularFood(food2);
+    function getSingularFood(food) {
+      if (["seeds", "apples", "bananas"].includes(food)) {
+        return food.slice(0, -1);
+      } else if (food === "tomatoes") {
+        return "tomato";
+      }
+    }
 
-    let second_food = (food2 === "seeds" || food2 === "apples" || food2 == "bananas")
-      ? food2.slice(0, -1) : food2.slice(0, -2);
-
-    let mainItem = (item == "shoes" || item == "gloves") ? "hamster_" + item : item;
+    let mainItem = (["shoes", "gloves"].includes(item)) ? "hamster_" + item : item;
 
     apple = 0.085, banana = [-0.085, 0.085];
     seed = 0.08, tomato = 0.08;
-
-    eval(`${item}_box.add([sprite("${first_food}"), scale(${first_food}), pos(first_food == "banana" ? 54:10,5)])`);
-    eval(`${item}_box.add([text(price1), scale(0.9), pos(55, 13)])`);
-    eval(`${item}_box.add([sprite("${second_food}"), scale(${second_food}), pos(second_food == "banana" ? 149:105,5)])`);
-    eval(`${item}_box.add([text(price2), scale(0.9), pos(150, 13)])`);
+    let coolPos = first_food == "banana" ? 54 : item == "x2_hearts" ? 46 : 10;
+    eval(`${item}_box.add([sprite("${first_food}"), scale(${first_food}), pos(${coolPos},5)])`);
+    eval(`${item}_box.add([text(price1), scale(0.9), pos(item == "x2_hearts" ? 90:55, 13)])`);
+    item !== "x2_hearts" && eval(`${item}_box.add([sprite("${second_food}"), scale(${second_food}), pos(second_food == "banana" ? 149:105,5)])`);
+    eval(`${item}_box.add([text(price2||""), scale(0.9), pos(150, 13)])`);
     eval(`${item}_box.add([sprite("${mainItem}"), pos(100, 100), scale(${Scale}), anchor("center")])`);
+    item == "x2_hearts" && x2_hearts_box.add([text("2x"), scale(0.9), color(0, 0, 0), pos(100, 100), anchor("center")]);
+
   });
 
   // create buttons with corresponding text, color and size
@@ -140,8 +148,7 @@ scene("shop", () => {
       (Ubierz = 0.7), (Ubrane = 0.6);
       eval(`buy_${item}_text.scale = ${Wearing_or_Wear}`);
       localStorage.setItem(
-        item == "cap" ? "Wearing" : item == "shoes" ? "Shoes" : item == "winter_hat" ? "Winter_hat" :
-          item == "gloves" ? "Gloves" : "Glasses",
+        item == "cap" ? "Wearing" : item[0].toUpperCase() + item.slice(1),
         Wearing_or_Wear == "Wearing" ? "True" : Wearing_or_Wear == "Ubrane" ? "True" : "False"
       );
     }

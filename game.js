@@ -38,7 +38,7 @@ scene("game", () => {
   !getSound("bonus") && loadSound("bonus", "sounds/bonus_heart.mp3");
   addTrees();
   function addTrees() {
-    let parameters = [fixed(), anchor("botleft"), z(-9),"tree"];
+    let parameters = [fixed(), anchor("botleft"), z(-9), "tree"];
     destroyAll("tree");
     add([
       sprite("drzewo1", { width: (width() + height()) / 10 }),
@@ -89,15 +89,14 @@ scene("game", () => {
   addHamster();
   function addHamster() {
     updateVariables();
-    debug.log(height())
     player = add([
       sprite(isWhite + updateHamster(), { width: hamster_width }),
-      pos(hamster_pos, height()/2),
+      pos(hamster_pos, -65),
       anchor("center"),
       area({ scale: vec2(0.7, 1) }),
       body(),
       "player",
-    ])
+    ]);
 
     items.forEach(item => {
       const { Scale, scale2 } = coolList[item];
@@ -295,14 +294,22 @@ scene("game", () => {
 
       for (let i = 1; i <= 1000; i++) {
         if (lives == i) {
-          const heartWidth = 50; // The width of each heart slot
-          // Calculate the number of hearts that can fit in one line
-          const heartsPerLine = Math.floor(width() / heartWidth);
-          // Calculate x and y position based on the current heart
-          const xPos = width() - 5 - ((i - 1) % heartsPerLine) * heartWidth - heartWidth;
-          const yPos = Math.floor((i - 1) / heartsPerLine) * heartWidth + 15;
+          addBonusHearts();
+          function addBonusHearts() {
+            const heartWidth = 50; // The width of each heart slot
+            // Calculate the number of hearts that can fit in one line
+            const heartsPerLine = Math.floor(width() / heartWidth);
+            // Calculate x and y position based on the current heart
+            const xPos = width() - 5 - ((i - 1) % heartsPerLine) * heartWidth - heartWidth;
+            const yPos = Math.floor((i - 1) / heartsPerLine) * heartWidth + 15;
 
-          eval(`Live${i} = add([pos(xPos, yPos), sprite("heart"), scale(0.08)])`);
+            eval(`Live${i} = add([pos(xPos, yPos), sprite("heart"), scale(0.08)])`);
+          }
+          if (localStorage.getItem("X2_hearts") == "True") {
+            i += 1;
+            lives += 1;
+            addBonusHearts();
+          }
         }
       }
     }
