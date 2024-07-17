@@ -1,8 +1,8 @@
 scene("shop", () => {
   isMenu = false; isShop = true;
-  window.addEventListener('resize', () => {
-    isMenu == false && isShop == true && wait(0.5, () => go("shop"));
-  }, true);
+  window.addEventListener("resize", debounce(function (e) {
+    isMenu == false && isShop == true && go("shop");
+  }));
 
   setCursor("default");
   !getSprite("cap") && loadSprite("cap", "images/other/cap.png");

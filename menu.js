@@ -4,9 +4,16 @@ let isShop = false;
 
 // initialize context
 kaplay();
-window.addEventListener('resize', () => {
-  isMenu == true && wait(0.5, () => go("menu"));
-}, true);
+function debounce(func) {
+  var timer;
+  return function (event) {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(func, 100, event);
+  };
+}
+window.addEventListener("resize", debounce(function (e) {
+  isMenu == true && go("menu");
+}));
 
 // load assets
 loadSprite("seed", "images/game/seed.png");

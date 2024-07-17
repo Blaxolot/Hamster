@@ -6,7 +6,7 @@ scene("game", () => {
   isShop = false;
   let skibidibi = 1;
   let phone = window.innerWidth <= 500;
-  window.addEventListener('resize', () => {
+  window.addEventListener("resize", debounce(function (e) {
     isShop == false && isMenu == false && wait(0.5, () => {
       phone = window.innerWidth <= 500;
       debug.paused = true;
@@ -19,7 +19,8 @@ scene("game", () => {
       addTrees();
       addHamster();
     });
-  }, true);
+  }), true);
+
 
   setBackground(0, 120, 180);
   !getSprite("banana") && loadSprite("banana", "images/game/banana.png");
