@@ -138,7 +138,7 @@ scene("game", () => {
   function jump() {
     if (player.isGrounded()) {
       player.jump(JUMP_FORCE);
-      play("jump");
+      play("jump", { volume: 2 });
     }
   }
 

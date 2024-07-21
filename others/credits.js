@@ -25,6 +25,13 @@ function display_info() {
       color(rgb(21, 209, 198)),
       pos(150, -290)
     ]);
+    my_github = Credits.add([
+      text("My github :)", { size: 25 }),
+      anchor("center"),
+      area(),
+      color(rgb(150, 150, 150)),
+      pos(220, 305),
+    ]);
 
     const list = [
       ["Hamster", "Chomika", "Freepik"],
@@ -59,7 +66,7 @@ function display_info() {
     let posY = -240; // Initial vertical position
 
     icons_Credits.forEach(Text => {
-      const gap = Text == "Iconic Panda" || (Text.includes(polish ? "czekolady" : "Chocolate")) ? 30 : 40;
+      const gap = Text == "Iconic Panda" || (Text.includes(polish ? "czekolady" : "Chocolate")) ? 25 : 35;
       Credits.add([text(Text), pos(0, posY), ...parameters]); // Add text
       posY += gap; // Increment posY by 30 or 40 based on the text
     });
@@ -74,7 +81,10 @@ function display_info() {
   }
   MyHover(x, 1, 1, rgb(240, 240, 240), rgb(150, 150, 150));
   MyHover(flaticon, 1, 1, rgb(16, 156, 147), rgb(21, 209, 198));
+  MyHover(my_github, 1, 1, rgb(220,220,220), rgb(150,150,150));
+
   flaticon.onClick(() => window.open("https://www.flaticon.com/"));
+  my_github.onClick(() => window.open("https://github.com/Blaxolot"));
 
   x.onClick(() => {
     go("menu");
