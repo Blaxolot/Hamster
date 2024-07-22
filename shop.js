@@ -144,9 +144,9 @@ scene("shop", () => {
       Wearing = rgb(0, 160, 0), Ubrane = rgb(0, 160, 0);
       eval(`buy_${item}.color = ${Wearing_or_Wear}`);
       eval(`buy_${item}_text.text = ${item}_text`);
-      (Wear = 0.7), (Wearing = 0.6);
-      (Ubierz = 0.7), (Ubrane = 0.6);
-      eval(`buy_${item}_text.scale = ${Wearing_or_Wear}`);
+      Wear = 0.7, Wearing = 0.6;
+      Ubierz = 0.7, Ubrane = 0.6;
+      eval(`buy_${item}_text.scale = vec2(${Wearing_or_Wear})`);
       localStorage.setItem(
         item == "cap" ? "Wearing" : item[0].toUpperCase() + item.slice(1),
         Wearing_or_Wear == "Wearing" ? "True" : Wearing_or_Wear == "Ubrane" ? "True" : "False"
