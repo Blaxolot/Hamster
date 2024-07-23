@@ -85,7 +85,7 @@ scene("shop", () => {
         const status = eval(condition.var) == "True";
         eval(`${item}_text = status ? (polish ? "Ubrane" : "Wearing") : (polish ? "Ubierz" : "Wear")`);
         eval(`buy_${item}_button_color = status ? rgb(0, 160, 0) : rgb(200, 0, 0)`);
-        eval(`buy_${item}_text_scale = status ? 0.6 : 0.7`);
+        eval(`buy_${item}_text_scale = vec2(status ? 0.6 : 0.7`));
       } else {
         const { food1, food2, price1, price2 } = itemPricing[item];
         const con = eval(food1) < price1 || eval(food2) < price2;
