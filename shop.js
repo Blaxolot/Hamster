@@ -85,7 +85,7 @@ scene("shop", () => {
         const status = eval(condition.var) == "True";
         eval(`${item}_text = status ? (polish ? "Ubrane" : "Wearing") : (polish ? "Ubierz" : "Wear")`);
         eval(`buy_${item}_button_color = status ? rgb(0, 160, 0) : rgb(200, 0, 0)`);
-        eval(`buy_${item}_text_scale = vec2(status ? 0.6 : 0.7`));
+        eval(`buy_${item}_text_scale = status ? 0.6 : 0.7`);
       } else {
         const { food1, food2, price1, price2 } = itemPricing[item];
         const con = eval(food1) < price1 || eval(food2) < price2;
@@ -129,13 +129,13 @@ scene("shop", () => {
       eval(`${otherItem}_text = polish ? "Ubierz" : "Wear"`);
       eval(`buy_${otherItem}.color = rgb(200, 0, 0)`);
       eval(`buy_${otherItem}_text.text = ${otherItem}_text`);
-      eval(`buy_${otherItem}_text.scale = 0.7`);
+      eval(`buy_${otherItem}_text.scale = vec2(0.7`));
       localStorage.setItem(otherItem == "cap" ? "Wearing" : "Winter_hat", "False");
 
       eval(`${item}_text = polish ? "Ubrane" : "Wearing"`);
       eval(`buy_${item}.color = rgb(0, 160, 0)`);
       eval(`buy_${item}_text.text = ${item}_text`);
-      eval(`buy_${item}_text.scale = 0.6`);
+      eval(`buy_${item}_text.scale = vec2(0.6)`);
       localStorage.setItem(item == "cap" ? "Wearing" : "Winter_hat", "True");
     }
     else {
