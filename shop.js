@@ -129,7 +129,7 @@ scene("shop", () => {
       eval(`${otherItem}_text = polish ? "Ubierz" : "Wear"`);
       eval(`buy_${otherItem}.color = rgb(200, 0, 0)`);
       eval(`buy_${otherItem}_text.text = ${otherItem}_text`);
-      eval(`buy_${otherItem}_text.scale = vec2(0.7`));
+      eval(`buy_${otherItem}_text.scale = vec2(0.7)`);
       localStorage.setItem(otherItem == "cap" ? "Wearing" : "Winter_hat", "False");
 
       eval(`${item}_text = polish ? "Ubrane" : "Wearing"`);
