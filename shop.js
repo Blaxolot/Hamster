@@ -19,7 +19,7 @@ scene("shop", () => {
     winter_hat: { key: "G8*m&a", value: "W%*hjk", var: "Winter_hat" },
     gloves: { key: "O&m*aC", value: "Io&*!c", var: "Gloves" },
     glasses: { key: "#9am3m", value: "Ghy&z@", var: "Glasses" },
-    x2_hearts: { key: "X%2&*x", value: "^2@x&2", var: "x2_hearts" },
+    x2_hearts: { key: "X%2&*x", value: "^2@x&2", var: "X2_hearts" },
   };
   const itemPricing = {
     cap: { food1: "seeds", food2: "apples", price1: 10, price2: 5, Scale: 0.25 },

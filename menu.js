@@ -33,7 +33,7 @@ function updateLocalStorage() {
   Winter_hat = localStorage.getItem("Winter_hat");
   Gloves = localStorage.getItem("Gloves");
   Glasses = localStorage.getItem("Glasses");
-  x2_hearts = localStorage.getItem("x2_hearts");
+  X2_hearts = localStorage.getItem("X2_hearts");
 }
 
 function updateHamster() {
