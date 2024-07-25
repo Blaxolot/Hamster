@@ -3,7 +3,10 @@ let isWhite = "";
 let isShop = false;
 
 // initialize context
-kaplay();
+kaboom({
+  canvas: document.querySelector("#mycanvas"),
+  crisp:false
+});
 function debounce(func) {
   var timer;
   return function (event) {

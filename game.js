@@ -143,8 +143,14 @@ scene("game", () => {
   }
 
   // handle jumping
-  onKeyPress(["space", "up", "w"], jump);
-  onKeyDown(["space", "up", "w"], jump);
+  onKeyPress("space", jump);
+  onKeyPress("up", jump);
+  onKeyPress("w", jump);
+
+  onKeyDown("space", jump);
+  onKeyDown("up", jump);
+  onKeyDown("w", jump);
+
   onClick(jump);
   onMouseDown(jump);
   onMouseRelease(jump);
@@ -215,7 +221,7 @@ scene("game", () => {
     setGravity(GRAVITY);
   });
 
-  let food = ["chocolate", "seed", "apple", "banana", "tomato", "rotten_tomato"];
+  let food = ["chocolate", "chocolate", "seed", "apple", "banana", "tomato", "rotten_tomato"];
   let distance;
   function spawnFood() {
     let randomFood = choose(food);
