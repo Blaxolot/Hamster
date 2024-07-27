@@ -5,7 +5,6 @@ let isShop = false;
 // initialize context
 kaboom({
   canvas: document.querySelector("#mycanvas"),
-  crisp:false
 });
 function debounce(func) {
   var timer;
