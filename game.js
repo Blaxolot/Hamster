@@ -134,26 +134,54 @@ scene("game", () => {
       ]);
     }
   }
-
-  function jump() {
+  let lastJumpFunction = shortJump;
+  function shortJump() {
     if (player.isGrounded()) {
-      player.jump(JUMP_FORCE);
+      player.jump(600);
       play("jump", { volume: 2 });
+      lastJumpFunction = shortJump;
+    }
+  }
+  function longJump() {
+    if (player.isGrounded()) {
+      player.jump(750);
+      play("jump", { volume: 2 });
+      lastJumpFunction = longJump;
     }
   }
 
   // handle jumping
-  onKeyPress("space", jump);
-  onKeyPress("up", jump);
-  onKeyPress("w", jump);
+  onKeyPress("space", shortJump);
+  onKeyPress("up", shortJump);
+  onKeyPress("w", shortJump);
 
-  onKeyDown("space", jump);
-  onKeyDown("up", jump);
-  onKeyDown("w", jump);
+  onKeyDown("space", shortJump);
+  onKeyDown("up", shortJump);
+  onKeyDown("w", shortJump);
 
-  onClick(jump);
-  onMouseDown(jump);
-  onMouseRelease(jump);
+  let pressTimer;
+  function clearPressTimer() {
+    clearTimeout(pressTimer);
+    shortJump();
+    return false;
+  }
+
+  function setPressTimer() {
+    pressTimer = window.setTimeout(function () {
+      longJump();
+      pressTimer = window.setTimeout(function repeatJump() {
+        if (lastJumpFunction) lastJumpFunction();
+        pressTimer = window.setTimeout(repeatJump, 200);
+      }, 200);
+    }, 200);
+    return false;
+  }
+  // desktop
+  document.addEventListener('mouseup', clearPressTimer);
+  document.addEventListener('mousedown', setPressTimer);
+  // mobile phone
+  document.addEventListener('touchstart', setPressTimer);
+  document.addEventListener('touchend', clearPressTimer);
 
   onKeyPress("escape", () => {
     let box = add([
@@ -248,7 +276,7 @@ scene("game", () => {
       }
     };
 
-    food_pos = randomFood == "chocolate" ? 65 : randi(65, 300);
+    food_pos = randomFood == "chocolate" ? 65 : randi(65, 350);
     add([
       sprite(randomFood, { width: window[randomFood + "_scale"] }),
       pos(width(), height() - food_pos),
