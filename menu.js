@@ -119,12 +119,11 @@ function getFirstBrowserLanguage() {
   return null;
 };
 let polish;
-let MenuText;
+let MenuText = "Blue Hamster";
 SetLanguage();
 function SetLanguage() {
   let language = localStorage.getItem("Language");
   polish = !language && getFirstBrowserLanguage().includes("pl") || language === "polish";
-  MenuText = polish ? "Chomik" : "Hamster";
 }
 
 let items = ["winter_hat", "cap", "glasses"];
@@ -142,7 +141,7 @@ scene("menu", () => {
   setBackground(50, 50, 50);
   updateLocalStorage();
   hamster_width = phone ? 250 : 285;
-  Hamster_text_size = phone ? 0.01 : 100;
+  Hamster_text_size = phone ? 0.01 : 80;
   arrows = phone ? 130 : 200;
   arrows_scale = phone ? 0.16 : 0.2;
   info_x = phone ? 35 : 40;
