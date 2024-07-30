@@ -185,7 +185,7 @@ scene("game", () => {
     document.addEventListener('touchstart', setPressTimer);
     document.addEventListener('touchend', clearPressTimer);
   }
-  else if (Mystery == "True") {
+  else if (Mystery !== "False") {
     function Jumping() {
       player.doubleJump(650);
     }
