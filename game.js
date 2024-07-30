@@ -151,7 +151,7 @@ scene("game", () => {
     }
   }
   // handle jumping
-  if (Mystery == "False") {
+  if (Mystery !== "True") {
     onKeyPress("space", shortJump);
     onKeyPress("up", shortJump);
     onKeyPress("w", shortJump);
@@ -185,7 +185,7 @@ scene("game", () => {
     document.addEventListener('touchstart', setPressTimer);
     document.addEventListener('touchend', clearPressTimer);
   }
-  else if (Mystery !== "False") {
+  else if (Mystery == "True") {
     function Jumping() {
       player.doubleJump(650);
     }
