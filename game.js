@@ -96,6 +96,7 @@ scene("game", () => {
       anchor("center"),
       area({ scale: vec2(0.7, 1) }),
       body(),
+      doubleJump(),
       "player",
     ]);
 
@@ -149,40 +150,55 @@ scene("game", () => {
       lastJumpFunction = longJump;
     }
   }
-
   // handle jumping
-  onKeyPress("space", shortJump);
-  onKeyPress("up", shortJump);
-  onKeyPress("w", shortJump);
+  if (Mystery == "False") {
+    onKeyPress("space", shortJump);
+    onKeyPress("up", shortJump);
+    onKeyPress("w", shortJump);
 
-  onKeyDown("space", shortJump);
-  onKeyDown("up", shortJump);
-  onKeyDown("w", shortJump);
+    onKeyDown("space", shortJump);
+    onKeyDown("up", shortJump);
+    onKeyDown("w", shortJump);
 
-  let pressTimer;
-  function clearPressTimer() {
-    clearTimeout(pressTimer);
-    shortJump();
-    return false;
-  }
 
-  function setPressTimer() {
-    pressTimer = window.setTimeout(function () {
-      longJump();
-      pressTimer = window.setTimeout(function repeatJump() {
-        if (lastJumpFunction) lastJumpFunction();
-        pressTimer = window.setTimeout(repeatJump, 200);
+    let pressTimer;
+    function clearPressTimer() {
+      clearTimeout(pressTimer);
+      shortJump();
+      return false;
+    }
+
+    function setPressTimer() {
+      pressTimer = window.setTimeout(function () {
+        longJump();
+        pressTimer = window.setTimeout(function repeatJump() {
+          if (lastJumpFunction) lastJumpFunction();
+          pressTimer = window.setTimeout(repeatJump, 200);
+        }, 200);
       }, 200);
-    }, 200);
-    return false;
+      return false;
+    }
+    // desktop
+    document.addEventListener('mouseup', clearPressTimer);
+    document.addEventListener('mousedown', setPressTimer);
+    // mobile phone
+    document.addEventListener('touchstart', setPressTimer);
+    document.addEventListener('touchend', clearPressTimer);
   }
-  // desktop
-  document.addEventListener('mouseup', clearPressTimer);
-  document.addEventListener('mousedown', setPressTimer);
-  // mobile phone
-  document.addEventListener('touchstart', setPressTimer);
-  document.addEventListener('touchend', clearPressTimer);
-
+  else if (Mystery == "True") {
+    function Jumping() {
+      player.doubleJump(650);
+    }
+    onMousePress(() => Jumping());
+    
+    onKeyPress("space", () => Jumping());
+    onKeyPress("up", () => Jumping());
+    onKeyPress("w", () => Jumping());
+  }
+  
+  player.onDoubleJump(() => {
+    play("jump", { volume: 2 });
+  });
   onKeyPress("escape", () => {
     let box = add([
       rect(600, 300, { radius: 25 }),

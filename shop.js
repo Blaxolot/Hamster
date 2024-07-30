@@ -11,8 +11,9 @@ scene("shop", () => {
   !getSprite("hamster_gloves") && loadSprite("hamster_gloves", "images/hamster_gloves.png");
   !getSprite("glasses") && loadSprite("glasses", "images/other/glasses.png");
   !getSprite("x2_hearts") && loadSprite("x2_hearts", "images/game/heart.png");
+  !getSprite("mystery") && loadSprite("mystery", "images/other/question-mark.png");
 
-  const items = ["cap", "winter_hat", "glasses", "shoes", "gloves", "x2_hearts"];
+  const items = ["cap", "winter_hat", "glasses", "shoes", "gloves", "x2_hearts", "mystery"];
   const itemConditions = {
     cap: { key: "93rfDw", value: "#%1d8*f@4p", var: "Wearing" },
     shoes: { key: "Sk@3o&", value: "%01ns#9p", var: "Shoes" },
@@ -20,6 +21,7 @@ scene("shop", () => {
     gloves: { key: "O&m*aC", value: "Io&*!c", var: "Gloves" },
     glasses: { key: "#9am3m", value: "Ghy&z@", var: "Glasses" },
     x2_hearts: { key: "X%2&*x", value: "^2@x&2", var: "X2_hearts" },
+    mystery: { key: "?*$?r2?", value: "$q?q&?a??", var: "Mystery" },
   };
   const itemPricing = {
     cap: { food1: "seeds", food2: "apples", price1: 10, price2: 5, Scale: 0.25 },
@@ -27,55 +29,75 @@ scene("shop", () => {
     winter_hat: { food1: "bananas", food2: "apples", price1: 10, price2: 10, Scale: 0.215 },
     gloves: { food1: "tomatoes", food2: "apples", price1: 15, price2: 20, Scale: 0.2 },
     glasses: { food1: "tomatoes", food2: "bananas", price1: 50, price2: 50, Scale: 0.33 },
-    x2_hearts: { food1: "apples", price1: 100, food2: "apples", price2: 0, Scale: 0.18 },
+    x2_hearts: { food1: "apples", price1: 100, Scale: 0.18 },
+    mystery: { food1: "seeds", price1: 250, Scale: 0.37 },
   };
   // Create boxes
-  items.forEach(item => {
-    const shop_phone = width() < 450;
-    const { food1, food2, price1, price2, Scale } = itemPricing[item];
-    const numberOfColumns = width() < 660 ? 2 : 3;;
+  createBoxes();
+  function createBoxes() {
+    items.forEach(item => {
+      const shop_phone = width() < 450;
+      const { food1, food2, price1, price2, Scale } = itemPricing[item];
+      const numberOfColumns = width() < 660 ? 2 : 4;
 
-    let position = [0, 0];
-    const itemIndex = items.indexOf(item);
-    if (itemIndex !== -1) {
-      const row = Math.floor(itemIndex / numberOfColumns);
-      const col = itemIndex % numberOfColumns;
-      position = [
-        (shop_phone ? 5 : 20) + col * (shop_phone ? 175 : 220),
-        20 + row * (shop_phone ? 175 : 220),
-      ];
-    }
+      let position = [0, 0];
+      const itemIndex = items.indexOf(item);
+      if (itemIndex !== -1) {
+        const row = Math.floor(itemIndex / numberOfColumns);
+        const col = itemIndex % numberOfColumns;
+        position = [
+          (shop_phone ? 5 : 20) + col * (shop_phone ? 175 : 220),
+          (shop_phone ? 5 : 20) + row * (shop_phone ? 175 : 220),
+        ];
+      }
 
-    eval(`${item}_box = add([
+      eval(`${item}_box = add([
       rect(200, 200, { radius: 15 }),
       pos(position),
       color(100, 100, 100),
       scale(shop_phone ? 0.8:1)
     ])`);
-
-    let first_food = getSingularFood(food1);
-    let second_food = getSingularFood(food2);
-    function getSingularFood(food) {
-      if (["seeds", "apples", "bananas"].includes(food)) {
-        return food.slice(0, -1);
-      } else if (food === "tomatoes") {
-        return "tomato";
+      const isOneFood = !food2;
+      const first_food = getSingularFood(food1);
+      const second_food = getSingularFood(food2);
+      function getSingularFood(food) {
+        if (["seeds", "apples", "bananas"].includes(food)) {
+          return food.slice(0, -1);
+        } else if (food === "tomatoes") {
+          return "tomato";
+        }
       }
-    }
 
-    let mainItem = (["shoes", "gloves"].includes(item)) ? "hamster_" + item : item;
+      let mainItem = (["shoes", "gloves"].includes(item)) ? "hamster_" + item : item;
 
-    apple = 0.085, banana = [-0.085, 0.085];
-    seed = 0.08, tomato = 0.08;
-    let coolPos = first_food == "banana" ? 54 : item == "x2_hearts" ? 46 : 10;
-    eval(`${item}_box.add([sprite("${first_food}"), scale(${first_food}), pos(${coolPos},5)])`);
-    eval(`${item}_box.add([text(price1), scale(0.9), pos(item == "x2_hearts" ? 90:55, 13)])`);
-    item !== "x2_hearts" && eval(`${item}_box.add([sprite("${second_food}"), scale(${second_food}), pos(second_food == "banana" ? 149:105,5)])`);
-    eval(`${item}_box.add([text(price2||""), scale(0.9), pos(150, 13)])`);
-    eval(`${item}_box.add([sprite("${mainItem}"), pos(100, 100), scale(${Scale}), anchor("center")])`);
-    item == "x2_hearts" && x2_hearts_box.add([text("2x"), scale(0.9), color(0, 0, 0), pos(100, 100), anchor("center")]);
+      apple = 0.085, banana = [-0.085, 0.085];
+      seed = 0.08, tomato = 0.08;
+      let coolPos = first_food == "banana" ? 54 : isOneFood ? 46 : 10;
+      eval(`${item}_box.add([sprite("${first_food}"), scale(${first_food}), pos(${coolPos},5)])`);
+      eval(`${item}_box.add([text(price1), scale(0.9), pos(isOneFood ? 90:55, 13)])`);
+      !isOneFood && eval(`${item}_box.add([sprite("${second_food}"), scale(${second_food}), pos(second_food == "banana" ? 149:105,5)])`);
+      eval(`${item}_box.add([text(price2||""), scale(0.9), pos(150, 13)])`);
 
-  });
+      if (item == "mystery" && localStorage.getItem("?*$?r2?") == "$q?q&?a??") { }
+      else {
+        eval(`${item}_box.add([sprite("${mainItem}"), pos(100, 100), scale(${Scale}), anchor("center")])`);
+      }
+
+      item == "x2_hearts" && x2_hearts_box.add([text("2x"), scale(0.9), color(0, 0, 0), pos(100, 100), anchor("center")]);
+      item == "mystery" &&
+        localStorage.getItem("?*$?r2?") == "$q?q&?a??" &&
+        mystery_box.add([
+          text(polish ? "Podwójny Skok" : "Double Jump", {
+            width: 200,
+            size: 30,
+            align: "center",
+          }),
+          color(0, 0, 0),
+          pos(100, 100),
+          anchor("center"),
+        ]);
+    });
+  }
 
   // create buttons with corresponding text, color and size
   function createButtons() {
@@ -164,15 +186,17 @@ scene("shop", () => {
       !getSprite(updateHamster()) && loadSprite(updateHamster(), `images/${updateHamster()}.png`);
 
       if (localStorage.getItem(key) !== value) {
-        if (eval(food1) >= price1 && eval(food2) >= price2) {
+        if ((!food2 && eval(food1) >= price1) || (food2 && eval(food1) >= price1 && eval(food2) >= price2)) {
           localStorage.setItem(key, value);
           localStorage.setItem(food1, eval(food1) - price1);
-          localStorage.setItem(food2, eval(food2) - price2);
+          food2 !== undefined && localStorage.setItem(food2, eval(food2) - price2);
           set(item, "Wearing");
           !getSprite(updateHamster()) && loadSprite(updateHamster(), `images/${updateHamster()}.png`);
+          createBoxes();
           createButtons();
+         
         } else if (eval(food1) < price1 || eval(food2) < price2) {
-          alert(polish ? `Nie masz wystarczająco ${food1} i ${food2}` :
+          alert(polish ? `Nie masz wystarczająco ${food1}  ${food2 !== undefined ? `i ${food2}` : ""}` :
             `You don't have enough ${food1} and ${food2}`);
         }
       }

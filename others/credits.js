@@ -47,7 +47,8 @@ function display_info() {
       ["Tomato", "Pomidora", "VectorPortal"],
       ["Glasses", "Okularów", "Job Moon"],
       ["Poland", "Polski", "Freepik"],
-      ["USA", "USA", "Freepik"]
+      ["USA", "USA", "Freepik"],
+      ["Question Mark", "Znaku Zapytania", "Freepik"],
     ];
 
     // Process the list to create icons_Credits array
