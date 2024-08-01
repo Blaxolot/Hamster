@@ -1,5 +1,6 @@
 scene("shop", () => {
-  isMenu = false; isShop = true;
+  isMenu = false;
+  isShop = true;
   window.addEventListener("resize", debounce(function (e) {
     isMenu == false && isShop == true && go("shop");
   }));
@@ -56,7 +57,8 @@ scene("shop", () => {
       pos(position),
       color(100, 100, 100),
       scale(shop_phone ? 0.8:1)
-    ])`);
+      ])`);
+      
       const isOneFood = !food2;
       const first_food = getSingularFood(food1);
       const second_food = getSingularFood(food2);
@@ -74,16 +76,23 @@ scene("shop", () => {
       seed = 0.08, tomato = 0.08;
       let coolPos = first_food == "banana" ? 54 : isOneFood ? 46 : 10;
       eval(`${item}_box.add([sprite("${first_food}"), scale(${first_food}), pos(${coolPos},5)])`);
-      eval(`${item}_box.add([text(price1), scale(0.9), pos(isOneFood ? 90:55, 13)])`);
+      eval(`${item}_box.add([text(price1), scale(0.9), pos(isOneFood ? 90: 55, 13)])`);
       !isOneFood && eval(`${item}_box.add([sprite("${second_food}"), scale(${second_food}), pos(second_food == "banana" ? 149:105,5)])`);
-      eval(`${item}_box.add([text(price2||""), scale(0.9), pos(150, 13)])`);
+      eval(`${item}_box.add([text(price2 || ""), scale(0.9), pos(150, 13)])`);
 
       if (item == "mystery" && localStorage.getItem("?*$?r2?") == "$q?q&?a??") { }
       else {
         eval(`${item}_box.add([sprite("${mainItem}"), pos(100, 100), scale(${Scale}), anchor("center")])`);
       }
 
-      item == "x2_hearts" && x2_hearts_box.add([text("2x"), scale(0.9), color(0, 0, 0), pos(100, 100), anchor("center")]);
+      item == "x2_hearts" &&
+        x2_hearts_box.add([
+          text("2x"),
+          scale(0.9),
+          color(0, 0, 0),
+          pos(100, 100),
+          anchor("center"),
+        ]);
       item == "mystery" &&
         localStorage.getItem("?*$?r2?") == "$q?q&?a??" &&
         mystery_box.add([
@@ -194,7 +203,6 @@ scene("shop", () => {
           !getSprite(updateHamster()) && loadSprite(updateHamster(), `images/${updateHamster()}.png`);
           createBoxes();
           createButtons();
-         
         } else if (eval(food1) < price1 || eval(food2) < price2) {
           alert(polish ? `Nie masz wystarczająco ${food1}  ${food2 !== undefined ? `i ${food2}` : ""}` :
             `You don't have enough ${food1} and ${food2}`);
