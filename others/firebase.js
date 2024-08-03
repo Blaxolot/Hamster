@@ -32,7 +32,7 @@ window.onbeforeunload = function () {
 // Retrieve the number of views from the database
 database.ref().on("value", snapshot => {
   var views = snapshot.numChildren();
-  Users_online(views);
+  Users_online(views || 1);
 });
 
 var eventName;

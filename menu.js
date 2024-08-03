@@ -1,131 +1,46 @@
 let phone = window.innerWidth <= 500;
-let isWhite = "";
 let isShop = false;
 
 // initialize context
 kaboom({
   canvas: document.querySelector("#mycanvas"),
 });
-function debounce(func) {
-  var timer;
-  return function (event) {
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(func, 100, event);
-  };
-}
-window.addEventListener("resize", debounce(function (e) {
-  isMenu == true && go("menu");
-}));
+
+window.addEventListener(
+  "resize",
+  debounce(function (e) {
+    isMenu == true && go("menu");
+  })
+);
 
 // load assets
+loadRoot("assets/");
 loadSprite("seed", "images/game/seed.png");
 loadSprite("apple", "images/game/apple.png");
 loadSprite("banana", "images/game/banana.png");
 loadSprite("tomato", "images/game/tomato.png");
-loadSprite("poland", "images/other/poland.png");
-loadSprite("usa", "images/other/united-states.png");
+loadSprite("poland", "images/menu/poland.png");
+loadSprite("usa", "images/menu/united-states.png");
 
-function updateLocalStorage() {
-  seeds = localStorage.getItem("seeds");
-  apples = localStorage.getItem("apples");
-  bananas = localStorage.getItem("bananas");
-  tomatoes = localStorage.getItem("tomatoes");
-  Wearing = localStorage.getItem("Wearing");
-  Shoes = localStorage.getItem("Shoes");
-  Winter_hat = localStorage.getItem("Winter_hat");
-  Gloves = localStorage.getItem("Gloves");
-  Glasses = localStorage.getItem("Glasses");
-  X2_hearts = localStorage.getItem("X2_hearts");
-  Mystery = localStorage.getItem("Mystery");
-}
-
-function updateHamster() {
-  updateLocalStorage();
-  const hasCap = Wearing === "True";
-  const hasShoes = Shoes === "True";
-  const hasWinterHat = Winter_hat === "True";
-  const hasGloves = Gloves === "True";
-  const hasGlasses = Glasses === "True";
-
-  glasses = hasGlasses ? true : false;
-  cap = hasCap ? true : false;
-  winter_hat = hasWinterHat ? true : false;
-
-  if (hasCap && hasWinterHat) {
-    localStorage.setItem("Winter_hat", "False");
-  } else if (hasShoes && hasGloves) {
-    hamster = "hamster_shoes_gloves";
-  } else if (hasShoes) {
-    hamster = "hamster_shoes";
-  } else if (hasGloves) {
-    hamster = "hamster_gloves";
-  } else {
-    hamster = "hamster";
-  }
-
-  return hamster;
-}
-
-loadSprite(updateHamster(), `images/${updateHamster()}.png`);
+loadSprite(updateHamster(), `images/menu/${updateHamster()}.png`);
 document.body.style.backgroundColor = rgb(50, 50, 50);
 
-cap && loadSprite("cap", "images/other/cap.png");
-winter_hat && loadSprite("winter_hat", "images/other/winter_hat.png");
-glasses && loadSprite("glasses", "images/other/glasses.png");
-
-function MyHover(obj, scale, scale2, color, color2) {
-  obj.onHoverUpdate(() => {
-    setCursor("pointer");
-    obj.scale = vec2(scale);
-    obj.color = color || obj.color;
-  });
-
-  obj.onHoverEnd(() => {
-    setCursor("default");
-    obj.scale = vec2(scale2);
-    obj.color = color2 || obj.color;
-  });
-}
+cap && loadSprite("cap", "images/menu/cap.png");
+winter_hat && loadSprite("winter_hat", "images/menu/winter_hat.png");
+glasses && loadSprite("glasses", "images/menu/glasses.png");
 
 let new_views = 1;
 let online;
 
 function Users_online(views) {
-  new_views = views;
-  online && (online.text = (polish ? "Użytkownicy online:" : "Users online:") + new_views);
+  new_views = views || 1;
+  online &&
+    (online.text = (polish ? "Użytkownicy online:" : "Users online:") + new_views);
 }
 
-function getFirstBrowserLanguage() {
-  var nav = window.navigator,
-    browserLanguagePropertyKeys = ['language', 'browserLanguage', 'systemLanguage', 'userLanguage'],
-    i,
-    language;
-
-  // support for HTML 5.1 "navigator.languages"
-  if (Array.isArray(nav.languages)) {
-    for (i = 0; i < nav.languages.length; i++) {
-      language = nav.languages[i];
-      if (language && language.length) {
-        return language;
-      }
-    }
-  }
-  // support for other well known properties in browsers
-  for (i = 0; i < browserLanguagePropertyKeys.length; i++) {
-    language = nav[browserLanguagePropertyKeys[i]];
-    if (language && language.length) {
-      return language;
-    }
-  }
-  return null;
-};
 let polish;
 let MenuText = "Blue Hamster";
 SetLanguage();
-function SetLanguage() {
-  let language = localStorage.getItem("Language");
-  polish = !language && getFirstBrowserLanguage().includes("pl") || language === "polish";
-}
 
 let items = ["winter_hat", "cap", "glasses"];
 const coolList = {
@@ -149,9 +64,9 @@ scene("menu", () => {
 
   AddHamster();
   function AddHamster(white = "") {
-    white !== "" ? isWhite = "white_" : isWhite = "";
+    white !== "" ? (isWhite = "white_") : (isWhite = "");
     if (white !== "" && !getSprite(white + updateHamster())) {
-      loadSprite(white + updateHamster(), `images/${white + updateHamster()}.png`);
+      loadSprite(white + updateHamster(), `images/menu/${white + updateHamster()}.png`);
     }
     menuHamster = add([
       sprite(white + updateHamster(), { width: hamster_width }),
@@ -204,7 +119,7 @@ scene("menu", () => {
   usa_icon = usa.add([
     sprite("usa", { width: 30 }),
     anchor("center"),
-    opacity(polish ? 0.3 : 1)
+    opacity(polish ? 0.3 : 1),
   ]);
   pl.onClick(() => {
     localStorage.setItem("Language", "polish");
@@ -230,7 +145,9 @@ scene("menu", () => {
   add([text(tomatoes || 0), pos(60, 210)]);
   // display users online
   online = add([
-    text((polish ? "Użytkownicy online:" : "Users online:") + new_views, { size: phone ? 22 : 28 }),
+    text((polish ? "Użytkownicy online:" : "Users online:") + new_views, {
+      size: phone ? 22 : 28,
+    }),
     pos(10, height() - 32),
   ]);
   // display credits
@@ -248,11 +165,7 @@ scene("menu", () => {
     anchor("center"),
     outline(5),
   ]);
-  play_button.add([
-    text(polish ? "Graj" : "Play"),
-    anchor("center"),
-    color(0, 0, 0),
-  ]);
+  play_button.add([text(polish ? "Graj" : "Play"), anchor("center"), color(0, 0, 0)]);
   const hamsters_button = add([
     rect(180, 40, { radius: 8 }),
     color(70, 70, 70),
@@ -264,7 +177,7 @@ scene("menu", () => {
   hamsters_button.add([
     text(polish ? "Chomiki" : "Hamsters", { size: 30 }),
     anchor("center"),
-    color(0, 0, 0)
+    color(0, 0, 0),
   ]);
   const shop_button = add([
     rect(120, 40, { radius: 8 }),
@@ -277,7 +190,7 @@ scene("menu", () => {
   shop_button.add([
     text(polish ? "Sklep" : "Shop", { size: 30 }),
     anchor("center"),
-    color(0, 0, 0)
+    color(0, 0, 0),
   ]);
   // animations
   MyHover(play_button, 1.025, 1, rgb(0, 125, 0), rgb(0, 100, 0));
@@ -287,7 +200,7 @@ scene("menu", () => {
 
   let left_arrow, right_arrow;
   function hamsters() {
-    !getSprite("left_arrow") && loadSprite("left_arrow", "images/other/left_arrow.png");
+    !getSprite("left_arrow") && loadSprite("left_arrow", "images/menu/left_arrow.png");
     if (!left_arrow && !right_arrow) {
       left_arrow = add([
         sprite("left_arrow"),
@@ -321,10 +234,11 @@ scene("menu", () => {
       secondary.scale = vec2(arrows_scale);
     });
     primary == right_arrow && MyHover(right_arrow, -arrows_scale - 0.01, -arrows_scale);
-    secondary == right_arrow && secondary.onHoverUpdate(() => {
-      setCursor("default");
-      secondary.scale = vec2(-arrows_scale);
-    });
+    secondary == right_arrow &&
+      secondary.onHoverUpdate(() => {
+        setCursor("default");
+        secondary.scale = vec2(-arrows_scale);
+      });
   }
   // Bind the onClickArrow function to the arrow keys
   onKeyPress("left", () => left_arrow && handleArrowClick("white_"));
@@ -337,13 +251,13 @@ scene("menu", () => {
   hamsters_button.onClick(() => hamsters());
   // Load script only if it isn`t loaded
   function isScriptLoaded(src) {
-    return Array.from(document.getElementsByTagName("script")).some(
-      script => script.src.includes(src)
+    return Array.from(document.getElementsByTagName("script")).some(script =>
+      script.src.includes(src)
     );
   }
   shop_button.onClick(() => {
     if (!isScriptLoaded("shop.js")) {
-      let script = document.createElement('script');
+      let script = document.createElement("script");
       script.src = "shop.js";
       script.onload = () => go("shop");
       document.head.appendChild(script);
@@ -353,7 +267,7 @@ scene("menu", () => {
   });
   info.onClick(() => {
     if (!isScriptLoaded("others/credits.js")) {
-      let script = document.createElement('script');
+      let script = document.createElement("script");
       script.src = "others/credits.js";
       script.onload = () => display_info();
       document.head.appendChild(script);
