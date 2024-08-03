@@ -1,4 +1,5 @@
 let phone = window.innerWidth <= 500;
+let MenuText = "Blue Hamster";
 let isShop = false;
 
 // initialize context
@@ -37,10 +38,6 @@ function Users_online(views) {
   online &&
     (online.text = (polish ? "Użytkownicy online:" : "Users online:") + new_views);
 }
-
-let polish;
-let MenuText = "Blue Hamster";
-SetLanguage();
 
 let items = ["winter_hat", "cap", "glasses"];
 const coolList = {

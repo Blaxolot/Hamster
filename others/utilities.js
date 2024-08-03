@@ -85,7 +85,8 @@ function updateHamster() {
 
     return hamster;
 }
-
+let polish;
+SetLanguage();
 function SetLanguage() {
     let language = localStorage.getItem("Language");
     polish = !language && getFirstBrowserLanguage().includes("pl") || language === "polish";

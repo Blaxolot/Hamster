@@ -58,7 +58,7 @@ scene("shop", () => {
       color(100, 100, 100),
       scale(shop_phone ? 0.8:1)
       ])`);
-      
+
       const isOneFood = !food2;
       const first_food = getSingularFood(food1);
       const second_food = getSingularFood(food2);
@@ -80,9 +80,13 @@ scene("shop", () => {
       !isOneFood && eval(`${item}_box.add([sprite("${second_food}"), scale(${second_food}), pos(second_food == "banana" ? 149:105,5)])`);
       eval(`${item}_box.add([text(price2 || ""), scale(0.9), pos(150, 13)])`);
 
-      if (item == "mystery" && localStorage.getItem("?*$?r2?") == "$q?q&?a??") { }
-      else {
-        eval(`${item}_box.add([sprite("${mainItem}"), pos(100, 100), scale(${Scale}), anchor("center")])`);
+      if (!(item == "mystery" && localStorage.getItem("?*$?r2?") == "$q?q&?a??")) {
+        window[`${item}_box`].add([
+          sprite(mainItem),
+          pos(100, 100),
+          scale(Scale),
+          anchor("center"),
+        ]);
       }
 
       item == "x2_hearts" &&
