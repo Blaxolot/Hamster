@@ -3,7 +3,6 @@ let GRAVITY = 1250;
 scene("game", () => {
   isMenu = false;
   isShop = false;
-  let skibidibi = 1;
   let phone = window.innerWidth <= 500;
   window.addEventListener(
     "resize",
@@ -27,57 +26,24 @@ scene("game", () => {
   );
 
   setBackground(0, 120, 180);
-  !getSprite("banana") && loadSprite("banana", "images/game/banana.png");
-  !getSprite("chocolate") && loadSprite("chocolate", "images/game/chocolate_bar.png");
-  !getSprite("rotten_tomato") &&
-    loadSprite("rotten_tomato", "images/game/rotten_tomato.png");
-  !getSprite("heart") && loadSprite("heart", "images/game/heart.png");
-  !getSprite("drzewo1") && loadSprite("drzewo1", "images/game/drzewo_1.png");
-  !getSprite("drzewo2") && loadSprite("drzewo2", "images/game/drzewo2.png");
-  !getSprite("drzewo3") && loadSprite("drzewo3", "images/game/drzewo3.png");
-  !getSprite("chmura") && loadSprite("chmura", "images/game/chmura.png");
+  !gS("banana") && loadSprite("banana", "images/game/banana.png");
+  !gS("chocolate") && loadSprite("chocolate", "images/game/chocolate_bar.png");
+  !gS("rotten_tomato") && loadSprite("rotten_tomato", "images/game/rotten_tomato.png");
+  !gS("heart") && loadSprite("heart", "images/game/heart.png");
+  !gS("drzewo1") && loadSprite("drzewo1", "images/game/drzewo_1.png");
+  !gS("drzewo2") && loadSprite("drzewo2", "images/game/drzewo2.png");
+  !gS("drzewo3") && loadSprite("drzewo3", "images/game/drzewo3.png");
+  !gS("chmura") && loadSprite("chmura", "images/game/chmura.png");
 
   !getSound("pickup") && loadSound("pickup", "sounds/pickup.wav");
   !getSound("jump") && loadSound("jump", "sounds/jump.wav");
   !getSound("negative") && loadSound("negative", "sounds/negative_beeps.mp3");
   !getSound("gameover") && loadSound("gameover", "sounds/gameover.mp3");
   !getSound("bonus") && loadSound("bonus", "sounds/bonus_heart.mp3");
+  // floor
+  addFloor();
   addTrees();
-  function addTrees() {
-    let parameters = [fixed(), anchor("botleft"), z(-9), "tree"];
-    destroyAll("tree");
-    add([
-      sprite("drzewo1", { width: (width() + height()) / 10 }),
-      pos(width() / 10, height() - 60),
-      ...parameters,
-    ]);
-    add([
-      sprite("drzewo2", { width: (width() + height()) / 20 }),
-      pos(width() / 2.8, height() - 60),
-      ...parameters,
-    ]);
-    add([
-      sprite("drzewo3", { width: (width() + height()) / 11 }),
-      pos(width() / 1.5, height() - 60),
-      ...parameters,
-    ]);
-  }
-
   addCloud();
-  function addCloud() {
-    add([
-      sprite("chmura", { width: (width() + height()) / 9 }),
-      fixed(),
-      anchor("center"),
-      pos(width() + 150, height() / 2 - 180),
-      move(LEFT, 10),
-      z(-10),
-      area(),
-      offscreen({ destroy: true }),
-      "chmura",
-    ]);
-  }
-  onDestroy("chmura", addCloud);
 
   // set Cursor and define gravity
   setCursor("default");
@@ -121,28 +87,6 @@ scene("game", () => {
     });
   }
 
-  // floor
-  addFloor();
-  function addFloor() {
-    for (let x = 0; x < width(); x += 60) {
-      add([
-        pos(x, height()),
-        rect(60, 60),
-        color(rgb(20, 170, 0)),
-        anchor("botleft"),
-        area(),
-        body({ isStatic: true }),
-        "floor" + skibidibi,
-      ]);
-      add([
-        pos(x, height()),
-        rect(60, 43),
-        color(rgb(90, 60, 0)),
-        anchor("botleft"),
-        "floor" + (skibidibi + 1),
-      ]);
-    }
-  }
   let lastJumpFunction = shortJump;
   function shortJump() {
     if (player.isGrounded()) {

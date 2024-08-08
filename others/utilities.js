@@ -91,3 +91,7 @@ function SetLanguage() {
     let language = localStorage.getItem("Language");
     polish = !language && getFirstBrowserLanguage().includes("pl") || language === "polish";
 }
+
+function gS(sprite) {
+    getSprite(sprite);
+}

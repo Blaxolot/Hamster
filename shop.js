@@ -6,13 +6,13 @@ scene("shop", () => {
   }));
 
   setCursor("default");
-  !getSprite("cap") && loadSprite("cap", "images/menu/cap.png");
-  !getSprite("hamster_shoes") && loadSprite("hamster_shoes", "images/menu/hamster_shoes.png");
-  !getSprite("winter_hat") && loadSprite("winter_hat", "images/menu/winter_hat.png");
-  !getSprite("hamster_gloves") && loadSprite("hamster_gloves", "images/menu/hamster_gloves.png");
-  !getSprite("glasses") && loadSprite("glasses", "images/menu/glasses.png");
-  !getSprite("x2_hearts") && loadSprite("x2_hearts", "images/game/heart.png");
-  !getSprite("mystery") && loadSprite("mystery", "images/menu/question-mark.png");
+  !gS("cap") && loadSprite("cap", "images/menu/cap.png");
+  !gS("hamster_shoes") && loadSprite("hamster_shoes", "images/menu/hamster_shoes.png");
+  !gS("winter_hat") && loadSprite("winter_hat", "images/menu/winter_hat.png");
+  !gS("hamster_gloves") && loadSprite("hamster_gloves", "images/menu/hamster_gloves.png");
+  !gS("glasses") && loadSprite("glasses", "images/menu/glasses.png");
+  !gS("x2_hearts") && loadSprite("x2_hearts", "images/game/heart.png");
+  !gS("mystery") && loadSprite("mystery", "images/menu/question-mark.png");
 
   const items = ["cap", "winter_hat", "glasses", "shoes", "gloves", "x2_hearts", "mystery"];
   const itemConditions = {
