@@ -85,6 +85,10 @@ scene("game", () => {
         ]);
       }
     });
+    onKeyDown("down", () => { player.scale = vec2(0.5); });
+    onKeyRelease("down", () => { player.scale = vec2(1); });
+    onKeyDown("s", () => { player.scale = vec2(0.5); });
+    onKeyRelease("s", () => { player.scale = vec2(1); });
   }
 
   let lastJumpFunction = shortJump;
