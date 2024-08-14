@@ -73,15 +73,14 @@ scene("game", () => {
       doubleJump(),
       "player",
     ]);
-
     items.forEach(item => {
-      const { Scale, scale2 } = coolList[item];
+      const { Scale, Scale2, scale1, scale2 } = coolList[item];
       if (eval(item) == true) {
         player.add([
           sprite(item, { width: hamster_width / 2 }),
-          scale(vec2(Scale)),
+          scale(vec2(currentHamster == "hamster" ? Scale : (Scale2 || Scale))),
           anchor("center"),
-          pos(0, -hamster_width / scale2),
+          pos(0, -hamster_width / (currentHamster == "hamster" ? scale1 : scale2)),
         ]);
       }
     });

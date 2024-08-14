@@ -41,9 +41,9 @@ function Users_online(views) {
 
 let items = ["winter_hat", "cap", "glasses"];
 const coolList = {
-  winter_hat: { Scale: [0.9, 0.65], scale2: 1.925 },
-  cap: { Scale: [0.9, 0.7], scale2: 2 },
-  glasses: { Scale: [0.75, 0.7], scale2: 2.85 },
+  winter_hat: { Scale: [0.9, 0.65], scale1: 1.925, scale2: 2 },
+  cap: { Scale: [0.9, 0.7], scale1: 2, scale2: 2.05 },
+  glasses: { Scale: [0.75, 0.7], Scale2: [0.8, 0.7], scale1: 2.85, scale2: 3.5 },
 };
 
 scene("menu", () => {
@@ -72,13 +72,13 @@ scene("menu", () => {
     ]);
 
     items.forEach(item => {
-      const { Scale, scale2 } = coolList[item];
+      const { Scale, Scale2, scale1, scale2 } = coolList[item];
       if (eval(item) == true) {
         menuHamster.add([
           sprite(item, { width: hamster_width / 2 }),
-          scale(vec2(Scale)),
+          scale(vec2(currentHamster == "hamster" ? Scale : (Scale2 || Scale))),
           anchor("center"),
-          pos(0, -hamster_width / scale2),
+          pos(0, -hamster_width / (currentHamster == "hamster" ? scale1 : scale2)),
         ]);
       }
     });

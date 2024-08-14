@@ -57,8 +57,10 @@ function updateLocalStorage() {
     Glasses = localStorage.getItem("Glasses");
     X2_hearts = localStorage.getItem("X2_hearts");
     Mystery = localStorage.getItem("Mystery");
-}
+    Hamster2 = localStorage.getItem("Hamster2");
 
+}
+let currentHamster = (localStorage.getItem("Hamster2") == "True") ? "hamster2" : "hamster";
 function updateHamster() {
     updateLocalStorage();
     const hasCap = Wearing === "True";
@@ -74,13 +76,13 @@ function updateHamster() {
     if (hasCap && hasWinterHat) {
         localStorage.setItem("Winter_hat", "False");
     } else if (hasShoes && hasGloves) {
-        hamster = "hamster_shoes_gloves";
+        hamster = currentHamster + "_shoes_gloves";
     } else if (hasShoes) {
-        hamster = "hamster_shoes";
+        hamster = currentHamster + "_shoes";
     } else if (hasGloves) {
-        hamster = "hamster_gloves";
+        hamster = currentHamster + "_gloves";
     } else {
-        hamster = "hamster";
+        hamster = currentHamster;
     }
 
     return hamster;

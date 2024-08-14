@@ -7,14 +7,15 @@ scene("shop", () => {
 
   setCursor("default");
   !gS("cap") && loadSprite("cap", "images/menu/cap.png");
-  !gS("hamster_shoes") && loadSprite("hamster_shoes", "images/menu/hamster_shoes.png");
+  !gS(currentHamster + "_shoes") && loadSprite(currentHamster + "_shoes", `images/menu/${currentHamster}_shoes.png`);
   !gS("winter_hat") && loadSprite("winter_hat", "images/menu/winter_hat.png");
-  !gS("hamster_gloves") && loadSprite("hamster_gloves", "images/menu/hamster_gloves.png");
+  !gS(currentHamster + "_gloves") && loadSprite(currentHamster + "_gloves", `images/menu/${currentHamster}_gloves.png`);
   !gS("glasses") && loadSprite("glasses", "images/menu/glasses.png");
   !gS("x2_hearts") && loadSprite("x2_hearts", "images/game/heart.png");
   !gS("mystery") && loadSprite("mystery", "images/menu/question-mark.png");
+  !gS("hamster2") && loadSprite("hamster2", "images/menu/hamster2.png");
 
-  const items = ["cap", "winter_hat", "glasses", "shoes", "gloves", "x2_hearts", "mystery"];
+  const items = ["cap", "winter_hat", "glasses", "shoes", "gloves", "x2_hearts", "mystery", "hamster2"];
   const itemConditions = {
     cap: { key: "93rfDw", value: "#%1d8*f@4p", var: "Wearing" },
     shoes: { key: "Sk@3o&", value: "%01ns#9p", var: "Shoes" },
@@ -23,6 +24,7 @@ scene("shop", () => {
     glasses: { key: "#9am3m", value: "Ghy&z@", var: "Glasses" },
     x2_hearts: { key: "X%2&*x", value: "^2@x&2", var: "X2_hearts" },
     mystery: { key: "?*$?r2?", value: "$q?q&?a??", var: "Mystery" },
+    hamster2: { key: "^#ma^&s", value: "Svm,wXjk", var: "Hamster2" },
   };
   const itemPricing = {
     cap: { food1: "seeds", food2: "apples", price1: 10, price2: 5, Scale: 0.25 },
@@ -32,6 +34,7 @@ scene("shop", () => {
     glasses: { food1: "tomatoes", food2: "bananas", price1: 50, price2: 50, Scale: 0.33 },
     x2_hearts: { food1: "apples", price1: 100, Scale: 0.18 },
     mystery: { food1: "seeds", price1: 250, Scale: 0.37 },
+    hamster2: { food1: "tomatoes", price1: 50, Scale: 0.2 },
   };
   // Create boxes
   createBoxes();
@@ -70,7 +73,7 @@ scene("shop", () => {
         }
       }
 
-      let mainItem = (["shoes", "gloves"].includes(item)) ? "hamster_" + item : item;
+      let mainItem = (["shoes", "gloves"].includes(item)) ? (currentHamster + "_") + item : item;
 
       apple = 0.085, banana = [-0.085, 0.085];
       seed = 0.08, tomato = 0.08;
@@ -196,7 +199,7 @@ scene("shop", () => {
       item_text = eval(item + "_text");
       (item_text == (polish ? "Ubierz" : "Wear") && set(item, polish ? "Ubrane" : "Wearing")) ||
         (item_text == (polish ? "Ubrane" : "Wearing") && set(item, polish ? "Ubierz" : "Wear"));
-      !getSprite(updateHamster()) && loadSprite(updateHamster(), `images/${updateHamster()}.png`);
+      !getSprite(updateHamster()) && loadSprite(updateHamster(), `images/menu/${updateHamster()}.png`);
 
       if (localStorage.getItem(key) !== value) {
         if ((!food2 && eval(food1) >= price1) || (food2 && eval(food1) >= price1 && eval(food2) >= price2)) {
@@ -204,9 +207,13 @@ scene("shop", () => {
           localStorage.setItem(food1, eval(food1) - price1);
           food2 !== undefined && localStorage.setItem(food2, eval(food2) - price2);
           set(item, "Wearing");
-          !getSprite(updateHamster()) && loadSprite(updateHamster(), `images/${updateHamster()}.png`);
+          !getSprite(updateHamster()) && loadSprite(updateHamster(), `images/menu/${updateHamster()}.png`);
           createBoxes();
           createButtons();
+          if (localStorage.getItem("Hamster2") == "True") {
+            currentHamster = "hamster2";
+            loadSprite(updateHamster(), `images/menu/${updateHamster()}.png`);
+          }
         } else if (eval(food1) < price1 || eval(food2) < price2) {
           alert(polish ? `Nie masz wystarczająco ${food1}  ${food2 !== undefined ? `i ${food2}` : ""}` :
             `You don't have enough ${food1} and ${food2}`);

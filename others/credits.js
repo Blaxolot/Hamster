@@ -49,6 +49,7 @@ function display_info() {
       ["Poland", "Polski", "Freepik"],
       ["USA", "USA", "Freepik"],
       ["Question Mark", "Znaku Zapytania", "Freepik"],
+      ["Hamster2", "Chomika2", "Freepik"],
     ];
 
     // Process the list to create icons_Credits array
