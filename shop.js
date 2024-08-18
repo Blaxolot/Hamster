@@ -212,7 +212,7 @@ scene("shop", () => {
           createButtons();
           if (localStorage.getItem("Hamster2") == "True") {
             currentHamster = "hamster2";
-            loadSprite(updateHamster(), `images/menu/${updateHamster()}.png`);
+            !getSprite(updateHamster()) && loadSprite(updateHamster(), `images/menu/${updateHamster()}.png`);
           }
         } else if (eval(food1) < price1 || eval(food2) < price2) {
           alert(polish ? `Nie masz wystarczająco ${food1}  ${food2 !== undefined ? `i ${food2}` : ""}` :

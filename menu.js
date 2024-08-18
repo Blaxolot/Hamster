@@ -238,10 +238,10 @@ scene("menu", () => {
       });
   }
   // Bind the onClickArrow function to the arrow keys
-  onKeyPress("left", () => left_arrow && handleArrowClick("white_"));
-  onKeyPress("right", () => right_arrow && handleArrowClick());
-  onClick("left_arrow", () => handleArrowClick("white_"));
-  onClick("right_arrow", () => handleArrowClick());
+  currentHamster !== "hamster2" && onKeyPress("left", () => left_arrow && handleArrowClick("white_"));
+  currentHamster !== "hamster2" && onKeyPress("right", () => right_arrow && handleArrowClick());
+  currentHamster !== "hamster2" && onClick("left_arrow", () => handleArrowClick("white_"));
+  currentHamster !== "hamster2" && onClick("right_arrow", () => handleArrowClick());
   // Bind onClick and onKeyPress
   play_button.onClick(() => go("game"));
   onKeyPress("space", () => go("game"));
