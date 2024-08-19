@@ -15,7 +15,7 @@ function display_info() {
     Credits.add([
       text(polish ? "Autorzy ikon - " : "Icon Credits - "),
       anchor("center"),
-      pos(polish ? -100 : -110, -290),
+      pos(polish ? -100 : -110, -295),
       color(255, 255, 255),
     ]);
     flaticon = Credits.add([
@@ -23,14 +23,14 @@ function display_info() {
       anchor("center"),
       area(),
       color(rgb(21, 209, 198)),
-      pos(150, -290),
+      pos(150, -295),
     ]);
     my_github = Credits.add([
-      text("My github :)", { size: 25 }),
+      text("My github :)", { size: 20 }),
       anchor("center"),
       area(),
       color(rgb(150, 150, 150)),
-      pos(220, 305),
+      pos(240, 310),
     ]);
 
     const list = [
@@ -50,6 +50,7 @@ function display_info() {
       ["USA", "USA", "Freepik"],
       ["Question Mark", "Znaku Zapytania", "Freepik"],
       ["Hamster2", "Chomika2", "Freepik"],
+      ["Grave", "Grób", "Freepik"],
     ];
 
     // Process the list to create icons_Credits array
@@ -64,7 +65,7 @@ function display_info() {
         }
       }
     });
-    let posY = -240; // Initial vertical position
+    let posY = -255; // Initial vertical position
 
     icons_Credits.forEach(Text => {
       const gap =

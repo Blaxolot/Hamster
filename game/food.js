@@ -1,5 +1,6 @@
 function food() {
   let food = ["chocolate", "chocolate", "seed", "apple", "banana", "tomato", "rotten_tomato"];
+  let alive = true;
   let distance;
   function spawnFood() {
     let randomFood = choose(food);
@@ -35,10 +36,12 @@ function food() {
       move(LEFT, SPEED),
       offscreen({ destroy: true }),
       randomFood,
+      "food",
     ]);
 
     // wait a random amount of time to spawn next Food
-    wait(distance == null ? rand(0.75, 1.25) : distance, spawnFood);
+    alive == false && destroyAll("food");
+    alive == true && wait(distance == null ? rand(0.75, 1.25) : distance, spawnFood);
   }
   spawnFood();
 
@@ -118,14 +121,30 @@ function food() {
       destroy(eval("Live" + (lives + 1)));
 
       if (lives == 0) {
-        go("menu");
+        destroyAll("food");
+        alive = false;
+
+        grave = add([
+          sprite("grave", { width: 125 }),
+          pos(hamster_pos, -65),
+          anchor("center"),
+          area(),
+          body(),
+        ]);
+        grave.onCollide("player", () => {
+          destroyAll("player");
+          play("gameover");
+          wait(2, () => {
+            go("menu");
+          });
+        });
+
         localStorage.setItem("seeds", seedScore + +seeds);
         localStorage.setItem("apples", appleScore + +apples);
         localStorage.setItem("bananas", bananaScore + +bananas);
         localStorage.setItem("tomatoes", tomatoScore + +tomatoes);
 
         SPEED = 350;
-        play("gameover");
         MenuText = polish ? "Koniec Gry" : "Game Over";
       }
       console.log("fu");

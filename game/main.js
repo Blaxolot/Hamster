@@ -34,6 +34,7 @@ scene("game", () => {
   !gS("drzewo2") && loadSprite("drzewo2", "images/game/drzewo2.png");
   !gS("drzewo3") && loadSprite("drzewo3", "images/game/drzewo3.png");
   !gS("chmura") && loadSprite("chmura", "images/game/chmura.png");
+  !gS("grave") && loadSprite("grave", "images/game/grave.png");
 
   !getSound("pickup") && loadSound("pickup", "sounds/pickup.wav");
   !getSound("jump") && loadSound("jump", "sounds/jump.wav");
