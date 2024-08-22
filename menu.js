@@ -197,7 +197,7 @@ scene("menu", () => {
 
   let left_arrow, right_arrow;
   function hamsters() {
-    !getSprite("left_arrow") && loadSprite("left_arrow", "images/menu/left_arrow.png");
+    loadS("left_arrow", "images/menu/left_arrow.png");
     if (!left_arrow && !right_arrow) {
       left_arrow = add([
         sprite("left_arrow"),

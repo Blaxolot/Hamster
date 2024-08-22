@@ -26,15 +26,15 @@ scene("game", () => {
   );
 
   setBackground(0, 120, 180);
-  !gS("banana") && loadSprite("banana", "images/game/banana.png");
-  !gS("chocolate") && loadSprite("chocolate", "images/game/chocolate_bar.png");
-  !gS("rotten_tomato") && loadSprite("rotten_tomato", "images/game/rotten_tomato.png");
-  !gS("heart") && loadSprite("heart", "images/game/heart.png");
-  !gS("drzewo1") && loadSprite("drzewo1", "images/game/drzewo_1.png");
-  !gS("drzewo2") && loadSprite("drzewo2", "images/game/drzewo2.png");
-  !gS("drzewo3") && loadSprite("drzewo3", "images/game/drzewo3.png");
-  !gS("chmura") && loadSprite("chmura", "images/game/chmura.png");
-  !gS("grave") && loadSprite("grave", "images/game/grave.png");
+  loadS("banana", "images/game/banana.png");
+  loadS("chocolate", "images/game/chocolate_bar.png");
+  loadS("rotten_tomato", "images/game/rotten_tomato.png");
+  loadS("heart", "images/game/heart.png");
+  loadS("drzewo1", "images/game/drzewo_1.png");
+  loadS("drzewo2", "images/game/drzewo2.png");
+  loadS("drzewo3", "images/game/drzewo3.png");
+  loadS("chmura", "images/game/chmura.png");
+  loadS("grave", "images/game/grave.png");
 
   !getSound("pickup") && loadSound("pickup", "sounds/pickup.wav");
   !getSound("jump") && loadSound("jump", "sounds/jump.wav");
@@ -108,13 +108,8 @@ scene("game", () => {
   }
   // handle jumping
   if (Mystery !== "True") {
-    onKeyPress("space", shortJump);
-    onKeyPress("up", shortJump);
-    onKeyPress("w", shortJump);
-
-    onKeyDown("space", shortJump);
-    onKeyDown("up", shortJump);
-    onKeyDown("w", shortJump);
+    onKeyPress(["space", "up", "w"], shortJump);
+    onKeyDown(["space", "up", "w"], shortJump);
 
     let pressTimer;
     function clearPressTimer() {
@@ -143,10 +138,8 @@ scene("game", () => {
     function Jumping() {
       player.doubleJump(650);
     }
-    onMousePress(() => Jumping());
-    onKeyPress("space", () => Jumping());
-    onKeyPress("up", () => Jumping());
-    onKeyPress("w", () => Jumping());
+    onClick(() => Jumping());
+    onKeyPress(["space", "up", "w"], () => Jumping());
 
     player.onDoubleJump(() => {
       play("jump", { volume: 2 });

@@ -6,14 +6,14 @@ scene("shop", () => {
   }));
 
   setCursor("default");
-  !gS("cap") && loadSprite("cap", "images/menu/cap.png");
-  !gS(currentHamster + "_shoes") && loadSprite(currentHamster + "_shoes", `images/menu/${currentHamster}_shoes.png`);
-  !gS("winter_hat") && loadSprite("winter_hat", "images/menu/winter_hat.png");
-  !gS(currentHamster + "_gloves") && loadSprite(currentHamster + "_gloves", `images/menu/${currentHamster}_gloves.png`);
-  !gS("glasses") && loadSprite("glasses", "images/menu/glasses.png");
-  !gS("x2_hearts") && loadSprite("x2_hearts", "images/game/heart.png");
-  !gS("mystery") && loadSprite("mystery", "images/menu/question-mark.png");
-  !gS("hamster2") && loadSprite("hamster2", "images/menu/hamster2.png");
+  loadS("cap", "images/menu/cap.png");
+  loadS(currentHamster + "_shoes", `images/menu/${currentHamster}_shoes.png`);
+  loadS("winter_hat", "images/menu/winter_hat.png");
+  loadS(currentHamster + "_gloves", `images/menu/${currentHamster}_gloves.png`);
+  loadS("glasses", "images/menu/glasses.png");
+  loadS("x2_hearts", "images/game/heart.png");
+  loadS("mystery", "images/menu/question-mark.png");
+  loadS("hamster2", "images/menu/hamster2.png");
 
   const items = ["cap", "winter_hat", "glasses", "shoes", "gloves", "x2_hearts", "mystery", "hamster2"];
   const itemConditions = {
@@ -199,7 +199,7 @@ scene("shop", () => {
       item_text = eval(item + "_text");
       (item_text == (polish ? "Ubierz" : "Wear") && set(item, polish ? "Ubrane" : "Wearing")) ||
         (item_text == (polish ? "Ubrane" : "Wearing") && set(item, polish ? "Ubierz" : "Wear"));
-      !getSprite(updateHamster()) && loadSprite(updateHamster(), `images/menu/${updateHamster()}.png`);
+      loadS(updateHamster(), `images/menu/${updateHamster()}.png`);
 
       if (localStorage.getItem(key) !== value) {
         if ((!food2 && eval(food1) >= price1) || (food2 && eval(food1) >= price1 && eval(food2) >= price2)) {
@@ -207,12 +207,12 @@ scene("shop", () => {
           localStorage.setItem(food1, eval(food1) - price1);
           food2 !== undefined && localStorage.setItem(food2, eval(food2) - price2);
           set(item, "Wearing");
-          !getSprite(updateHamster()) && loadSprite(updateHamster(), `images/menu/${updateHamster()}.png`);
+          loadS(updateHamster(), `images/menu/${updateHamster()}.png`);
           createBoxes();
           createButtons();
           if (localStorage.getItem("Hamster2") == "True") {
             currentHamster = "hamster2";
-            !getSprite(updateHamster()) && loadSprite(updateHamster(), `images/menu/${updateHamster()}.png`);
+            loadS(updateHamster(), `images/menu/${updateHamster()}.png`);
           }
         } else if (eval(food1) < price1 || eval(food2) < price2) {
           alert(polish ? `Nie masz wystarczająco ${food1}  ${food2 !== undefined ? `i ${food2}` : ""}` :

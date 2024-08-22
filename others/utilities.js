@@ -20,6 +20,7 @@ function MyHover(obj, scale, scale2, color, color2) {
     });
 }
 
+
 function getFirstBrowserLanguage() {
     var nav = window.navigator,
         browserLanguagePropertyKeys = ['language', 'browserLanguage', 'systemLanguage', 'userLanguage'],
@@ -94,6 +95,8 @@ function SetLanguage() {
     polish = !language && getFirstBrowserLanguage().includes("pl") || language === "polish";
 }
 
-function gS(sprite) {
-    getSprite(sprite);
+function loadS(sprite, directory) {
+    if (!getSprite(sprite)) {
+        loadSprite(sprite, directory);
+    }
 }
