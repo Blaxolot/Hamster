@@ -94,42 +94,6 @@ scene("menu", () => {
     anchor("center"),
   ]);
 
-  const pl = add([
-    rect(40, 40, { radius: 5 }),
-    pos(width() - 75, 30),
-    color(25, 25, 25),
-    anchor("center"),
-    area(),
-  ]);
-  pl_icon = pl.add([
-    sprite("poland", { width: 30 }),
-    anchor("center"),
-    opacity(polish ? 1 : 0.3),
-  ]);
-  const usa = add([
-    rect(40, 40, { radius: 5 }),
-    pos(width() - 30, 30),
-    color(25, 25, 25),
-    anchor("center"),
-    area(),
-  ]);
-  usa_icon = usa.add([
-    sprite("usa", { width: 30 }),
-    anchor("center"),
-    opacity(polish ? 0.3 : 1),
-  ]);
-  pl.onClick(() => {
-    localStorage.setItem("Language", "polish");
-    SetLanguage();
-    go("menu");
-  });
-  usa.onClick(() => {
-    localStorage.setItem("Language", "english");
-    SetLanguage();
-    go("menu");
-  });
-  MyHover(pl, 1.05, 1);
-  MyHover(usa, 1.05, 1);
   // display score
   add([text(polish ? "Masz:" : "You have:"), pos(10, 10)]);
   add([sprite("seed"), scale(0.08), pos(10, 50)]);
@@ -147,53 +111,6 @@ scene("menu", () => {
     }),
     pos(10, height() - 32),
   ]);
-  // display credits
-  const info = add([
-    text("i"),
-    pos(width() - info_x, height() - 45),
-    color(140, 140, 140),
-    area(),
-  ]);
-  const play_button = add([
-    rect(350, 75, { radius: 8 }),
-    color(0, 100, 0),
-    pos(width() / 2, height() / 2 + 220),
-    area(),
-    anchor("center"),
-    outline(5),
-  ]);
-  play_button.add([text(polish ? "Graj" : "Play"), anchor("center"), color(0, 0, 0)]);
-  const hamsters_button = add([
-    rect(180, 40, { radius: 8 }),
-    color(70, 70, 70),
-    pos(width() / 2 - 65, height() / 2 + 285),
-    area(),
-    anchor("center"),
-    outline(4.5),
-  ]);
-  hamsters_button.add([
-    text(polish ? "Chomiki" : "Hamsters", { size: 30 }),
-    anchor("center"),
-    color(0, 0, 0),
-  ]);
-  const shop_button = add([
-    rect(120, 40, { radius: 8 }),
-    color(70, 70, 70),
-    pos(width() / 2 + 95, height() / 2 + 285),
-    area(),
-    anchor("center"),
-    outline(4.5),
-  ]);
-  shop_button.add([
-    text(polish ? "Sklep" : "Shop", { size: 30 }),
-    anchor("center"),
-    color(0, 0, 0),
-  ]);
-  // animations
-  MyHover(play_button, 1.025, 1, rgb(0, 125, 0), rgb(0, 100, 0));
-  MyHover(hamsters_button, 1.02, 1, rgb(90, 90, 90), rgb(70, 70, 70));
-  MyHover(shop_button, 1.02, 1, rgb(90, 90, 90), rgb(70, 70, 70));
-  MyHover(info, 1, 1, rgb(240, 240, 240), rgb(140, 140, 140));
 
   let left_arrow, right_arrow;
   function hamsters() {
@@ -243,16 +160,11 @@ scene("menu", () => {
   currentHamster !== "hamster2" && onClick("left_arrow", () => handleArrowClick("white_"));
   currentHamster !== "hamster2" && onClick("right_arrow", () => handleArrowClick());
   // Bind onClick and onKeyPress
-  play_button.onClick(() => go("game"));
+  onClick("play_button", () => go("game"));
   onKeyPress("space", () => go("game"));
-  hamsters_button.onClick(() => hamsters());
-  // Load script only if it isn`t loaded
-  function isScriptLoaded(src) {
-    return Array.from(document.getElementsByTagName("script")).some(script =>
-      script.src.includes(src)
-    );
-  }
-  shop_button.onClick(() => {
+  onClick("hamsters_button", () => hamsters());
+
+  onClick("shop_button", () => {
     if (!isScriptLoaded("shop.js")) {
       let script = document.createElement("script");
       script.src = "shop.js";
@@ -262,7 +174,7 @@ scene("menu", () => {
       go("shop");
     }
   });
-  info.onClick(() => {
+  onClick("info", () => {
     if (!isScriptLoaded("others/credits.js")) {
       let script = document.createElement("script");
       script.src = "others/credits.js";
@@ -272,5 +184,6 @@ scene("menu", () => {
       display_info();
     }
   });
+  buttons();
 });
 go("menu");

@@ -100,3 +100,9 @@ function loadS(sprite, directory) {
         loadSprite(sprite, directory);
     }
 }
+// Load script only if it isn`t loaded
+function isScriptLoaded(src) {
+    return Array.from(document.getElementsByTagName("script")).some(script =>
+        script.src.includes(src)
+    );
+}
