@@ -1,3 +1,4 @@
+let ip = "hej";
 let id = localStorage.getItem("DeviceToken");
 if (!id) {
   id = Math.random().toString(36).substring(7);
@@ -9,7 +10,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyDb5wWE6RUBGf7906Cj0Yt_LqxIvYwFZb0",
   authDomain: "blaxolot-hamster-game.firebaseapp.com",
   databaseURL:
-    "https://blaxolot-hamster-game-default-rtdb.europe-west1.firebasedatabase.app",
+  "https://blaxolot-hamster-game-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "blaxolot-hamster-game",
   storageBucket: "blaxolot-hamster-game.appspot.com",
   messagingSenderId: "1040643858295",
@@ -23,11 +24,21 @@ firebase.analytics(app);
 // Get a reference to the Firebase Realtime Database
 const database = firebase.database();
 // Set the page views in the database
-database.ref(id).set("");
 database.ref(id).onDisconnect().remove();
 window.onbeforeunload = function () {
   database.ref(id).remove();
 };
+
+fetch('https://api.ipify.org?format=json')
+  .then(response => response.json())
+  .then(data => {
+    ip = data.ip;
+    database.ref(id).set(ip);
+  })
+  .catch(error => {
+    console.error('Error fetching IP:', error);
+    ip = "failed";
+  });
 
 // Retrieve the number of views from the database
 database.ref().on("value", snapshot => {
@@ -58,7 +69,6 @@ function handleChange(evt) {
   }
   else if (!visible && (["focusin", "pageshow"].includes(evt.type) || (this && !this[propName]))) {
     visible = true;
-    database.ref(id).set("");
+    database.ref(id).set(ip);
   }
 }
-
