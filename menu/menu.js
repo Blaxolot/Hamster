@@ -1,7 +1,4 @@
-let phone = window.innerWidth <= 500;
 let MenuText = "Blue Hamster";
-let isShop = false;
-
 // initialize context
 kaboom({
   canvas: document.querySelector("#mycanvas"),

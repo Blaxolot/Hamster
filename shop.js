@@ -15,7 +15,17 @@ scene("shop", () => {
   loadS("mystery", "images/menu/question-mark.png");
   loadS("hamster2", "images/menu/hamster2.png");
 
-  const items = ["cap", "winter_hat", "glasses", "shoes", "gloves", "x2_hearts", "mystery", "hamster2"];
+  const items = [
+    "cap",
+    "winter_hat",
+    "glasses",
+    "shoes",
+    "gloves",
+    "x2_hearts",
+    "mystery",
+    "hamster2",
+    "protection_bubble",
+  ];
   const itemConditions = {
     cap: { key: "93rfDw", value: "#%1d8*f@4p", var: "Wearing" },
     shoes: { key: "Sk@3o&", value: "%01ns#9p", var: "Shoes" },
@@ -80,7 +90,11 @@ scene("shop", () => {
       let coolPos = first_food == "banana" ? 54 : isOneFood ? 46 : 10;
       eval(`${item}_box.add([sprite("${first_food}"), scale(${first_food}), pos(${coolPos},5)])`);
       eval(`${item}_box.add([text(price1), scale(0.9), pos(isOneFood ? 90: 55, 13)])`);
-      !isOneFood && eval(`${item}_box.add([sprite("${second_food}"), scale(${second_food}), pos(second_food == "banana" ? 149:105,5)])`);
+      !isOneFood && eval(`${item}_box.add([
+        sprite("${second_food}"),
+        scale(${second_food}),
+        pos(second_food == "banana" ? 149:105,5),
+      ])`);
       eval(`${item}_box.add([text(price2 || ""), scale(0.9), pos(150, 13)])`);
 
       if (!(item == "mystery" && localStorage.getItem("?*$?r2?") == "$q?q&?a??")) {

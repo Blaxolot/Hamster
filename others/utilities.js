@@ -1,3 +1,5 @@
+let phone = window.innerWidth <= 500;
+let isShop = false;
 function debounce(func) {
     var timer;
     return function (event) {
