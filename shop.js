@@ -24,7 +24,6 @@ scene("shop", () => {
     "x2_hearts",
     "mystery",
     "hamster2",
-    "protection_bubble",
   ];
   const itemConditions = {
     cap: { key: "93rfDw", value: "#%1d8*f@4p", var: "Wearing" },
