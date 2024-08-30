@@ -61,7 +61,6 @@ function updateLocalStorage() {
     X2_hearts = localStorage.getItem("X2_hearts");
     Mystery = localStorage.getItem("Mystery");
     Hamster2 = localStorage.getItem("Hamster2");
-
 }
 let currentHamster = (localStorage.getItem("Hamster2") == "True") ? "hamster2" : "hamster";
 function updateHamster() {

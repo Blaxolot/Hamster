@@ -159,7 +159,7 @@ function food() {
   const appleText10 = add([text("/10"), pos(200, 24), color(180, 180, 180)]);
   add([sprite("apple"), scale(0.1), pos(120, 10)]);
   const bananaText = add([text(bananaScore), pos(65, 80)]);
-  add([sprite("banana"), scale(-0.1, 0.1), pos(65, 75)]);
+  add([sprite("banana", { flipX: true }), scale(0.1), pos(13, 75)]);
   const tomatoText = add([text(tomatoScore), pos(65, 136)]);
   add([sprite("tomato"), scale(0.085), pos(14, 130)]);
 

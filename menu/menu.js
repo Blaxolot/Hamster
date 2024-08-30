@@ -32,8 +32,7 @@ let online;
 
 function Users_online(views) {
   new_views = views || 1;
-  online &&
-    (online.text = (polish ? "Użytkownicy online:" : "Users online:") + new_views);
+  online.text = (polish ? "Użytkownicy" : "Users") + " online:" + new_views;
 }
 
 let items = ["winter_hat", "cap", "glasses"];
@@ -44,6 +43,7 @@ const coolList = {
 };
 
 scene("menu", () => {
+  document.addEventListener("mouseup", null);
   let phone = window.innerWidth <= 500;
   isMenu = true;
   Credits = null;
@@ -97,7 +97,7 @@ scene("menu", () => {
   add([text(seeds || 0), pos(60, 53)]);
   add([sprite("apple"), scale(0.1), pos(8, 100)]);
   add([text(apples || 0), pos(60, 110)]);
-  add([sprite("banana"), scale(-0.09, 0.09), pos(56, 152)]);
+  add([sprite("banana", { flipX: true }), scale(0.09), pos(10, 152)]);
   add([text(bananas || 0), pos(60, 160)]);
   add([sprite("tomato"), scale(0.085), pos(10, 202.5)]);
   add([text(tomatoes || 0), pos(60, 210)]);
