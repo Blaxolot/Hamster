@@ -74,7 +74,7 @@ scene("game", () => {
       doubleJump(),
       "player",
     ]);
-    items.forEach(item => {
+    hamster_accessories.forEach(item => {
       const { Scale, Scale2, scale1, scale2 } = coolList[item];
       if (eval(item) == true) {
         player.add([
