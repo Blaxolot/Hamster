@@ -11,7 +11,7 @@ function display_info() {
       outline(5),
       scale(phone ? 0.55 : 1),
     ]);
-    parameters = [anchor("center"), color(255, 255, 255), scale(0.6)];
+    parameters = [anchor("center"), color(255, 255, 255), scale(0.5)];
     Credits.add([
       text(polish ? "Autorzy ikon - " : "Icon Credits - "),
       anchor("center"),
@@ -50,7 +50,8 @@ function display_info() {
       ["USA", "USA", "Freepik"],
       ["Question Mark", "Znaku Zapytania", "Freepik"],
       ["Hamster2", "Chomika2", "Freepik"],
-      ["Grave", "Grób", "Freepik"],
+      ["Grave", "Grobu", "Freepik"], 
+      ["Statistics", "Statystyk", "Freepik"],
     ];
 
     // Process the list to create icons_Credits array
@@ -71,7 +72,7 @@ function display_info() {
       const gap =
         Text == "Iconic Panda" || Text.includes(polish ? "czekolady" : "Chocolate")
           ? 25
-          : 35;
+          : 30;
       Credits.add([text(Text), pos(0, posY), ...parameters]); // Add text
       posY += gap; // Increment posY by 30 or 40 based on the text
     });

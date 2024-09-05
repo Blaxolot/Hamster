@@ -11,6 +11,7 @@ loadSprite("seed", "images/game/seed.png");
 loadSprite("apple", "images/game/apple.png");
 loadSprite("banana", "images/game/banana.png");
 loadSprite("tomato", "images/game/tomato.png");
+loadSprite("statistics", "images/menu/statistics.png");
 
 let new_views = 1;
 let online;
@@ -24,13 +25,14 @@ scene("menu", () => {
   let phone = window.innerWidth <= 500;
   isMenu = true;
   Credits = null;
+  Statistics = null;
   setCursor("default");
   setBackground(50, 50, 50);
   updateLocalStorage();
   arrows = phone ? 130 : 200;
   arrows_scale = phone ? 0.16 : 0.2;
   info_x = phone ? 35 : 40;
-  
+
   // display score
   add([text(polish ? "Masz:" : "You have:"), pos(10, 10)]);
   add([sprite("seed"), scale(0.08), pos(10, 50)]);
@@ -112,13 +114,27 @@ scene("menu", () => {
     }
   });
   onClick("info", () => {
-    if (!isScriptLoaded("others/credits.js")) {
-      let script = document.createElement("script");
-      script.src = "others/credits.js";
-      script.onload = () => display_info();
-      document.head.appendChild(script);
-    } else if (isScriptLoaded("others/credits.js")) {
-      display_info();
+    if (Statistics == null) {
+      if (!isScriptLoaded("others/credits.js")) {
+        let script = document.createElement("script");
+        script.src = "others/credits.js";
+        script.onload = () => display_info();
+        document.head.appendChild(script);
+      } else if (isScriptLoaded("others/credits.js")) {
+        display_info();
+      }
+    }
+  });
+  onClick("stats_button", () => {
+    if (Credits == null) {
+      if (!isScriptLoaded("others/statistics.js")) {
+        let script = document.createElement("script");
+        script.src = "others/statistics.js";
+        script.onload = () => display_stats();
+        document.head.appendChild(script);
+      } else if (isScriptLoaded("others/statistics.js")) {
+        display_stats();
+      }
     }
   });
   initialize_hamster();

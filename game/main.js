@@ -97,6 +97,7 @@ scene("game", () => {
       player.jump(600);
       play("jump", { volume: 2 });
       lastJumpFunction = shortJump;
+      localStorage.setItem("number_of_jumps", ++number_of_jumps);
     }
   }
   function longJump() {
@@ -104,6 +105,7 @@ scene("game", () => {
       player.jump(750);
       play("jump", { volume: 2 });
       lastJumpFunction = longJump;
+      localStorage.setItem("number_of_jumps", ++number_of_jumps);
     }
   }
   // handle jumping
@@ -143,6 +145,7 @@ scene("game", () => {
 
     player.onDoubleJump(() => {
       play("jump", { volume: 2 });
+      localStorage.setItem("number_of_jumps", ++number_of_jumps);
     });
   }
 

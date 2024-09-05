@@ -143,6 +143,7 @@ function food() {
         localStorage.setItem("apples", appleScore + +apples);
         localStorage.setItem("bananas", bananaScore + +bananas);
         localStorage.setItem("tomatoes", tomatoScore + +tomatoes);
+        localStorage.setItem("number_of_deaths", ++number_of_deaths);
 
         SPEED = 350;
         MenuText = polish ? "Koniec Gry" : "Game Over";

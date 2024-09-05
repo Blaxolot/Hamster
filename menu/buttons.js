@@ -45,9 +45,16 @@ function buttons() {
         anchor("center"),
         color(0, 0, 0),
     ]);
+    const statistics_button = add([
+        sprite("statistics", { width: 35 }),
+        pos(width() - info_x - 45, height() - 50),
+        area(),
+        "stats_button",
+    ]);
     // animations
     MyHover(play_button, 1.025, 1, rgb(0, 125, 0), rgb(0, 100, 0));
     MyHover(hamsters_button, 1.02, 1, rgb(90, 90, 90), rgb(70, 70, 70));
     MyHover(shop_button, 1.02, 1, rgb(90, 90, 90), rgb(70, 70, 70));
     MyHover(info, 1, 1, rgb(240, 240, 240), rgb(140, 140, 140));
+    MyHover(statistics_button, 1, 1, "#f0f0f0", rgb(255, 255, 255));
 }

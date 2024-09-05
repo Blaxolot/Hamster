@@ -107,3 +107,11 @@ function isScriptLoaded(src) {
         script.src.includes(src)
     );
 }
+let number_of_jumps = localStorage.getItem("number_of_jumps");
+if (!number_of_jumps) {
+    localStorage.setItem("number_of_jumps", 0);
+}
+let number_of_deaths = localStorage.getItem("number_of_deaths");
+if (!number_of_deaths) {
+    localStorage.setItem("number_of_deaths", 0);
+}
