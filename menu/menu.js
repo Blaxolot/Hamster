@@ -30,7 +30,7 @@ scene("menu", () => {
   setBackground(50, 50, 50);
   updateLocalStorage();
   arrows = phone ? 130 : 200;
-  arrows_scale = phone ? 0.16 : 0.2;
+  arrows_scale = phone ? 0.2 : 0.25;
   info_x = phone ? 35 : 40;
 
   // display score
@@ -52,6 +52,7 @@ scene("menu", () => {
   ]);
 
   let left_arrow, right_arrow;
+  const arrows_color = rgb(150, 150, 150);
   function hamsters() {
     loadS("left_arrow", "images/menu/left_arrow.png");
     if (!left_arrow && !right_arrow) {
@@ -60,6 +61,7 @@ scene("menu", () => {
         scale(arrows_scale),
         pos(width() / 2 - arrows, height() / 2),
         area(),
+        color(arrows_color),
         anchor("center"),
         "left_arrow",
       ]);
@@ -68,12 +70,13 @@ scene("menu", () => {
         scale(-arrows_scale),
         pos(width() / 2 + arrows, height() / 2),
         area(),
+        color(arrows_color),
         anchor("center"),
         opacity(0.25),
         "right_arrow",
       ]);
     }
-    MyHover(left_arrow, arrows_scale + 0.01, arrows_scale);
+    MyHover(left_arrow, arrows_scale + 0.01, arrows_scale, WHITE, arrows_color);
   }
   function handleArrowClick(white) {
     AddHamster(white);
@@ -81,16 +84,18 @@ scene("menu", () => {
     const secondary = white !== undefined ? left_arrow : right_arrow;
     primary.opacity = 1;
     secondary.opacity = 0.25;
-    MyHover(primary, arrows_scale + 0.01, arrows_scale);
+    MyHover(primary, arrows_scale + 0.01, arrows_scale, WHITE, arrows_color);
     secondary.onHoverUpdate(() => {
       setCursor("default");
       secondary.scale = vec2(arrows_scale);
+      secondary.color = arrows_color;
     });
     primary == right_arrow && MyHover(right_arrow, -arrows_scale - 0.01, -arrows_scale);
     secondary == right_arrow &&
       secondary.onHoverUpdate(() => {
         setCursor("default");
         secondary.scale = vec2(-arrows_scale);
+        secondary.color = arrows_color;
       });
   }
   // Bind the onClickArrow function to the arrow keys
