@@ -34,7 +34,7 @@ scene("menu", () => {
   info_x = phone ? 35 : 40;
 
   // display score
-  add([text(polish ? "Masz:" : "You have:"), pos(10, 10)]);
+  add([text(polish ? "Zebrano:" : "Collected:"), pos(10, 10)]);
   add([sprite("seed"), scale(0.08), pos(10, 50)]);
   add([text(seeds || 0), pos(60, 53)]);
   add([sprite("apple"), scale(0.1), pos(8, 100)]);
