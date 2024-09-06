@@ -168,9 +168,9 @@ scene("shop", () => {
     text("x"),
     area(),
     pos(width() - 50, 15),
-    color(150, 150, 150),
+    color(LIGHT_GRAY),
   ]);
-  MyHover(x, 1, 1, rgb(240, 240, 240), rgb(150, 150, 150));
+  MyHover(x, 1, 1, rgb(240, 240, 240), LIGHT_GRAY);
 
   function set(item, Wearing_or_Wear) {
     if ((item == "cap" || item == "winter_hat") &&
@@ -262,7 +262,7 @@ scene("shop", () => {
             rect(400, 200, { radius: 20 }),
             anchor("center"),
             pos(center()),
-            color(rgb(150, 150, 150)),
+            color(LIGHT_GRAY),
           ]);
           wait(3, () => {
             destroy(box);

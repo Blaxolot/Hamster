@@ -52,7 +52,7 @@ scene("menu", () => {
   ]);
 
   let left_arrow, right_arrow;
-  const arrows_color = rgb(150, 150, 150);
+  const arrows_color = LIGHT_GRAY;
   function hamsters() {
     loadS("left_arrow", "images/menu/left_arrow.png");
     if (!left_arrow && !right_arrow) {

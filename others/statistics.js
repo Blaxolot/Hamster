@@ -11,7 +11,6 @@ function display_stats() {
             outline(5),
             scale(phone ? 0.55 : 1),
         ]);
-        parameters = [anchor("center"), color(255, 255, 255), scale(0.6)];
         Statistics.add([
             text(polish ? "Statystyki" : "Statistics"),
             anchor("center"),
@@ -22,7 +21,7 @@ function display_stats() {
             text("My github :)", { size: 20 }),
             anchor("center"),
             area(),
-            color(rgb(150, 150, 150)),
+            color(LIGHT_GRAY),
             pos(240, 310),
         ]);
         let Total_food = +apples + +bananas + +tomatoes + +seeds;
@@ -51,7 +50,13 @@ function display_stats() {
                 Text == "Iconic Panda" || Text.includes(polish ? "czekolady" : "Chocolate")
                     ? 25
                     : 35;
-            Statistics.add([text(Text), pos(0, posY), ...parameters]); // Add text
+
+            Statistics.add([
+                text(Text, { size: 20 }),
+                pos(0, posY),
+                anchor("center"),
+                color(255, 255, 255),
+            ]);
             posY += gap; // Increment posY by 30 or 40 based on the text
         });
 
@@ -60,11 +65,11 @@ function display_stats() {
             anchor("center"),
             area(),
             pos(-305, -305),
-            color(150, 150, 150),
+            color(LIGHT_GRAY),
         ]);
     }
-    MyHover(x, 1, 1, rgb(240, 240, 240), rgb(150, 150, 150));
-    MyHover(my_github, 1, 1, rgb(220, 220, 220), rgb(150, 150, 150));
+    MyHover(x, 1, 1, rgb(240, 240, 240), LIGHT_GRAY);
+    MyHover(my_github, 1, 1, rgb(220, 220, 220), LIGHT_GRAY);
 
     my_github.onClick(() => window.open("https://github.com/Blaxolot"));
 

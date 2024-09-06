@@ -13,9 +13,7 @@ function exitMenu() {
       pos(0, -100),
     ]);
     box.add([
-      text(
-        polish ? "!!! Stracisz swoje jedzenie !!!" : "!!! You will lose your food !!!"
-      ),
+      text(polish ? "!!! Stracisz swoje jedzenie !!!" : "!!! You will lose your food !!!"),
       scale(0.8),
       anchor("center"),
       pos(0, -50),

@@ -1,12 +1,4 @@
 function buttons() {
-    // display credits
-    const info = add([
-        text("i"),
-        pos(width() - info_x, height() - 45),
-        color(140, 140, 140),
-        area(),
-        "info",
-    ]);
     const play_button = add([
         rect(350, 75, { radius: 8 }),
         color(0, 100, 0),
@@ -45,6 +37,15 @@ function buttons() {
         anchor("center"),
         color(0, 0, 0),
     ]);
+    // display credits
+    const info = add([
+        text("i"),
+        pos(width() - info_x, height() - 45),
+        color(140, 140, 140),
+        area(),
+        "info",
+    ]);
+    // display statistics
     const statistics_button = add([
         sprite("statistics", { width: 35 }),
         pos(width() - info_x - 45, height() - 50),
@@ -56,5 +57,5 @@ function buttons() {
     MyHover(hamsters_button, 1.02, 1, rgb(90, 90, 90), rgb(70, 70, 70));
     MyHover(shop_button, 1.02, 1, rgb(90, 90, 90), rgb(70, 70, 70));
     MyHover(info, 1, 1, rgb(240, 240, 240), rgb(140, 140, 140));
-    MyHover(statistics_button, 1, 1, "#f0f0f0", rgb(255, 255, 255));
+    MyHover(statistics_button, 1, 1, "#f0f0f0", WHITE);
 }

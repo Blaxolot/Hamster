@@ -11,7 +11,6 @@ function display_info() {
       outline(5),
       scale(phone ? 0.55 : 1),
     ]);
-    parameters = [anchor("center"), color(255, 255, 255), scale(0.5)];
     Credits.add([
       text(polish ? "Autorzy ikon - " : "Icon Credits - "),
       anchor("center"),
@@ -29,7 +28,7 @@ function display_info() {
       text("My github :)", { size: 20 }),
       anchor("center"),
       area(),
-      color(rgb(150, 150, 150)),
+      color(LIGHT_GRAY),
       pos(240, 310),
     ]);
 
@@ -50,7 +49,7 @@ function display_info() {
       ["USA", "USA", "Freepik"],
       ["Question Mark", "Znaku Zapytania", "Freepik"],
       ["Hamster2", "Chomika2", "Freepik"],
-      ["Grave", "Grobu", "Freepik"], 
+      ["Grave", "Grobu", "Freepik"],
       ["Statistics", "Statystyk", "Freepik"],
     ];
 
@@ -67,13 +66,18 @@ function display_info() {
       }
     });
     let posY = -255; // Initial vertical position
-
     icons_Credits.forEach(Text => {
       const gap =
         Text == "Iconic Panda" || Text.includes(polish ? "czekolady" : "Chocolate")
           ? 25
           : 30;
-      Credits.add([text(Text), pos(0, posY), ...parameters]); // Add text
+
+      Credits.add([
+        text(Text, { size: 18 }),
+        pos(0, posY),
+        anchor("center"),
+        color(255, 255, 255),
+      ]);
       posY += gap; // Increment posY by 30 or 40 based on the text
     });
 
@@ -82,12 +86,12 @@ function display_info() {
       anchor("center"),
       area(),
       pos(-305, -305),
-      color(150, 150, 150),
+      color(LIGHT_GRAY),
     ]);
   }
-  MyHover(x, 1, 1, rgb(240, 240, 240), rgb(150, 150, 150));
+  MyHover(x, 1, 1, rgb(240, 240, 240), LIGHT_GRAY);
   MyHover(flaticon, 1, 1, rgb(16, 156, 147), rgb(21, 209, 198));
-  MyHover(my_github, 1, 1, rgb(220, 220, 220), rgb(150, 150, 150));
+  MyHover(my_github, 1, 1, rgb(220, 220, 220), LIGHT_GRAY);
 
   flaticon.onClick(() => window.open("https://www.flaticon.com/"));
   my_github.onClick(() => window.open("https://github.com/Blaxolot"));

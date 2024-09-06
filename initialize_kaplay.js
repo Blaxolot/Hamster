@@ -13,3 +13,6 @@ if (hour >= 6 && hour < 18) {
 } else {
     isNight = true;
 }
+isNight = true;
+
+const LIGHT_GRAY = rgb(150, 150, 150);
