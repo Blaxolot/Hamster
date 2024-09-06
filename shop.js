@@ -46,6 +46,13 @@ scene("shop", () => {
     hamster2: { food1: "tomatoes", price1: 50, Scale: 0.2 },
   };
   // Create boxes
+  function getSingularFood(food) {
+    if (["seeds", "apples", "bananas"].includes(food)) {
+      return food.slice(0, -1);
+    } else if (food === "tomatoes") {
+      return "tomato";
+    }
+  }
   createBoxes();
   function createBoxes() {
     items.forEach(item => {
@@ -74,13 +81,6 @@ scene("shop", () => {
       const isOneFood = !food2;
       const first_food = getSingularFood(food1);
       const second_food = getSingularFood(food2);
-      function getSingularFood(food) {
-        if (["seeds", "apples", "bananas"].includes(food)) {
-          return food.slice(0, -1);
-        } else if (food === "tomatoes") {
-          return "tomato";
-        }
-      }
 
       let mainItem = (["shoes", "gloves"].includes(item)) ? (currentHamster + "_") + item : item;
 
@@ -228,8 +228,66 @@ scene("shop", () => {
             loadS(updateHamster(), `images/menu/${updateHamster()}.png`);
           }
         } else if (eval(food1) < price1 || eval(food2) < price2) {
-          alert(polish ? `Nie masz wystarczająco ${food1}  ${food2 !== undefined ? `i ${food2}` : ""}` :
-            `You don't have enough ${food1} and ${food2}`);
+          let message;
+          let food;
+          let missing1 = price1 - eval(food1);
+          let missing2 = price2 - eval(food2);
+          const first_food = getSingularFood(food1);
+          const second_food = getSingularFood(food2);
+
+          if (polish) {
+            if (!food2) {
+              message = `Brakuje ci ${missing1}`;
+              food = first_food;
+            } else if (eval(food1) > price1) {
+              message = `Brakuje ci`;
+            } else if (eval(food2) > price2) {
+              message = `Brakuje ci`;
+            } else {
+              message = `Brakuje ci`;
+            }
+          } else {
+            if (!food2) {
+              message = `You need ${missing1} more`;
+              food = first_food;
+            } else if (eval(food1) > price1) {
+              message = `You need`;
+            } else if (eval(food2) > price2) {
+              message = `You need`;
+            } else {
+              message = `You need`;
+            }
+          }
+          let box = add([
+            rect(400, 200, { radius: 20 }),
+            anchor("center"),
+            pos(center()),
+            color(rgb(150, 150, 150)),
+          ]);
+          wait(3, () => {
+            destroy(box);
+          });
+          box.add([text(message, { size: 30 }), pos(food2 ? 0 : -25, food2 ? -40 : 0), anchor("center"), color(BLACK)]);
+          if (!food2) {
+            box.add([sprite(food, { width: 45 }), anchor("center"), pos(message.length / 0.1, -5)]);
+          }
+          else {
+            missing1 > 0 && box.add([text(missing1, { size: 30 }), pos(-15, 0), anchor("center"), color(BLACK)]);
+            missing2 > 0 && box.add([text(missing2, { size: 30 }), pos(-15, 50), anchor("center"), color(BLACK)]);
+
+            missing1 > 0 && box.add([sprite(first_food, { width: 45, flipX: first_food == "banana" && true }), anchor("center"), pos(message.length / 0.3, -5)]);
+            missing2 > 0 && box.add([sprite(second_food, { width: 45, flipX: second_food == "banana" && true }), anchor("center"), pos(message.length / 0.3, 45)]);
+          }
+
+          let box_x = box.add([
+            text("x"),
+            pos(170, -80),
+            anchor("center"),
+            color(BLACK),
+            area({ scale: vec2(1.5, 1) }),
+          ]);
+          MyHover(box_x, 1, 1, rgb(240, 240, 240), BLACK);
+          box_x.onClick(() => destroy(box));
         }
       }
     });
