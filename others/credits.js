@@ -3,7 +3,7 @@ function display_info() {
   if (!Credits) {
     Credits = add([
       rect(650, 650, { radius: 8 }),
-      color(0, 0, 0),
+      color(BLACK),
       opacity(0.9),
       pos(center()),
       area(),
@@ -15,7 +15,6 @@ function display_info() {
       text(polish ? "Autorzy ikon - " : "Icon Credits - "),
       anchor("center"),
       pos(polish ? -100 : -110, -295),
-      color(255, 255, 255),
     ]);
     flaticon = Credits.add([
       text("Flaticon"),
@@ -76,7 +75,6 @@ function display_info() {
         text(Text, { size: 18 }),
         pos(0, posY),
         anchor("center"),
-        color(255, 255, 255),
       ]);
       posY += gap; // Increment posY by 30 or 40 based on the text
     });

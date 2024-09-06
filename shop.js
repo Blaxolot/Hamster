@@ -109,7 +109,7 @@ scene("shop", () => {
         x2_hearts_box.add([
           text("2x"),
           scale(0.9),
-          color(0, 0, 0),
+          color(BLACK),
           pos(100, 100),
           anchor("center"),
         ]);
@@ -121,7 +121,7 @@ scene("shop", () => {
             size: 30,
             align: "center",
           }),
-          color(0, 0, 0),
+          color(BLACK),
           pos(100, 100),
           anchor("center"),
         ]);

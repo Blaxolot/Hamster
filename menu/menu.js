@@ -11,7 +11,15 @@ loadSprite("seed", "images/game/seed.png");
 loadSprite("apple", "images/game/apple.png");
 loadSprite("banana", "images/game/banana.png");
 loadSprite("tomato", "images/game/tomato.png");
+// load other assets
+loadSprite("poland", "images/menu/poland.png");
+loadSprite("usa", "images/menu/united-states.png");
 loadSprite("statistics", "images/menu/statistics.png");
+
+loadSprite(updateHamster(), `images/menu/${updateHamster()}.png`);
+cap && loadSprite("cap", "images/menu/cap.png");
+winter_hat && loadSprite("winter_hat", "images/menu/winter_hat.png");
+glasses && loadSprite("glasses", "images/menu/glasses.png");
 
 let new_views = 1;
 let online;

@@ -8,7 +8,7 @@ function buttons() {
         outline(5),
         "play_button",
     ]);
-    play_button.add([text(polish ? "Graj" : "Play"), anchor("center"), color(0, 0, 0)]);
+    play_button.add([text(polish ? "Graj" : "Play"), anchor("center"), color(BLACK)]);
     const hamsters_button = add([
         rect(180, 40, { radius: 8 }),
         color(70, 70, 70),
@@ -21,7 +21,7 @@ function buttons() {
     hamsters_button.add([
         text(polish ? "Chomiki" : "Hamsters", { size: 30 }),
         anchor("center"),
-        color(0, 0, 0),
+        color(BLACK),
     ]);
     const shop_button = add([
         rect(120, 40, { radius: 8 }),
@@ -35,7 +35,7 @@ function buttons() {
     shop_button.add([
         text(polish ? "Sklep" : "Shop", { size: 30 }),
         anchor("center"),
-        color(0, 0, 0),
+        color(BLACK),
     ]);
     // display credits
     const info = add([

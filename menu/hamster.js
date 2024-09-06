@@ -7,10 +7,6 @@ const coolList = {
 function initialize_hamster() {
     hamster_width = phone ? 250 : 285;
     Hamster_text_size = phone ? 0.01 : 80;
-    loadSprite(updateHamster(), `images/menu/${updateHamster()}.png`);
-    cap && loadSprite("cap", "images/menu/cap.png");
-    winter_hat && loadSprite("winter_hat", "images/menu/winter_hat.png");
-    glasses && loadSprite("glasses", "images/menu/glasses.png");
 
     add([
         text(MenuText, {

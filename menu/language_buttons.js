@@ -1,6 +1,4 @@
 function language_buttons() {
-    loadSprite("poland", "images/menu/poland.png");
-    loadSprite("usa", "images/menu/united-states.png");
     const pl = add([
         rect(40, 40, { radius: 5 }),
         pos(width() - 75, 30),

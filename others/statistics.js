@@ -3,7 +3,7 @@ function display_stats() {
     if (!Statistics) {
         Statistics = add([
             rect(650, 650, { radius: 8 }),
-            color(0, 0, 0),
+            color(BLACK),
             opacity(0.9),
             pos(center()),
             area(),
@@ -15,7 +15,6 @@ function display_stats() {
             text(polish ? "Statystyki" : "Statistics"),
             anchor("center"),
             pos(0, -295),
-            color(255, 255, 255),
         ]);
         my_github = Statistics.add([
             text("My github :)", { size: 20 }),
@@ -55,7 +54,6 @@ function display_stats() {
                 text(Text, { size: 20 }),
                 pos(0, posY),
                 anchor("center"),
-                color(255, 255, 255),
             ]);
             posY += gap; // Increment posY by 30 or 40 based on the text
         });

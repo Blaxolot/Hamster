@@ -4,7 +4,7 @@ function exitMenu() {
       rect(600, 300, { radius: 25 }),
       anchor("center"),
       pos(center()),
-      color(0, 0, 0),
+      color(BLACK),
     ]);
 
     box.add([
@@ -17,32 +17,32 @@ function exitMenu() {
       scale(0.8),
       anchor("center"),
       pos(0, -50),
-      color(255, 0, 0),
+      color(RED),
     ]);
     const yes = box.add([
       rect(200, 50, { radius: 10 }),
       pos(-150, 80),
       anchor("center"),
-      color(0, 255, 0),
+      color(GREEN),
       area(),
     ]);
     const no = box.add([
       rect(200, 50, { radius: 10 }),
       pos(150, 80),
       anchor("center"),
-      color(255, 0, 0),
+      color(RED),
       area(),
     ]);
     yes.add([
       text(polish ? "TAK" : "YES", { size: 35 }),
       anchor("center"),
-      color(0, 0, 0),
+      color(BLACK),
       pos(0, 2),
     ]);
     no.add([
       text(polish ? "NIE" : "NO", { size: 35 }),
       anchor("center"),
-      color(0, 0, 0),
+      color(BLACK),
       pos(0, 2),
     ]);
 
