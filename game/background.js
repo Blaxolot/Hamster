@@ -1,6 +1,7 @@
 let skibidibi = 1;
+
 function addTrees() {
-    let parameters = [fixed(), anchor("botleft"), z(-9), "tree"];
+    let parameters = [fixed(), anchor("botleft"), z(-9), "tree", opacity(isNight == true ? 0.7 : 1)];
     destroyAll("tree");
     add([
         sprite("drzewo1", { width: (width() + height()) / 10 }),
@@ -25,6 +26,7 @@ function addCloud() {
         z(-10),
         area(),
         offscreen({ destroy: true }),
+        opacity(isNight == true ? 0.4 : 1),
         "chmura",
     ]);
 }
@@ -34,7 +36,7 @@ function addFloor() {
         add([
             pos(x, height()),
             rect(60, 60),
-            color(rgb(20, 170, 0)),
+            color(rgb(isNight == true ? [20, 150, 0] : [20, 170, 0])),
             anchor("botleft"),
             area(),
             body({ isStatic: true }),
@@ -43,7 +45,7 @@ function addFloor() {
         add([
             pos(x, height()),
             rect(60, 43),
-            color(rgb(90, 60, 0)),
+            color(rgb(isNight == true ? [60, 40, 0] : [90, 60, 0])),
             anchor("botleft"),
             "floor" + (skibidibi + 1),
         ]);
