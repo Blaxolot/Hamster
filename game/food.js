@@ -138,11 +138,10 @@ function food() {
             go("menu");
           });
         });
-
-        localStorage.setItem("seeds", seedScore + +seeds);
-        localStorage.setItem("apples", appleScore + +apples);
-        localStorage.setItem("bananas", bananaScore + +bananas);
-        localStorage.setItem("tomatoes", tomatoScore + +tomatoes);
+        localStorage.setItem(myEncode("seeds"), myEncode(+seedScore + (seeds || 0)));
+        localStorage.setItem(myEncode("apples"), myEncode(+appleScore + (apples || 0)));
+        localStorage.setItem(myEncode("bananas"), myEncode(+bananaScore + (bananas || 0)));
+        localStorage.setItem(myEncode("tomatoes"), myEncode(+tomatoScore + (tomatoes || 0)));
         localStorage.setItem("number_of_deaths", ++number_of_deaths);
 
         SPEED = 350;
@@ -164,7 +163,7 @@ function food() {
   const tomatoText = add([text(tomatoScore), pos(65, 136)]);
   add([sprite("tomato"), scale(0.085), pos(14, 130)]);
 
-  const Live1 = add([sprite("heart"), pos(width() - 55, 15), scale(0.08)]);
-  const Live2 = add([sprite("heart"), pos(width() - 105, 15), scale(0.08)]);
-  const Live3 = add([sprite("heart"), pos(width() - 155, 15), scale(0.08)]);
+  let Live1 = add([sprite("heart"), pos(width() - 55, 15), scale(0.08)]);
+  let Live2 = add([sprite("heart"), pos(width() - 105, 15), scale(0.08)]);
+  let Live3 = add([sprite("heart"), pos(width() - 155, 15), scale(0.08)]);
 }

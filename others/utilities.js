@@ -46,11 +46,35 @@ function getFirstBrowserLanguage() {
     return null;
 };
 
+function myEncode(num) {
+    return btoa(num.toString());
+}
+
+function myDecode(encoded) {
+    return parseInt(atob(encoded));
+}
+
+if (
+    localStorage.getItem("seeds") && localStorage.getItem("apples") &&
+    localStorage.getItem("bananas") && localStorage.getItem("tomatoes")
+) {
+    localStorage.setItem("c2VlZHM=", myEncode(localStorage.getItem("seeds")));
+    localStorage.setItem("YXBwbGVz", myEncode(localStorage.getItem("apples")));
+    localStorage.setItem("YmFuYW5hcw==", myEncode(localStorage.getItem("bananas")));
+    localStorage.setItem("dG9tYXRvZXM=", myEncode(localStorage.getItem("tomatoes")));
+    // remove old foods
+    localStorage.removeItem("seeds");
+    localStorage.removeItem("apples");
+    localStorage.removeItem("bananas");
+    localStorage.removeItem("tomatoes");
+}
+
 function updateLocalStorage() {
-    seeds = localStorage.getItem("seeds");
-    apples = localStorage.getItem("apples");
-    bananas = localStorage.getItem("bananas");
-    tomatoes = localStorage.getItem("tomatoes");
+    seeds = myDecode(localStorage.getItem("c2VlZHM="));
+    apples = myDecode(localStorage.getItem("YXBwbGVz"));
+    bananas = myDecode(localStorage.getItem("YmFuYW5hcw=="));
+    tomatoes = myDecode(localStorage.getItem("dG9tYXRvZXM="));
+    // other
     Wearing = localStorage.getItem("Wearing");
     Shoes = localStorage.getItem("Shoes");
     Winter_hat = localStorage.getItem("Winter_hat");
@@ -112,12 +136,4 @@ if (!number_of_jumps) {
 let number_of_deaths = localStorage.getItem("number_of_deaths");
 if (!number_of_deaths) {
     localStorage.setItem("number_of_deaths", 0);
-}
-
-// Function to encode score in Base64
-function encodeScore(score) {
-    return btoa(score);
-}
-function decodeScore(encodedScore) {
-    return atob(encodedScore);
 }
