@@ -1,4 +1,4 @@
-let hamster_accessories = ["winter_hat", "cap", "glasses"];
+const hamster_accessories = ["winter_hat", "cap", "glasses"];
 const coolList = {
     winter_hat: { Scale: [0.9, 0.65], scale1: 1.925, scale2: 2 },
     cap: { Scale: [0.9, 0.7], scale1: 2, scale2: 2.05 },

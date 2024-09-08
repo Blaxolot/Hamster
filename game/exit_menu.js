@@ -1,6 +1,6 @@
 function exitMenu() {
   onKeyPress("escape", () => {
-    let box = add([
+    const box = add([
       rect(600, 300, { radius: 25 }),
       anchor("center"),
       pos(center()),

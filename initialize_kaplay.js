@@ -3,6 +3,11 @@ kaboom({
     canvas: document.querySelector("#mycanvas"),
 });
 loadRoot("assets/");
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+        e.preventDefault();
+    }
+});
 document.body.style.backgroundColor = rgb(50, 50, 50);
 
 const LIGHT_GRAY = rgb(150, 150, 150);

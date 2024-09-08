@@ -157,7 +157,7 @@ scene("shop", () => {
         text(window[`${item}_text`]),
         anchor("center"),
         scale(window[`buy_${item}_text_scale`]),
-        color(0, 0, 0),
+        color(BLACK),
       ]);
       // hovers
       MyHover(window[`buy_${item}`], 1.025, 1);
@@ -258,7 +258,7 @@ scene("shop", () => {
               message = `You need`;
             }
           }
-          let box = add([
+          const box = add([
             rect(400, 200, { radius: 20 }),
             anchor("center"),
             pos(center()),
@@ -279,7 +279,7 @@ scene("shop", () => {
             missing2 > 0 && box.add([sprite(second_food, { width: 45, flipX: second_food == "banana" && true }), anchor("center"), pos(message.length / 0.3, 45)]);
           }
 
-          let box_x = box.add([
+          const box_x = box.add([
             text("x"),
             pos(170, -80),
             anchor("center"),

@@ -45,7 +45,7 @@ function food() {
   }
   spawnFood();
 
-  let foods = ["seed", "apple", "banana", "tomato"];
+  const foods = ["seed", "apple", "banana", "tomato"];
   foods.forEach(food => {
     eval(`${food}Score = 0`);
     onCollide(food, "player", item => {
@@ -164,7 +164,7 @@ function food() {
   const tomatoText = add([text(tomatoScore), pos(65, 136)]);
   add([sprite("tomato"), scale(0.085), pos(14, 130)]);
 
-  let Live1 = add([sprite("heart"), pos(width() - 55, 15), scale(0.08)]);
-  let Live2 = add([sprite("heart"), pos(width() - 105, 15), scale(0.08)]);
-  let Live3 = add([sprite("heart"), pos(width() - 155, 15), scale(0.08)]);
+  const Live1 = add([sprite("heart"), pos(width() - 55, 15), scale(0.08)]);
+  const Live2 = add([sprite("heart"), pos(width() - 105, 15), scale(0.08)]);
+  const Live3 = add([sprite("heart"), pos(width() - 155, 15), scale(0.08)]);
 }

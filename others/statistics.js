@@ -23,7 +23,7 @@ function display_stats() {
             color(LIGHT_GRAY),
             pos(240, 310),
         ]);
-        let Total_food = +apples + +bananas + +tomatoes + +seeds;
+        const Total_food = +apples + +bananas + +tomatoes + +seeds;
         const list = [
             ["Total jumps", "Ilość skoków", localStorage.getItem("number_of_jumps")],
             ["Number of deaths", "Ilość śmierci", localStorage.getItem("number_of_deaths")],

@@ -118,7 +118,7 @@ scene("menu", () => {
 
   onClick("shop_button", () => {
     if (!isScriptLoaded("shop.js")) {
-      let script = document.createElement("script");
+      const script = document.createElement("script");
       script.src = "shop.js";
       script.onload = () => go("shop");
       document.head.appendChild(script);
@@ -129,7 +129,7 @@ scene("menu", () => {
   onClick("info", () => {
     if (Statistics == null) {
       if (!isScriptLoaded("others/credits.js")) {
-        let script = document.createElement("script");
+        const script = document.createElement("script");
         script.src = "others/credits.js";
         script.onload = () => display_info();
         document.head.appendChild(script);
@@ -141,7 +141,7 @@ scene("menu", () => {
   onClick("stats_button", () => {
     if (Credits == null) {
       if (!isScriptLoaded("others/statistics.js")) {
-        let script = document.createElement("script");
+        const script = document.createElement("script");
         script.src = "others/statistics.js";
         script.onload = () => display_stats();
         document.head.appendChild(script);

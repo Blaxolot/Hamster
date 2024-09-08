@@ -1,7 +1,7 @@
 let skibidibi = 1;
 
 function addTrees() {
-    let parameters = [fixed(), anchor("botleft"), z(-9), "tree", opacity(isNight == true ? 0.7 : 1)];
+    const parameters = [fixed(), anchor("botleft"), z(-9), "tree", opacity(isNight == true ? 0.7 : 1)];
     destroyAll("tree");
     add([
         sprite("drzewo1", { width: (width() + height()) / 10 }),

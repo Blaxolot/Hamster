@@ -113,3 +113,11 @@ let number_of_deaths = localStorage.getItem("number_of_deaths");
 if (!number_of_deaths) {
     localStorage.setItem("number_of_deaths", 0);
 }
+
+// Function to encode score in Base64
+function encodeScore(score) {
+    return btoa(score);
+}
+function decodeScore(encodedScore) {
+    return atob(encodedScore);
+}
