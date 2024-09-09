@@ -43,7 +43,7 @@ function food() {
     alive == false && destroyAll("food");
     alive == true && wait(distance == null ? rand(0.75, 1.25) : distance, spawnFood);
   }
-  spawnFood();
+  phone ? wait(1, () => spawnFood()) : spawnFood();
 
   const foods = ["seed", "apple", "banana", "tomato"];
   foods.forEach(food => {
