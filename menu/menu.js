@@ -130,7 +130,7 @@ scene("menu", () => {
     if (Statistics == null) {
       if (!isScriptLoaded("others/credits.js")) {
         const script = document.createElement("script");
-        script.src = "others/credits.js";
+        script.src = "credits.js";
         script.onload = () => display_info();
         document.head.appendChild(script);
       } else if (isScriptLoaded("others/credits.js")) {
@@ -142,7 +142,7 @@ scene("menu", () => {
     if (Credits == null) {
       if (!isScriptLoaded("others/statistics.js")) {
         const script = document.createElement("script");
-        script.src = "others/statistics.js";
+        script.src = "statistics.js";
         script.onload = () => display_stats();
         document.head.appendChild(script);
       } else if (isScriptLoaded("others/statistics.js")) {
