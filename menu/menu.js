@@ -117,35 +117,38 @@ scene("menu", () => {
   onClick("hamsters_button", () => hamsters());
 
   onClick("shop_button", () => {
-    if (!isScriptLoaded("shop.js")) {
+    const shop_script = "shop.js";
+    if (!isScriptLoaded(shop_script)) {
       const script = document.createElement("script");
-      script.src = "shop.js";
+      script.src = shop_script;
       script.onload = () => go("shop");
       document.head.appendChild(script);
-    } else if (isScriptLoaded("shop.js")) {
+    } else if (isScriptLoaded(shop_script)) {
       go("shop");
     }
   });
   onClick("info", () => {
+    const info_script = "menu/credits.js";
     if (Statistics == null) {
-      if (!isScriptLoaded("others/credits.js")) {
+      if (!isScriptLoaded(info_script)) {
         const script = document.createElement("script");
-        script.src = "credits.js";
+        script.src = info_script;
         script.onload = () => display_info();
         document.head.appendChild(script);
-      } else if (isScriptLoaded("others/credits.js")) {
+      } else if (isScriptLoaded(info_script)) {
         display_info();
       }
     }
   });
   onClick("stats_button", () => {
+    const stats_script = "menu/statistics.js";
     if (Credits == null) {
-      if (!isScriptLoaded("others/statistics.js")) {
+      if (!isScriptLoaded(stats_script)) {
         const script = document.createElement("script");
-        script.src = "statistics.js";
+        script.src = stats_script;
         script.onload = () => display_stats();
         document.head.appendChild(script);
-      } else if (isScriptLoaded("others/statistics.js")) {
+      } else if (isScriptLoaded(stats_script)) {
         display_stats();
       }
     }

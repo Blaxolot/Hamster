@@ -9,7 +9,7 @@ document.addEventListener('keydown', function (e) {
     }
 });
 document.body.style.backgroundColor = rgb(50, 50, 50);
-
+setBackground(rgb(50, 50, 50));
 const LIGHT_GRAY = rgb(150, 150, 150);
 let phone = window.innerWidth <= 500;
 let isShop = false;
