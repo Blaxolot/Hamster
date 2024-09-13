@@ -27,9 +27,6 @@ scene("game", () => {
   const day_background_color = [0, 120, 180];
   const night_background_color = [0, 40, 60];
   setBackground(isNight == true ? night_background_color : day_background_color);
-  loadS("banana", "images/game/banana.png");
-  loadS("chocolate", "images/game/chocolate_bar.png");
-  loadS("rotten_tomato", "images/game/rotten_tomato.png");
   loadS("heart", "images/game/heart.png");
   loadS("drzewo1", "images/game/drzewo_1.png");
   loadS("drzewo2", "images/game/drzewo2.png");

@@ -1,21 +1,9 @@
 let MenuText = "Blue Hamster";
-window.addEventListener(
-  "resize",
-  debounce(function (e) {
-    isMenu == true && go("menu");
-  })
-);
-
 // load assets
-loadSprite("seed", "images/game/seed.png");
-loadSprite("apple", "images/game/apple.png");
-loadSprite("banana", "images/game/banana.png");
-loadSprite("tomato", "images/game/tomato.png");
-// load other assets
 loadSprite("poland", "images/menu/poland.png");
 loadSprite("usa", "images/menu/united-states.png");
 loadSprite("statistics", "images/menu/statistics.png");
-
+// load hamster and accessories
 loadSprite(updateHamster(), `images/menu/${updateHamster()}.png`);
 cap && loadSprite("cap", "images/menu/cap.png");
 winter_hat && loadSprite("winter_hat", "images/menu/winter_hat.png");
@@ -40,6 +28,10 @@ scene("menu", () => {
   arrows = phone ? 130 : 200;
   arrows_scale = phone ? 0.2 : 0.25;
   info_x = phone ? 35 : 40;
+  // refresh on resize
+  window.addEventListener("resize", debounce((e) => {
+    isMenu == true && go("menu");
+  }));
 
   // display score
   add([text(polish ? "Zebrano:" : "Collected:"), pos(10, 10)]);

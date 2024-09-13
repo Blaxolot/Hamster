@@ -1,5 +1,5 @@
 function food() {
-  let food = ["chocolate", "chocolate", "seed", "apple", "banana", "tomato", "rotten_tomato"];
+  let food = all_food.concat("chocolate");
   let alive = true;
   let distance;
   function spawnFood() {
@@ -45,8 +45,7 @@ function food() {
   }
   phone ? wait(1, () => spawnFood()) : spawnFood();
 
-  const foods = ["seed", "apple", "banana", "tomato"];
-  foods.forEach(food => {
+  natural_food.forEach(food => {
     eval(`${food}Score = 0`);
     onCollide(food, "player", item => {
       if (item.scale == undefined) {

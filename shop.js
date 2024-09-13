@@ -45,7 +45,7 @@ scene("shop", () => {
     mystery: { food1: "seeds", price1: 250, Scale: 0.37 },
     hamster2: { food1: "tomatoes", price1: 50, Scale: 0.2 },
   };
-  // Create boxes
+
   function getSingularFood(food) {
     if (["seeds", "apples", "bananas"].includes(food)) {
       return food.slice(0, -1);
