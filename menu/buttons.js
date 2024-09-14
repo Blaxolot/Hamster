@@ -1,7 +1,9 @@
 function buttons() {
+    const DARK_GRAY = rgb(70, 70, 70);
+
     const play_button = add([
         rect(350, 75, { radius: 8 }),
-        color(0, 100, 0),
+        color(rgb(0, 100, 0)),
         pos(width() / 2, height() / 2 + 220),
         area(),
         anchor("center"),
@@ -11,7 +13,7 @@ function buttons() {
     play_button.add([text(polish ? "Graj" : "Play"), anchor("center"), color(BLACK)]);
     const hamsters_button = add([
         rect(180, 40, { radius: 8 }),
-        color(70, 70, 70),
+        color(DARK_GRAY),
         pos(width() / 2 - 65, height() / 2 + 285),
         area(),
         anchor("center"),
@@ -25,7 +27,7 @@ function buttons() {
     ]);
     const shop_button = add([
         rect(120, 40, { radius: 8 }),
-        color(70, 70, 70),
+        color(DARK_GRAY),
         pos(width() / 2 + 95, height() / 2 + 285),
         area(),
         anchor("center"),
@@ -54,8 +56,8 @@ function buttons() {
     ]);
     // animations
     MyHover(play_button, 1.025, 1, rgb(0, 125, 0), rgb(0, 100, 0));
-    MyHover(hamsters_button, 1.02, 1, rgb(90, 90, 90), rgb(70, 70, 70));
-    MyHover(shop_button, 1.02, 1, rgb(90, 90, 90), rgb(70, 70, 70));
+    MyHover(hamsters_button, 1.02, 1, rgb(90, 90, 90), DARK_GRAY);
+    MyHover(shop_button, 1.02, 1, rgb(90, 90, 90), DARK_GRAY);
     MyHover(info, 1, 1, rgb(240, 240, 240), rgb(140, 140, 140));
     MyHover(statistics_button, 1, 1, "#f0f0f0", WHITE);
 }

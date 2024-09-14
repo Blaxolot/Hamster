@@ -29,7 +29,7 @@ scene("menu", () => {
   arrows_scale = phone ? 0.2 : 0.25;
   info_x = phone ? 35 : 40;
   // refresh on resize
-  window.addEventListener("resize", debounce((e) => {
+  window.addEventListener("resize", debounce(e => {
     isMenu == true && go("menu");
   }));
 

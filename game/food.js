@@ -137,10 +137,12 @@ function food() {
             go("menu");
           });
         });
-        localStorage.setItem(myEncode("seeds"), myEncode(+seedScore + (seeds || 0)));
-        localStorage.setItem(myEncode("apples"), myEncode(+appleScore + (apples || 0)));
-        localStorage.setItem(myEncode("bananas"), myEncode(+bananaScore + (bananas || 0)));
-        localStorage.setItem(myEncode("tomatoes"), myEncode(+tomatoScore + (tomatoes || 0)));
+        if (distance == null) {
+          localStorage.setItem(myEncode("seeds"), myEncode(+seedScore + (seeds || 0)));
+          localStorage.setItem(myEncode("apples"), myEncode(+appleScore + (apples || 0)));
+          localStorage.setItem(myEncode("bananas"), myEncode(+bananaScore + (bananas || 0)));
+          localStorage.setItem(myEncode("tomatoes"), myEncode(+tomatoScore + (tomatoes || 0)));
+        }
         localStorage.setItem("number_of_deaths", ++number_of_deaths);
 
         SPEED = 350;
