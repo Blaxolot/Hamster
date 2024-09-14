@@ -83,10 +83,12 @@ scene("game", () => {
         ]);
       }
     });
-    onKeyDown("down", () => { player.scale = vec2(0.5); });
-    onKeyRelease("down", () => { player.scale = vec2(1); });
-    onKeyDown("s", () => { player.scale = vec2(0.5); });
-    onKeyRelease("s", () => { player.scale = vec2(1); });
+    // get smaller when user presses down or s
+    onKeyDown(["down", "s"], () => player.scale = vec2(0.5));
+    onKeyRelease(["down", "s"], () => {
+      localStorage.setItem("number_of_reductions", ++number_of_reductions);
+      player.scale = vec2(1);
+    });
   }
 
   let lastJumpFunction = shortJump;

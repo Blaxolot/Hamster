@@ -25,8 +25,9 @@ function display_stats() {
         ]);
         const Total_food = +apples + +bananas + +tomatoes + +seeds;
         const list = [
-            ["Total jumps", "Ilość skoków", localStorage.getItem("number_of_jumps")],
-            ["Number of deaths", "Ilość śmierci", localStorage.getItem("number_of_deaths")],
+            ["Total jumps", "Ilość skoków", number_of_jumps],
+            ["Number of deaths", "Ilość śmierci", number_of_deaths],
+            ["Number of reductions", "Ilość pomniejszeń", number_of_reductions],
             ["Total food", "Łączna ilość jedzenia", Total_food],
         ];
 

@@ -129,11 +129,13 @@ function isScriptLoaded(src) {
         script.src.includes(src)
     );
 }
-let number_of_jumps = localStorage.getItem("number_of_jumps");
-if (!number_of_jumps) {
-    localStorage.setItem("number_of_jumps", 0);
-}
-let number_of_deaths = localStorage.getItem("number_of_deaths");
-if (!number_of_deaths) {
-    localStorage.setItem("number_of_deaths", 0);
+const statistics_list = ["number_of_jumps", "number_of_deaths", "number_of_reductions"];
+let number_of_jumps = localStorage.getItem("number_of_jumps") || 0;
+let number_of_deaths = localStorage.getItem("number_of_deaths") || 0;
+let number_of_reductions = localStorage.getItem("number_of_reductions") || 0;
+
+for (const stat of statistics_list) {
+    if (!eval(stat)) {
+        localStorage.setItem(stat, 0);
+    }
 }
