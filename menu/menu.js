@@ -109,7 +109,7 @@ scene("menu", () => {
   onClick("hamsters_button", () => hamsters());
 
   onClick("shop_button", () => {
-    const shop_script = "shop.js";
+    const shop_script = "shop/main.js";
     if (!isScriptLoaded(shop_script)) {
       const script = document.createElement("script");
       script.src = shop_script;
