@@ -85,7 +85,10 @@ scene("game", () => {
     });
     // get smaller when user presses down or s
     onMousePress("right", () => (player.scale = vec2(0.5)));
-    onMouseRelease("right", () => (player.scale = vec2(1)));
+    onMouseRelease("right", () => {
+      localStorage.setItem("number_of_reductions", ++number_of_reductions);
+      player.scale = vec2(1);
+    });
     onKeyDown(["down", "s"], () => (player.scale = vec2(0.5)));
     onKeyRelease(["down", "s"], () => {
       localStorage.setItem("number_of_reductions", ++number_of_reductions);
