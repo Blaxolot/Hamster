@@ -6,32 +6,30 @@ scene("game", () => {
   let phone = window.innerWidth <= 500;
   window.addEventListener(
     "resize",
-    debounce(function (e) {
+    debounce(() => {
       isShop == false &&
         isMenu == false &&
         wait(0.5, () => {
           phone = window.innerWidth <= 500;
           debug.paused = true;
-          skibidibi += 1;
+          destroyAll("floor");
           addFloor();
-          destroyAll("floor" + (skibidibi - 1));
-          destroyAll("floor" + (skibidibi - 2));
           debug.paused = false;
           destroyAll("player");
           addTrees();
           addHamster();
         });
     }),
-    true
+    true,
   );
   const day_background_color = [0, 120, 180];
   const night_background_color = [0, 40, 60];
   setBackground(isNight == true ? night_background_color : day_background_color);
   loadS("heart", "images/game/heart.png");
   loadS("drzewo1", "images/game/drzewo_1.png");
-  loadS("drzewo2", "images/game/drzewo2.png");
-  loadS("drzewo3", "images/game/drzewo3.png");
-  loadS("chmura", "images/game/chmura.png");
+  loadS("drzewo2", "images/game/drzewo_2.png");
+  loadS("drzewo3", "images/game/drzewo_3.png");
+  loadS("cloud", "images/game/cloud.png");
   loadS("grave", "images/game/grave.png");
 
   !getSound("pickup") && loadSound("pickup", "sounds/pickup.wav");
@@ -64,19 +62,19 @@ scene("game", () => {
   function addHamster() {
     updateVariables();
     player = add([
-      sprite(isWhite + updateHamster(), {width: hamster_width}),
+      sprite(isWhite + updateHamster(), { width: hamster_width }),
       pos(hamster_pos, -65),
       anchor("center"),
-      area({scale: vec2(0.7, 1)}),
+      area({ scale: vec2(0.7, 1) }),
       body(),
       doubleJump(),
       "player",
     ]);
     hamster_accessories.forEach(item => {
-      const {Scale, Scale2, scale1, scale2} = coolList[item];
+      const { Scale, Scale2, scale1, scale2 } = coolList[item];
       if (eval(item) == true) {
         player.add([
-          sprite(item, {width: hamster_width / 2}),
+          sprite(item, { width: hamster_width / 2 }),
           scale(vec2(currentHamster == "hamster" ? Scale : Scale2 || Scale)),
           anchor("center"),
           pos(0, -hamster_width / (currentHamster == "hamster" ? scale1 : scale2)),
@@ -100,7 +98,7 @@ scene("game", () => {
   function shortJump() {
     if (player.isGrounded()) {
       player.jump(600);
-      play("jump", {volume: 2});
+      play("jump", { volume: 2 });
       lastJumpFunction = shortJump;
       localStorage.setItem("number_of_jumps", ++number_of_jumps);
     }
@@ -108,7 +106,7 @@ scene("game", () => {
   function longJump() {
     if (player.isGrounded()) {
       player.jump(750);
-      play("jump", {volume: 2});
+      play("jump", { volume: 2 });
       lastJumpFunction = longJump;
       localStorage.setItem("number_of_jumps", ++number_of_jumps);
     }
@@ -153,7 +151,7 @@ scene("game", () => {
     onKeyPress(["space", "up", "w"], () => Jumping());
 
     player.onDoubleJump(() => {
-      play("jump", {volume: 2});
+      play("jump", { volume: 2 });
       localStorage.setItem("number_of_jumps", ++number_of_jumps);
     });
   }
