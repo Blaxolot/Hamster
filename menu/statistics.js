@@ -63,7 +63,7 @@ function display_stats() {
             text("x", { size: 30 }),
             anchor("center"),
             area(),
-            pos(-305, -305),
+            pos(305, -305),
             color(LIGHT_GRAY),
         ]);
     }
