@@ -15,9 +15,7 @@ function Users_online(views) {
   new_views = views || 1;
   online.text = (polish ? "Użytkownicy" : "Users") + " online:" + new_views;
 }
-
 scene("menu", () => {
-  let phone = window.innerWidth <= 500;
   isMenu = true;
   Credits = null;
   Statistics = null;
@@ -28,9 +26,12 @@ scene("menu", () => {
   arrows_scale = phone ? 0.2 : 0.25;
   info_x = phone ? 35 : 40;
   // refresh on resize
-  window.addEventListener("resize", debounce(e => {
-    isMenu == true && go("menu");
-  }));
+  window.addEventListener(
+    "resize",
+    debounce(() => {
+      isMenu == true && go("menu");
+    }),
+  );
 
   // display score
   add([text(polish ? "Zebrano:" : "Collected:"), pos(10, 10)]);
@@ -89,7 +90,8 @@ scene("menu", () => {
       secondary.scale = vec2(arrows_scale);
       secondary.color = arrows_color;
     });
-    primary == right_arrow && MyHover(right_arrow, -arrows_scale - 0.01, -arrows_scale);
+    primary == right_arrow &&
+      MyHover(right_arrow, -arrows_scale - 0.01, -arrows_scale);
     secondary == right_arrow &&
       secondary.onHoverUpdate(() => {
         setCursor("default");
@@ -98,10 +100,14 @@ scene("menu", () => {
       });
   }
   // Bind the onClickArrow function to the arrow keys
-  currentHamster !== "hamster2" && onKeyPress("left", () => left_arrow && handleArrowClick("white_"));
-  currentHamster !== "hamster2" && onKeyPress("right", () => right_arrow && handleArrowClick());
-  currentHamster !== "hamster2" && onClick("left_arrow", () => handleArrowClick("white_"));
-  currentHamster !== "hamster2" && onClick("right_arrow", () => handleArrowClick());
+  currentHamster !== "hamster2" &&
+    onKeyPress("left", () => left_arrow && handleArrowClick("white_"));
+  currentHamster !== "hamster2" &&
+    onKeyPress("right", () => right_arrow && handleArrowClick());
+  currentHamster !== "hamster2" &&
+    onClick("left_arrow", () => handleArrowClick("white_"));
+  currentHamster !== "hamster2" &&
+    onClick("right_arrow", () => handleArrowClick());
   // Bind onClick and onKeyPress
   onClick("play_button", () => go("game"));
   onKeyPress("space", () => go("game"));

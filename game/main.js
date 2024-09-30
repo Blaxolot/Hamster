@@ -3,18 +3,14 @@ let GRAVITY = 1250;
 scene("game", () => {
   isMenu = false;
   isShop = false;
-  let phone = window.innerWidth <= 500;
   window.addEventListener(
     "resize",
     debounce(() => {
       isShop == false &&
         isMenu == false &&
         wait(0.5, () => {
-          phone = window.innerWidth <= 500;
-          debug.paused = true;
           destroyAll("floor");
           addFloor();
-          debug.paused = false;
           destroyAll("player");
           addTrees();
           addHamster();
@@ -24,7 +20,9 @@ scene("game", () => {
   );
   const day_background_color = [0, 120, 180];
   const night_background_color = [0, 40, 60];
-  setBackground(isNight == true ? night_background_color : day_background_color);
+  setBackground(
+    isNight == true ? night_background_color : day_background_color,
+  );
   loadS("heart", "images/game/heart.png");
   loadS("drzewo1", "images/game/drzewo_1.png");
   loadS("drzewo2", "images/game/drzewo_2.png");
@@ -71,7 +69,10 @@ scene("game", () => {
           sprite(item, { width: hamster_width / 2 }),
           scale(vec2(currentHamster == "hamster" ? Scale : Scale2 || Scale)),
           anchor("center"),
-          pos(0, -hamster_width / (currentHamster == "hamster" ? scale1 : scale2)),
+          pos(
+            0,
+            -hamster_width / (currentHamster == "hamster" ? scale1 : scale2),
+          ),
         ]);
       }
     });

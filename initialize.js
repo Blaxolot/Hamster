@@ -1,4 +1,4 @@
-let phone = window.innerWidth <= 500;
+const phone = window.innerWidth <= 500;
 let isShop = false;
 document.addEventListener('keydown', function (e) {
     if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
