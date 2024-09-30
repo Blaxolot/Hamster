@@ -13,7 +13,11 @@ function exitMenu() {
       pos(0, -100),
     ]);
     box.add([
-      text(polish ? "!!! Stracisz swoje jedzenie !!!" : "!!! You will lose your food !!!"),
+      text(
+        polish
+          ? "!!! Stracisz swoje jedzenie !!!"
+          : "!!! You will lose your food !!!",
+      ),
       scale(0.8),
       anchor("center"),
       pos(0, -50),
@@ -33,18 +37,9 @@ function exitMenu() {
       color(RED),
       area(),
     ]);
-    yes.add([
-      text(polish ? "TAK" : "YES", { size: 35 }),
-      anchor("center"),
-      color(BLACK),
-      pos(0, 2),
-    ]);
-    no.add([
-      text(polish ? "NIE" : "NO", { size: 35 }),
-      anchor("center"),
-      color(BLACK),
-      pos(0, 2),
-    ]);
+    const text_para = [anchor("center"), color(BLACK), pos(0, 2)];
+    yes.add([text(polish ? "TAK" : "YES", { size: 35 }), ...text_para]);
+    no.add([text(polish ? "NIE" : "NO", { size: 35 }), ...text_para]);
 
     yes.onClick(() => {
       go("menu");
@@ -54,11 +49,13 @@ function exitMenu() {
       debug.paused = false;
       destroy(box);
     });
+    let selected;
     onKeyPress("enter", () => {
+      debug.paused = false;
       if (selected == "yes") {
-        go("menu"), (debug.paused = false);
-      } else if (selected == "no") {
-        (debug.paused = false), destroy(box);
+        go("menu");
+      } else {
+        destroy(box);
       }
     });
     onKeyPress("left", () => {

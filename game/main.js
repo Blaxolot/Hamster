@@ -49,12 +49,6 @@ scene("game", () => {
   function updateVariables() {
     hamster_pos = phone ? 40 : 100;
     hamster_width = 105 / (phone ? 1.25 : 1);
-    chocolate_scale = 75 / (phone ? 1.25 : 1);
-    apple_scale = 80 / (phone ? 1.25 : 1);
-    banana_scale = 70 / (phone ? 1.25 : 1);
-    seed_scale = 50 / (phone ? 1.25 : 1);
-    tomato_scale = 70 / (phone ? 1.25 : 1);
-    rotten_tomato_scale = 70 / (phone ? 1.25 : 1);
   }
 
   // add hamster

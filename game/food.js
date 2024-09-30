@@ -1,4 +1,10 @@
 function food() {
+  let chocolate_scale = 75 / (phone ? 1.25 : 1);
+  let apple_scale = 80 / (phone ? 1.25 : 1);
+  let banana_scale = 70 / (phone ? 1.25 : 1);
+  let seed_scale = 50 / (phone ? 1.25 : 1);
+  let tomato_scale = 70 / (phone ? 1.25 : 1);
+  let rotten_tomato_scale = 70 / (phone ? 1.25 : 1);
   let food = all_food.concat("chocolate");
   let alive = true;
   let distance;
@@ -29,7 +35,7 @@ function food() {
 
     food_pos = randomFood == "chocolate" ? 65 : randi(65, 350);
     add([
-      sprite(randomFood, { width: window[randomFood + "_scale"] }),
+      sprite(randomFood, { width: eval(randomFood + "_scale") }),
       pos(width(), height() - food_pos),
       area(),
       anchor("botleft"),
@@ -41,7 +47,8 @@ function food() {
 
     // wait a random amount of time to spawn next Food
     alive == false && destroyAll("food");
-    alive == true && wait(distance == null ? rand(0.75, 1.25) : distance, spawnFood);
+    alive == true &&
+      wait(distance == null ? rand(0.75, 1.25) : distance, spawnFood);
   }
   phone ? wait(1, () => spawnFood()) : spawnFood();
 
@@ -86,10 +93,13 @@ function food() {
             // Calculate the number of hearts that can fit in one line
             const heartsPerLine = Math.floor(width() / heartWidth);
             // Calculate x and y position based on the current heart
-            const xPos = width() - 5 - ((i - 1) % heartsPerLine) * heartWidth - heartWidth;
+            const xPos =
+              width() - 5 - ((i - 1) % heartsPerLine) * heartWidth - heartWidth;
             const yPos = Math.floor((i - 1) / heartsPerLine) * heartWidth + 15;
 
-            eval(`Live${i} = add([pos(xPos, yPos), sprite("heart"), scale(0.08)])`);
+            eval(
+              `Live${i} = add([pos(xPos, yPos), sprite("heart"), scale(0.08)])`,
+            );
           }
           if (localStorage.getItem("X2_hearts") == "True") {
             i += 1;
@@ -138,10 +148,22 @@ function food() {
           });
         });
         if (distance == null) {
-          localStorage.setItem(myEncode("seeds"), myEncode(+seedScore + (seeds || 0)));
-          localStorage.setItem(myEncode("apples"), myEncode(+appleScore + (apples || 0)));
-          localStorage.setItem(myEncode("bananas"), myEncode(+bananaScore + (bananas || 0)));
-          localStorage.setItem(myEncode("tomatoes"), myEncode(+tomatoScore + (tomatoes || 0)));
+          localStorage.setItem(
+            myEncode("seeds"),
+            myEncode(+seedScore + (seeds || 0)),
+          );
+          localStorage.setItem(
+            myEncode("apples"),
+            myEncode(+appleScore + (apples || 0)),
+          );
+          localStorage.setItem(
+            myEncode("bananas"),
+            myEncode(+bananaScore + (bananas || 0)),
+          );
+          localStorage.setItem(
+            myEncode("tomatoes"),
+            myEncode(+tomatoScore + (tomatoes || 0)),
+          );
         }
         localStorage.setItem("number_of_deaths", ++number_of_deaths);
 
