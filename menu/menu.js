@@ -1,4 +1,3 @@
-let MenuText = "Blue Hamster";
 // load assets
 loadSprite("poland", "images/menu/poland.png");
 loadSprite("usa", "images/menu/united-states.png");

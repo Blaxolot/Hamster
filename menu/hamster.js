@@ -16,7 +16,7 @@ function initialize_hamster() {
   add([rect(150, height()), area(), opacity(0)]);
 
   const Hamster_text = add([
-    text(MenuText, { size: Hamster_text_size }),
+    text("Blue Hamster", { size: Hamster_text_size }),
     pos(width() / 2, height() / 2 - 250),
     anchor("center"),
     area(),

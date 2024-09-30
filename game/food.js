@@ -166,9 +166,7 @@ function food() {
           );
         }
         localStorage.setItem("number_of_deaths", ++number_of_deaths);
-
         SPEED = 350;
-        MenuText = polish ? "Koniec Gry" : "Game Over";
       }
       console.log("fu");
     }
