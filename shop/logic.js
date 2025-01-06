@@ -58,9 +58,9 @@ function shop_logic() {
           (food2 && eval(food1) >= price1 && eval(food2) >= price2)
         ) {
           localStorage.setItem(key, value);
-          localStorage.setItem(food1, eval(food1) - price1);
+          localStorage.setItem(myEncode(food1), myEncode(eval(food1) - price1));
           food2 !== undefined &&
-            localStorage.setItem(food2, eval(food2) - price2);
+            localStorage.setItem(myEncode(food2), myEncode(eval(food2) - price2));
           set(item, "Wearing");
           loadS(updateHamster(), `images/menu/${updateHamster()}.png`);
           createBoxes();

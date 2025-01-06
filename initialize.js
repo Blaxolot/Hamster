@@ -6,7 +6,7 @@ document.addEventListener('keydown', function (e) {
     }
 });
 // initialize context
-kaboom({
+kaplay({
     canvas: document.querySelector("#mycanvas"),
 });
 const natural_food = ["seed", "apple", "banana", "tomato"];

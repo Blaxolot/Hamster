@@ -8,17 +8,17 @@ function addTrees() {
   ];
   destroyAll("tree");
   add([
-    sprite("drzewo1", { width: (width() + height()) / 10 }),
+    sprite("tree1", { width: (width() + height()) / 10 }),
     pos(width() / 10, height() - 60),
     ...parameters,
   ]);
   add([
-    sprite("drzewo2", { width: (width() + height()) / 20 }),
+    sprite("tree2", { width: (width() + height()) / 20 }),
     pos(width() / 2.8, height() - 60),
     ...parameters,
   ]);
   add([
-    sprite("drzewo3", { width: (width() + height()) / 11 }),
+    sprite("tree3", { width: (width() + height()) / 11 }),
     pos(width() / 1.5, height() - 60),
     ...parameters,
   ]);

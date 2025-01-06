@@ -24,9 +24,9 @@ scene("game", () => {
     isNight == true ? night_background_color : day_background_color,
   );
   loadS("heart", "images/game/heart.png");
-  loadS("drzewo1", "images/game/drzewo_1.png");
-  loadS("drzewo2", "images/game/drzewo_2.png");
-  loadS("drzewo3", "images/game/drzewo_3.png");
+  loadS("tree1", "images/game/tree_1.png");
+  loadS("tree2", "images/game/tree_2.png");
+  loadS("tree3", "images/game/tree_3.png");
   loadS("cloud", "images/game/cloud.png");
   loadS("grave", "images/game/grave.png");
 
